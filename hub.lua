@@ -1,4 +1,4 @@
--- antiafk
+print ("anti afk acttivated")
 task.spawn(function()
     local vu = game:GetService("VirtualUser")
     game:GetService("Players").LocalPlayer.Idled:Connect(function()
