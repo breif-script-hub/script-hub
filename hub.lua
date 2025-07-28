@@ -9,3 +9,8 @@ if game.PlaceId == 17625359962 or game.PlaceId == 117398147513099 then
         loadstring(game:HttpGet("https://pastebin.com/raw/LVGpyNMS"))()
     end)
 end
+if game.PlaceId == 13355910112 then
+    pcall(function()
+        loadstring(game:HttpGet("https://pastebin.com/raw/FXtjAeWm"))()
+    end)
+end
