@@ -1,4 +1,4 @@
-print ("anti afk acttivated")
+print ("anti afk activated")
 task.spawn(function()
     local vu = game:GetService("VirtualUser")
     game:GetService("Players").LocalPlayer.Idled:Connect(function()
@@ -30,5 +30,12 @@ end
 if game.PlaceId == 5256165620 then
     pcall(function()
         loadstring(game:HttpGet("https://pastebin.com/raw/MdA6jZvT"))()
+    end)
+end
+
+-- new place
+if game.PlaceId == 75663528075786 then
+    pcall(function()
+        loadstring(game:HttpGet("https://pastebin.com/raw/LSi1MkLi"))()
     end)
 end
