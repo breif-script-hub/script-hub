@@ -26,12 +26,12 @@ elseif game.PlaceId == 75663528075786 then
     pcall(function()
         loadstring(game:HttpGet("https://gist.githubusercontent.com/thebiraf/32dfb4ed746c5d54cd2b031356666476/raw/224c41cc309b621cd2a972e8119c083a5facd254/How%2520to%2520train%2520ur%2520dragon"))()
     end)
--- future scripts
+-- future games
 elseif game.PlaceId ==  then
     pcall(function()
         loadstring(game:HttpGet(""))()
     end)
--- if game isnt supported
+    -- unsupported games
 else
     pcall(function()
         print("Youru are not in a supported game")
