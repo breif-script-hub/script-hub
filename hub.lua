@@ -18,7 +18,7 @@ end
 
 if game.PlaceId == 13355910112 then
     pcall(function()
-        loadstring(game:HttpGet("https://pastebin.com/raw/FXtjAeWm"))()
+        loadstring(game:HttpGet("https://gist.githubusercontent.com/thebiraf/7205d43e2910940049de839dde5c9392/raw/cd46d41427c6ea78c8dfb2b5556460aebe7fe1bd/every%2520seacond%2520you%2520get%2520faster"))()
     end)
 end
 
