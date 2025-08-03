@@ -34,6 +34,6 @@ elseif game.PlaceId == 0 then
 -- if not supported
 else
     pcall(function()
-        loadstring(game:HttpGet("https://gist.githubusercontent.com/thebiraf/0c9a5657c4403429ba107179fb2f356b/raw/6edc39eb06e01b538e7d92f8c4f18a663280d9df/Unsupported%2520game"))()
+        loadstring(game:HttpGet("https://gist.githubusercontent.com/thebiraf/b8dc286e73020f5446f7998dc1651e42/raw/78c038e4a6c736235e19e009491282ec3ece503a/unsupported%2520game."))()
     end)
 end
