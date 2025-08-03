@@ -11,15 +11,10 @@ end)
 
 if game.PlaceId == 81440632616906 then
     pcall(function()
-        loadstring(game:HttpGet("https://pastebin.com/raw/5NHqnmJ6"))()
+        loadstring(game:HttpGet("https://gist.githubusercontent.com/thebiraf/078b24d6aea94f58fc97a21e683abbfa/raw/d53813b1c974f40d8016fadbce977304b4f46dec/dig%2520to%2520earths%2520core"))()
     end)
 end
 
-if game.PlaceId == 17625359962 or game.PlaceId == 117398147513099 then
-    pcall(function()
-        loadstring(game:HttpGet("https://pastebin.com/raw/LVGpyNMS"))()
-    end)
-end
 
 if game.PlaceId == 13355910112 then
     pcall(function()
