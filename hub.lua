@@ -31,6 +31,11 @@ elseif game.PlaceId == 0 then
     pcall(function()
         loadstring(game:HttpGet("https://gist.githubusercontent.com/thebiraf/451324b8baeaa0f0ca437e86f9811530/raw/db09f4f2d2318c2d1dff0a214303eee9628ab921/invalid"))()
     end)
+
+elseif game.PlaceId == 13461044782 then
+    pcall(function()
+        loadstring(game:HttpGet("https://gist.githubusercontent.com/thebiraf/785efc32f7a51ebe7873ad6c7e8ab046/raw/c8c708299d195e900480875ab475a138a057aa2f/every%2520seacond%2520you%2520get%2520more%2520jump%2520power"))()
+    end)
 -- if not supported
 else
     pcall(function()
