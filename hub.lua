@@ -26,16 +26,16 @@ elseif game.PlaceId == 75663528075786 then
     pcall(function()
         loadstring(game:HttpGet("https://gist.githubusercontent.com/thebiraf/32dfb4ed746c5d54cd2b031356666476/raw/224c41cc309b621cd2a972e8119c083a5facd254/How%2520to%2520train%2520ur%2520dragon"))()
     end)
+elseif game.PlaceId == 13461044782 then
+    pcall(function()
+        loadstring(game:HttpGet("https://gist.githubusercontent.com/thebiraf/947737c51b4716a23a6e61b1d1c3dd85/raw/943c4e0d062e7c54fe2b0da29380feced3a66206/every%2520seacond%2520you%2520get%2520higher%2520jump%2520power"))()
+    end)
 -- Example code for future updates
 elseif game.PlaceId == 0 then
     pcall(function()
         loadstring(game:HttpGet("https://gist.githubusercontent.com/thebiraf/451324b8baeaa0f0ca437e86f9811530/raw/db09f4f2d2318c2d1dff0a214303eee9628ab921/invalid"))()
     end)
 
-elseif game.PlaceId == 13461044782 then
-    pcall(function()
-        loadstring(game:HttpGet("https://gist.githubusercontent.com/thebiraf/785efc32f7a51ebe7873ad6c7e8ab046/raw/c8c708299d195e900480875ab475a138a057aa2f/every%2520seacond%2520you%2520get%2520more%2520jump%2520power"))()
-    end)
 -- if not supported
 else
     pcall(function()
