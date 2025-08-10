@@ -30,6 +30,11 @@ elseif game.PlaceId == 13461044782 then
     pcall(function()
         loadstring(game:HttpGet("https://gist.githubusercontent.com/thebiraf/947737c51b4716a23a6e61b1d1c3dd85/raw/943c4e0d062e7c54fe2b0da29380feced3a66206/every%2520seacond%2520you%2520get%2520higher%2520jump%2520power"))()
     end)
+
+elseif game.PlaceId == 13501167264 then
+    pcall(function()
+        loadstring(game:HttpGet("https://gist.githubusercontent.com/thebiraf/058fdfee05538610be325c229a33cf6d/raw/2ea3f72d1faf53f2daecad38b85ba49676b2f4a3/build%2520a%2520raftt%2520or%2520die"))()
+    end)
 -- Example code for future updates
 elseif game.PlaceId == 0 then
     pcall(function()
