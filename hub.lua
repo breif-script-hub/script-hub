@@ -33,7 +33,7 @@ elseif game.PlaceId == 13461044782 then
 
 elseif game.PlaceId == 13501167264 then
     pcall(function()
-        loadstring(game:HttpGet("https://gist.githubusercontent.com/thebiraf/9640345c6402ae8b15a441f99014c5a1/raw/e9d6301671a474bf1de9d7ffbd2162065f62e753/build%2520a%2520raft%2520or%2520die"))()
+        loadstring(game:HttpGet("https://gist.githubusercontent.com/thebiraf/614354c746ebfadeb757e9a1fffe7f5c/raw/2c385358ac700218aa4004461ef70d22f5bbba1d/build%2520a%2520raft%2520or%2520die"))()
     end)
 -- Example code for future updates
 elseif game.PlaceId == 0 then
