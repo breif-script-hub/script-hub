@@ -14,6 +14,10 @@ if game.PlaceId == 81440632616906 then -- dig to earths core
     pcall(function()
         loadstring(game:HttpGet("https://gist.githubusercontent.com/thebiraf/078b24d6aea94f58fc97a21e683abbfa/raw/d53813b1c974f40d8016fadbce977304b4f46dec/dig%2520to%2520earths%2520core"))()
     end)
+elseif game.PlaceId == 14218711698  then -- criminal tycoon
+    pcall(function()
+        loadstring(game:HttpGet("https://gist.githubusercontent.com/thebiraf/a753bb753cef544680a5b299501e7a06/raw/00576063682f536ecfef7ddfa3d2345cd0105045/criminal%2520tycoon"))()
+    end)
 elseif game.PlaceId == 13355910112 then -- every seacond you get faster
     pcall(function()
         loadstring(game:HttpGet("https://gist.githubusercontent.com/thebiraf/7ccd216eeac9ee67a028ad76a7c08dc4/raw/7076596495adb50d5ce48c2531636fa1f7a4ea29/every%2520seacond%2520you%2520get%2520faster"))()
@@ -34,10 +38,6 @@ elseif game.PlaceId == 13461044782 then -- every seacond you jump higher
 elseif game.PlaceId == 13501167264 then -- build a raft or die
     pcall(function()
         loadstring(game:HttpGet("https://gist.githubusercontent.com/thebiraf/614354c746ebfadeb757e9a1fffe7f5c/raw/2c385358ac700218aa4004461ef70d22f5bbba1d/build%2520a%2520raft%2520or%2520die"))()
-    end)
-elseif game.PlaceId == 14218711698  then -- criminal tycoon
-    pcall(function()
-        loadstring(game:HttpGet("https://gist.githubusercontent.com/thebiraf/a753bb753cef544680a5b299501e7a06/raw/00576063682f536ecfef7ddfa3d2345cd0105045/criminal%2520tycoon"))()
     end)
 -- Example code for future updates
 elseif game.PlaceId == 0 then -- example
