@@ -50,7 +50,7 @@ elseif game.PlaceId == 0 then -- example
         loadstring(game:HttpGet("https://gist.githubusercontent.com/thebiraf/451324b8baeaa0f0ca437e86f9811530/raw/db09f4f2d2318c2d1dff0a214303eee9628ab921/invalid"))()
     end)
 
--- if not supported
+-- if not supported - the script below is broken bcz its unsupported xd
 else
     pcall(function()
         loadstring(game:HttpGet("https://gist.githubusercontent.com/thebiraf/b8dc286e73020f5446f7998dc1651e42/raw/78c038e4a6c736235e19e009491282ec3ece503a/unsupported%2520game."))()
