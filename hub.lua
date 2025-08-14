@@ -39,6 +39,11 @@ elseif game.PlaceId == 13501167264 then -- build a raft or die
     pcall(function()
         loadstring(game:HttpGet("https://gist.githubusercontent.com/thebiraf/614354c746ebfadeb757e9a1fffe7f5c/raw/2c385358ac700218aa4004461ef70d22f5bbba1d/build%2520a%2520raft%2520or%2520die"))()
     end)
+
+elseif game.PlaceId == 95425238757150 then -- wall hop to admin obby
+    pcall(function()
+        loadstring(game:HttpGet("https://gist.githubusercontent.com/thebiraf/7fd78b12feb653501d5fe979f97dd9e3/raw/a9a9a79889ebb3555c5c9e44242e79f41b73dbd4/admin%2520obby%2520wall%2520hop"))()
+    end)
 -- Example code for future updates
 elseif game.PlaceId == 0 then -- example
     pcall(function()
