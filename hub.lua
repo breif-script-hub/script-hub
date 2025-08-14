@@ -35,9 +35,9 @@ elseif game.PlaceId == 13501167264 then -- build a raft or die
     pcall(function()
         loadstring(game:HttpGet("https://gist.githubusercontent.com/thebiraf/614354c746ebfadeb757e9a1fffe7f5c/raw/2c385358ac700218aa4004461ef70d22f5bbba1d/build%2520a%2520raft%2520or%2520die"))()
     end)
-elseif game.PlaceId == 14218711698  then -- chriminal tycoon
+elseif game.PlaceId == 14218711698  then -- criminal tycoon
     pcall(function()
-        loadstring(game:HttpGet("https://gist.githubusercontent.com/thebiraf/8141ba0db0f950a21a8c3a597ba46aff/raw/ee88fcca9ab0bc498a70129a683f6507166729a4/chriminal%2520tycoon"))()
+        loadstring(game:HttpGet("https://gist.githubusercontent.com/thebiraf/a753bb753cef544680a5b299501e7a06/raw/00576063682f536ecfef7ddfa3d2345cd0105045/criminal%2520tycoon"))()
     end)
 -- Example code for future updates
 elseif game.PlaceId == 0 then -- example
