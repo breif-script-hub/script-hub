@@ -44,6 +44,11 @@ elseif game.PlaceId == 95425238757150 then -- wall hop to admin obby
     pcall(function()
         loadstring(game:HttpGet("https://gist.githubusercontent.com/thebiraf/7fd78b12feb653501d5fe979f97dd9e3/raw/a9a9a79889ebb3555c5c9e44242e79f41b73dbd4/admin%2520obby%2520wall%2520hop"))()
     end)
+
+elseif game.PlaceId == 13772394625 or game.PlaceId == 15144787112 or game.PlaceId == 15517169103 or game.PlaceId == 15234596844 or game.PlaceId == 14915220621 or game.PlaceId == 15264892126 then -- Bladeball
+    pcall(function()
+        loadstring(game:HttpGet("https://gist.githubusercontent.com/thebiraf/dd5bb1f41f6b154411f9d97ce1d8bbe4/raw/8459f65716fb1dcf7bfb11d9b0b7e836b6e2ab90/bladeball"))()
+    end)
 -- Example code for future updates
 elseif game.PlaceId == 0 then -- example
     pcall(function()
