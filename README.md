@@ -1,13 +1,15 @@
 <style>
 .site-header, 
 .pagehead, 
-.site-footer,
-.site-title, 
-.header,    
-h1.site-title { 
+.site-footer {
     display: none !important;
 }
-</style>
+.page-header { 
+    display: none !important;
+}
+.site-title { 
+    display: none !important;
+}
 </style>
 <h2 align="center">
   A Roblox script Made by breif
