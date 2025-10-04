@@ -4,14 +4,13 @@
 </h2>
 
 <p align="center">
-  Custom-made scripts and configs for Roblox games.<br/>
+  Custom-made scripts for Roblox games.<br/>
   Updated frequently with new features and improvements.
 </p>
 
 <p align="center">
-  🔗 <a href="https://github.com/breif-script-hub/script-hub">Main Script Hub</a> <br/>
-  ⚙️ <a href="https://discord.gg/yourdiscordlink">Join our Discord</a> <br/>
-  💾 <a href="https://example.com/extra">More Resources</a>
+  🔗 <a href="https://github.com/breif-script-hub/script-hub">Github page</a> <br/>
+  ⚙️ <a href="https://discord.gg/nD5zARHUhP">Join our Discord</a> <br/>
 </p>
 
 ---
