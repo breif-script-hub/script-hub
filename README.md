@@ -20,4 +20,7 @@
 ```luau
 loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/breif-script-hub/script-hub/refs/heads/main/loader"))()
 ```
-2. yes
+2. Load the check place id script
+```luau
+loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/breif-script-hub/script-hub/refs/heads/main/checkplaceID.lua"))()
+```
