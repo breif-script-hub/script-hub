@@ -1,17 +1,3 @@
-<style>
-.site-header, 
-.pagehead, 
-.site-footer,
-.page-header, 
-.page-content + hr {
-    display: none !important;
-}
-</style>
-
-<h2 align="center">
-  A Roblox script Made by breif
-  <br/>
-</h2>
 <h2 align="center">
   A Roblox script Made by breif
   <br/>
