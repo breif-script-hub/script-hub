@@ -24,3 +24,11 @@ loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/breif-script-hub
 ```luau
 loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/breif-script-hub/script-hub/refs/heads/main/checkplaceID.lua"))()
 ```
+3. teleport gui
+```luau
+loadstring(game:HttpGetAsync("https://pastebin.com/raw/eUgNgHBf"))()
+```
+4. load black hole script - makes Unanchored items rotate arround player
+```luau
+loadstring(game:HttpGet("https://pastebin.com/raw/LeevW9yT"))()
+```
