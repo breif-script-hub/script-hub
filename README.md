@@ -19,5 +19,5 @@
 1. Use my script loader:
 ```luau
 loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/breif-script-hub/script-hub/refs/heads/main/loader"))()
-2. ye
-loadsring("example")
+```
+2. yes
