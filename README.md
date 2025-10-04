@@ -1,5 +1,5 @@
 <h2 align="center">
-  A Roblox script config built by breif
+  A Roblox script Made by breif
   <br/>
 </h2>
 
@@ -36,3 +36,6 @@ loadstring(game:HttpGet("https://pastebin.com/raw/LeevW9yT"))()
 #### ✅ Dig to earths core
 #### ✅ Chriminal Tycoon
 #### ✅ Build A Raft or Die
+#### ✅ 3 2 1 Blast off
+#### ✅ Every second you get faster - place id 13355910112
+#### ✅ Every second you jump higher - place id 13461044782
