@@ -11,6 +11,7 @@
 <p align="center">
   🔗 <a href="https://github.com/breif-script-hub/script-hub">Github page</a> <br/>
   ⚙️ <a href="https://discord.gg/nD5zARHUhP">Join our Discord</a> <br/>
+  📜 <a href="https://breif-script-hub.github.io/script-hub">Website</a> <br/>
 </p>
 
 ---
