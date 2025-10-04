@@ -33,6 +33,6 @@ loadstring(game:HttpGetAsync("https://pastebin.com/raw/eUgNgHBf"))()
 loadstring(game:HttpGet("https://pastebin.com/raw/LeevW9yT"))()
 ```
 ### Supported Games:
-🟠 Natural Disasters\n
-🔴 Arsenal\n
-✅ Bedwars\n
+# 🟠 Natural Disasters
+# 🔴 Arsenal
+# ✅ Bedwars
