@@ -16,6 +16,6 @@
 ---
 
 ## Usage
-1. Use my normal script:
+1. Use my script loader:
 ```luau
 loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/breif-script-hub/script-hub/refs/heads/main/loader"))()
