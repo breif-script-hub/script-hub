@@ -1,3 +1,11 @@
+<style>
+.site-header, .pagehead {
+    display: none !important;
+}
+.site-footer {
+    display: none !important;
+}
+</style>
 <h2 align="center">
   A Roblox script Made by breif
   <br/>
