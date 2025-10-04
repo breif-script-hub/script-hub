@@ -32,7 +32,7 @@ loadstring(game:HttpGetAsync("https://pastebin.com/raw/eUgNgHBf"))()
 ```luau
 loadstring(game:HttpGet("https://pastebin.com/raw/LeevW9yT"))()
 ```
-### Supported Games:
-# 🟠 Natural Disasters
-# 🔴 Arsenal
-# ✅ Bedwars
+## Supported Games:
+### 🟠 Natural Disasters
+### 🔴 Arsenal
+### ✅ Bedwars
