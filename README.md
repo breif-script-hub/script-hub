@@ -33,6 +33,10 @@ loadstring(game:HttpGetAsync("https://pastebin.com/raw/eUgNgHBf"))()
 ```luau
 loadstring(game:HttpGet("https://pastebin.com/raw/LeevW9yT"))()
 ```
+5. copy charicter cframe
+```luau
+loadstring(game:HttpGet("https://pastebin.com/raw/bmM1Z6M5"))()
+```
 ## Supported Games:
 ###### May be outdated contact me if a script is patched
 #### ✅ Dig to earths core - Place id 81440632616906
