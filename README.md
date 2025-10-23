@@ -23,7 +23,7 @@ loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/breif-script-hub
 ```
 2. Load the check place id script
 ```luau
-loadstring(game:HttpGetAsync("https://pastebin.com/raw/U3S8hPHJ"))()
+loadstring(game:HttpGetAsync("https://pastebin.com/raw/dCc6vtyD"))()
 ```
 3. teleport gui
 ```luau
