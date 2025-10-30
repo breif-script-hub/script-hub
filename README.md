@@ -23,19 +23,19 @@ loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/breif-script-hub
 ```
 2. Load the check place id script
 ```luau
-loadstring(game:HttpGetAsync(""))()
+loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/breif-script-hub/script-hub/refs/heads/main/Dependencies%20/%20side%20scrips/copy%20place%20id"))()
 ```
 3. teleport gui
 ```luau
-loadstring(game:HttpGetAsync(""))()
+loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/breif-script-hub/script-hub/refs/heads/main/Dependencies%20/%20side%20scrips/teleport%20gui%20by%20brief"))()
 ```
 4. load black hole script - makes Unanchored items rotate arround player
 ```luau
-loadstring(game:HttpGet(""))()
+loadstring(game:HttpGet("https://raw.githubusercontent.com/breif-script-hub/script-hub/refs/heads/main/Dependencies%20/%20side%20scrips/black%20hole%20script"))()
 ```
 5. copy charicter cframe
 ```luau
-loadstring(game:HttpGet(""))()
+loadstring(game:HttpGet("https://raw.githubusercontent.com/breif-script-hub/script-hub/refs/heads/main/Dependencies%20/%20side%20scrips/copy%20cframe"))()
 ```
 ## Supported Games:
 ###### May be outdated contact me if a script is patched
