@@ -389,7 +389,7 @@ MiscTab:CreateToggle({
 MiscTab:CreateButton({
     Name = "Copy Cframe Location",
     Callback = function()
-        loadstring(game:HttpGet(""))()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/breif-script-hub/script-hub/refs/heads/main/Dependencies%20/%20side%20scrips/copy%20cframe"))()
     end
 })
     local ShopTab = Window:CreateTab("Guis")
