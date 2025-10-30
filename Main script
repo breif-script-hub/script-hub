@@ -11,11 +11,7 @@ local gameScripts = {
     [95425238757150] = "https://raw.githubusercontent.com/breif-script-hub/script-hub/refs/heads/main/Games/95425238757150%20-%20wallhop%20to%20admin%20obby",-- Wall Hop to Admin Obby
     [2693023319] = "https://raw.githubusercontent.com/breif-script-hub/script-hub/refs/heads/main/Games/2693023319%20-%20Expedition%20Antarctica",    -- Expedition Antarctica
     [189707] = "https://raw.githubusercontent.com/breif-script-hub/script-hub/refs/heads/main/Games/189707%20-%20Natural%20Disasters",    -- Natural disasters
-    [109983668079237] = "https://raw.githubusercontent.com/breif-script-hub/script-hub/refs/heads/main/Games/trashy%20games",    -- Trashy game
-    [126884695634066] = "https://raw.githubusercontent.com/breif-script-hub/script-hub/refs/heads/main/Games/trashy%20games",    -- Trashy game
-    [127742093697776] = "https://raw.githubusercontent.com/breif-script-hub/script-hub/refs/heads/main/Games/trashy%20games",    -- Trashy game
-    [124977557560410] = "https://raw.githubusercontent.com/breif-script-hub/script-hub/refs/heads/main/Games/trashy%20games",    -- Trashy game
-    [96342491571673] = "https://raw.githubusercontent.com/breif-script-hub/script-hub/refs/heads/main/Games/trashy%20games",    -- Trashy game
+
     
 }
 local universalScript = "https://raw.githubusercontent.com/breif-script-hub/script-hub/refs/heads/main/Games/Universal" -- Universal Script
