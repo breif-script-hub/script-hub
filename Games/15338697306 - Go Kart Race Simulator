@@ -1,0 +1,651 @@
+-- makes sure the seur has right game loaded
+if game.PlaceId == 15338697306 then
+    local Players = game:GetService("Players")
+    local player = Players.LocalPlayer
+    local UserInputService = game:GetService("UserInputService")
+    local Debris = game:GetService("Debris")
+    local RunService = game:GetService("RunService")
+    -- this loads the gui we will be using.
+    local Rayfield = loadstring(game:HttpGet('https://pastefy.app/gfsVc4lI/raw'))()
+    -- this creates the window we will be using.
+    local Window = Rayfield:CreateWindow({
+        Name = "Go Kart Simulator",
+        Icon = 0,
+        LoadingTitle = "Script Hub",
+        LoadingSubtitle = "by Breif",
+        ShowText = "Rayfield",
+        Theme = "Default",
+        ToggleUIKeybind = "K",
+        DisableRayfieldPrompts = false,
+        DisableBuildWarnings = true,
+        ConfigurationSaving = {
+            Enabled = true,
+            FolderName = "script_hub_configs",
+            FileName = "default_config"
+        },
+        Discord = {
+            Enabled = false,
+            Invite = "noinvitelink",
+            RememberJoins = true
+        },
+        KeySystem = false
+    })
+
+    local MainTab = Window:CreateTab("Main")
+    local MiscTab = Window:CreateTab("Misc")
+    local VISTab = Window:CreateTab("visuals")
+    -- Fly code
+    local flying = false
+    local flySpeed = 50
+    local bodyGyro, bodyVelocity
+    local hrp
+    local directions = {Forward = false, Backward = false, Left = false, Right = false, Up = false, Down = false}
+
+    UserInputService.InputBegan:Connect(function(input, gameProcessed)
+        if gameProcessed or not flying then return end
+        if input.KeyCode == Enum.KeyCode.W then directions.Forward = true end
+        if input.KeyCode == Enum.KeyCode.S then directions.Backward = true end
+        if input.KeyCode == Enum.KeyCode.A then directions.Left = true end
+        if input.KeyCode == Enum.KeyCode.D then directions.Right = true end
+        if input.KeyCode == Enum.KeyCode.Space then directions.Up = true end
+        if input.KeyCode == Enum.KeyCode.LeftControl then directions.Down = true end
+    end)
+
+    UserInputService.InputEnded:Connect(function(input)
+        if not flying then return end
+        if input.KeyCode == Enum.KeyCode.W then directions.Forward = false end
+        if input.KeyCode == Enum.KeyCode.S then directions.Backward = false end
+        if input.KeyCode == Enum.KeyCode.A then directions.Left = false end
+        if input.KeyCode == Enum.KeyCode.D then directions.Right = false end
+        if input.KeyCode == Enum.KeyCode.Space then directions.Up = false end
+        if input.KeyCode == Enum.KeyCode.LeftControl then directions.Down = false end
+    end)
+
+    local function getDirectionVector()
+        local cam = workspace.CurrentCamera
+        local moveVector = Vector3.new()
+        if directions.Forward then moveVector += cam.CFrame.LookVector end
+        if directions.Backward then moveVector -= cam.CFrame.LookVector end
+        if directions.Right then moveVector += cam.CFrame.RightVector end
+        if directions.Left then moveVector -= cam.CFrame.RightVector end
+        if directions.Up then moveVector += cam.CFrame.UpVector end
+        if directions.Down then moveVector -= cam.CFrame.UpVector end
+        return moveVector.Magnitude > 0 and moveVector.Unit * flySpeed or Vector3.new()
+    end
+
+    local flyConnection
+    local function startFly()
+        flying = true
+        hrp = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
+        if not hrp then return end
+        bodyGyro = Instance.new("BodyGyro", hrp)
+        bodyGyro.P = 9e4
+        bodyGyro.MaxTorque = Vector3.new(9e9, 9e9, 9e9)
+        bodyGyro.CFrame = hrp.CFrame
+
+        bodyVelocity = Instance.new("BodyVelocity", hrp)
+        bodyVelocity.Velocity = Vector3.new()
+        bodyVelocity.MaxForce = Vector3.new(9e9, 9e9, 9e9)
+
+        flyConnection = RunService.RenderStepped:Connect(function()
+            if flying then
+                bodyGyro.CFrame = workspace.CurrentCamera.CFrame
+                bodyVelocity.Velocity = getDirectionVector()
+            end
+        end)
+    end
+
+    local function stopFly()
+        flying = false
+        if flyConnection then flyConnection:Disconnect() flyConnection = nil end
+        if bodyGyro then bodyGyro:Destroy() bodyGyro = nil end
+        if bodyVelocity then bodyVelocity:Destroy() bodyVelocity = nil end
+        for k in pairs(directions) do directions[k] = false end
+    end
+
+    MiscTab:CreateToggle({
+        Name = "Fly",
+        CurrentValue = false,
+        Flag = "flyToggle",
+        Callback = function(value)
+            if value then startFly() else stopFly() end
+        end
+    })
+
+    MiscTab:CreateSlider({
+        Name = "Fly Speed",
+        Range = {50, 700},
+        Increment = 1,
+        Suffix = "Speed",
+        CurrentValue = flySpeed,
+        Flag = "flySpeedSlider",
+        Callback = function(value)
+            flySpeed = value
+        end
+    })
+
+    -- NoClip code
+    local noclip = false
+    local noclipConnection
+    MiscTab:CreateToggle({
+        Name = "NoClip",
+        CurrentValue = false,
+        Flag = "noclipToggle",
+        Callback = function(value)
+            noclip = value
+            if noclip and not noclipConnection then
+                noclipConnection = RunService.Stepped:Connect(function()
+                    local char = player.Character
+                    if char then
+                        for _, v in pairs(char:GetDescendants()) do
+                            if v:IsA("BasePart") then v.CanCollide = false end
+                        end
+                    end
+                end)
+            elseif not noclip and noclipConnection then
+                noclipConnection:Disconnect()
+                noclipConnection = nil
+            end
+        end
+    })
+
+-- this allows the player to jump as by default jumping is disiablleld in this game.
+local defaultJumpPower = 0  
+local jpToggleEnabled = false
+MiscTab:CreateToggle({
+    Name = "Enable jump",
+    CurrentValue = false,
+    Flag = "jpToggle",
+    Callback = function(value)
+        jpToggleEnabled = value
+        local character = player.Character or player.CharacterAdded:Wait()
+        local humanoid = character:FindFirstChildWhichIsA("Humanoid")
+        if humanoid then
+            if jpToggleEnabled then
+                humanoid.JumpPower = 50
+            else
+                humanoid.JumpPower = defaultJumpPower
+            end
+        end
+    end
+})
+    -- Infinite Jump
+    local canInfJump = false
+    UserInputService.JumpRequest:Connect(function()
+        local char = player.Character
+        if canInfJump and char then
+            local humanoid = char:FindFirstChildWhichIsA("Humanoid")
+            if humanoid and humanoid:GetState() ~= Enum.HumanoidStateType.Jumping then
+                humanoid:ChangeState(Enum.HumanoidStateType.Jumping)
+            end
+        end
+    end)
+
+    MiscTab:CreateToggle({
+        Name = "Infinite Jump",
+        CurrentValue = false,
+        Flag = "infJumpToggle",
+        Save = true,
+        Callback = function(value)
+            canInfJump = value
+        end
+    })
+-- warning inf strength or wins rewinis the game.
+MainTab:CreateButton({
+    Name = "Give Inf Strength",
+    Callback = function()
+        local args = { 
+            [1] = "Train", 
+            [2] = "Power", 
+            [3] = math.huge  
+        }
+
+        pcall(function()
+            game:GetService("ReplicatedStorage")
+                :WaitForChild("Remotes", 9e9)
+                :WaitForChild("ClientRemote", 9e9)
+                :InvokeServer(unpack(args))
+        end)
+    end
+})
+-- creates a button to give player magma egg 
+MainTab:CreateButton({
+    Name = "Get Magma Egg",
+    Callback = function()
+        local args = {
+            [1] = 4  
+        }
+
+        local success, result = pcall(function()
+            game:GetService("ReplicatedStorage")
+                :WaitForChild("Remotes", 9e9)
+                :WaitForChild("Spin", 9e9)
+                :FireServer(unpack(args))
+        end)
+        if success then
+            Rayfield:Notify({
+                Title = "Success",
+                Content = "Magma Egg spin triggered!",
+                Duration = 3,
+                Image = "rbxassetid://4483345998"
+            })
+        else
+            Rayfield:Notify({
+                Title = "Error",
+                Content = "Failed to spin for Magma Egg!",
+                Duration = 3,
+                Image = "rbxassetid://4483345998"
+            })
+        end
+    end
+})
+-- spam gives  u wins till u reach roblox integer limmit which means u reach inf.
+MainTab:CreateButton({
+    Name = "Give Inf Wins",
+    Callback = function()
+        local duration = 3
+        local endTime = tick() + duration
+
+        spawn(function()
+            while tick() < endTime do
+                local args1 = { [1] = 1 }
+                local args2 = { [1] = 7 }
+                local args3 = { [1] = 6 }
+
+
+                pcall(function()
+                    local remote = game:GetService("ReplicatedStorage")
+                        :WaitForChild("Remotes", 9e9)
+                        :WaitForChild("Spin", 9e9)
+                    remote:FireServer(unpack(args1))
+                    remote:FireServer(unpack(args2))
+                    remote:FireServer(unpack(args3))
+                end)
+
+                task.wait(0.001) 
+            end
+        end)
+    end
+})
+-- doubles your stats in game for a hour.
+MainTab:CreateButton({
+    Name = "Give x2 Stats - lasts 1 hour",
+    Callback = function()
+        local args = { [1] = "D3" }
+
+      
+        local success, result = pcall(function()
+            game:GetService("ReplicatedStorage")
+                :WaitForChild("Remotes", 9e9)
+                :WaitForChild("Daily", 9e9)
+                :FireServer(unpack(args))
+        end)
+
+
+        if success then
+            Rayfield:Notify({
+                Title = "Success",
+                Content = "x2 Stats triggered!",
+                Duration = 3,
+            })
+        else
+            Rayfield:Notify({
+                Title = "Error",
+                Content = "Failed!",
+                Duration = 3,
+            })
+        end
+    end
+})
+-- Doubles youur wins for a hour
+MainTab:CreateButton({
+    Name = "Give x2 wins - lasts 1 hour",
+    Callback = function()
+        local args = { [1] = "D4" }
+
+      
+        local success, result = pcall(function()
+            game:GetService("ReplicatedStorage")
+                :WaitForChild("Remotes", 9e9)
+                :WaitForChild("Daily", 9e9)
+                :FireServer(unpack(args))
+        end)
+
+
+        if success then
+            Rayfield:Notify({
+                Title = "Success",
+                Content = "x2 wins ",
+                Duration = 3,
+            })
+        else
+            Rayfield:Notify({
+                Title = "Error",
+                Content = "failed",
+                Duration = 3,
+            })
+        end
+    end
+})
+MainTab:CreateButton({
+    Name = "Give 10 k wins",
+    Callback = function()
+        local args = { [1] = "D5" }
+
+      
+        local success, result = pcall(function()
+            game:GetService("ReplicatedStorage")
+                :WaitForChild("Remotes", 9e9)
+                :WaitForChild("Daily", 9e9)
+                :FireServer(unpack(args))
+        end)
+
+
+        if success then
+            Rayfield:Notify({
+                Title = "Success",
+                Content = "successfully gave 10 k wins",
+                Duration = 3,
+            })
+        else
+            Rayfield:Notify({
+                Title = "Error",
+                Content = "Failed!",
+                Duration = 3,
+            })
+        end
+    end
+})
+MainTab:CreateButton({
+    Name = "Give Deadly dom",
+    Callback = function()
+        local args = { [1] = "D6" }
+
+      
+        local success, result = pcall(function()
+            game:GetService("ReplicatedStorage")
+                :WaitForChild("Remotes", 9e9)
+                :WaitForChild("Daily", 9e9)
+                :FireServer(unpack(args))
+        end)
+
+
+        if success then
+            Rayfield:Notify({
+                Title = "Success",
+                Content = "successfully gave deadly dom",
+                Duration = 3,
+            })
+        else
+            Rayfield:Notify({
+                Title = "Error",
+                Content = "Failed!",
+                Duration = 3,
+            })
+        end
+    end
+})
+MainTab:CreateButton({
+    Name = "Give dom egg",
+    Callback = function()
+        local args = { [1] = "D7" }
+
+      
+        local success, result = pcall(function()
+            game:GetService("ReplicatedStorage")
+                :WaitForChild("Remotes", 9e9)
+                :WaitForChild("Daily", 9e9)
+                :FireServer(unpack(args))
+        end)
+
+
+        if success then
+            Rayfield:Notify({
+                Title = "Success",
+                Content = "gave dom egg",
+                Duration = 3,
+            })
+        else
+            Rayfield:Notify({
+                Title = "Error",
+                Content = "Failed!",
+                Duration = 3,
+            })
+        end
+    end
+})
+-- code to add
+local Players = game:GetService("Players")
+local RunService = game:GetService("RunService")
+
+local nametagRadius = 2750
+local nametagEnabled = false
+local nametagFolder = Instance.new("Folder")
+nametagFolder.Name = "Nametags"
+nametagFolder.Parent = workspace
+
+local playerNametags = {}
+local localPlayer = Players.LocalPlayer
+
+local function createNametag(player)
+    if not player.Character or not player.Character:FindFirstChild("HumanoidRootPart") then return nil end
+    local billboard = Instance.new("BillboardGui")
+    billboard.Name = "NametagGui"
+    billboard.Adornee = player.Character.HumanoidRootPart
+    billboard.Size = UDim2.new(0, 100, 0, 30)
+    billboard.StudsOffset = Vector3.new(0, 3, 0)
+    billboard.AlwaysOnTop = true
+    billboard.Parent = nametagFolder
+
+    local textLabel = Instance.new("TextLabel")
+    textLabel.BackgroundTransparency = 1
+    textLabel.Size = UDim2.new(1, 0, 1, 0)
+    textLabel.Text = player.Name
+    textLabel.TextColor3 = Color3.new(1, 1, 1)
+    textLabel.TextStrokeColor3 = Color3.new(0, 0, 0)
+    textLabel.TextStrokeTransparency = 0
+    textLabel.Font = Enum.Font.SourceSansBold
+    textLabel.TextScaled = true
+    textLabel.Parent = billboard
+
+    return billboard
+end
+
+local function updateNametags()
+    if not localPlayer.Character or not localPlayer.Character:FindFirstChild("HumanoidRootPart") then return end
+    local localHRP = localPlayer.Character.HumanoidRootPart
+
+    for _, plr in pairs(Players:GetPlayers()) do
+        if plr ~= localPlayer then
+            local char = plr.Character
+            if char and char:FindFirstChild("HumanoidRootPart") then
+                local distance = (char.HumanoidRootPart.Position - localHRP.Position).Magnitude
+                if distance <= nametagRadius then
+                    if not playerNametags[plr] then
+                        playerNametags[plr] = createNametag(plr)
+                    end
+                    if playerNametags[plr] then
+                        playerNametags[plr].Enabled = true
+                        playerNametags[plr].Adornee = plr.Character.HumanoidRootPart
+                    end
+                else
+                    if playerNametags[plr] then
+                        playerNametags[plr].Enabled = false
+                    end
+                end
+            elseif playerNametags[plr] then
+                playerNametags[plr]:Destroy()
+                playerNametags[plr] = nil
+            end
+        end
+    end
+end
+
+local function clearNametags()
+    for _, gui in pairs(playerNametags) do
+        if gui then gui:Destroy() end
+    end
+    playerNametags = {}
+end
+
+local function onPlayerAdded(player)
+    if nametagEnabled and player ~= localPlayer then
+        player.CharacterAdded:Connect(function()
+            task.wait(1)
+            if nametagEnabled then
+                if playerNametags[player] then playerNametags[player]:Destroy() end
+                playerNametags[player] = createNametag(player)
+            end
+        end)
+    end
+end
+
+local function onPlayerRemoving(player)
+    if playerNametags[player] then
+        playerNametags[player]:Destroy()
+        playerNametags[player] = nil
+    end
+end
+
+local updateConnection
+local function toggleNametags(state)
+    nametagEnabled = state
+    if nametagEnabled then
+        for _, player in ipairs(Players:GetPlayers()) do
+            if player ~= localPlayer then
+                onPlayerAdded(player)
+            end
+        end
+        updateConnection = RunService.RenderStepped:Connect(updateNametags)
+        Players.PlayerAdded:Connect(onPlayerAdded)
+        Players.PlayerRemoving:Connect(onPlayerRemoving)
+    else
+        if updateConnection then
+            updateConnection:Disconnect()
+            updateConnection = nil
+        end
+        clearNametags()
+    end
+end
+
+VisTab:CreateToggle({
+    Name = "Nametags",
+    Flag = "NametagsToggle",
+    Callback = function(state)
+        toggleNametags(state)
+        Rayfield:Notify({
+            Title = "Nametags",
+            Content = state and "Nametags Enabled" or "Nametags Disabled",
+            Duration = 3
+        })
+    end
+})
+
+VisTab:CreateSlider({
+    Name = "Nametag Radius",
+    Range = {50, 10000},
+    Increment = 10,
+    CurrentValue = nametagRadius,
+    Flag = "NametagRadiusSlider",
+    Callback = function(value)
+        nametagRadius = value
+    end
+})
+-- player Teleportation
+MiscTab:CreateLabel("Player Teleportation")
+
+local Players = game:GetService("Players")
+local LocalPlayer = Players.LocalPlayer
+
+local playerNames = {}
+for _, player in pairs(Players:GetPlayers()) do
+    if player ~= LocalPlayer then
+        table.insert(playerNames, player.Name)
+    end
+end
+if #playerNames == 0 then
+    playerNames = {"No players found"}
+end
+
+local selectedPlayerName = nil
+
+local playerDropdown = MiscTab:CreateDropdown({
+    Name = "Select Player",
+    Options = playerNames,
+    CurrentOption = playerNames[1],
+    MultipleOptions = false,
+    Flag = "PlayerDropdown",
+    Callback = function(selection)
+        selectedPlayerName = table.concat(selection, ", ")
+        Rayfield:Notify({
+            Title = "Player Selected",
+            Content = "You selected: " .. selectedPlayerName,
+            Duration = 3,
+        })
+    end
+})
+
+-- Teleport Button
+MiscTab:CreateButton({
+    Name = "Teleport to Player",
+    Callback = function()
+        if selectedPlayerName == nil or selectedPlayerName == "No players found" then
+            Rayfield:Notify({
+                Title = "Error",
+                Content = "No valid target player selected.",
+                Duration = 3,
+            })
+            return
+        end
+
+        local targetPlayer = Players:FindFirstChild(selectedPlayerName)
+        if targetPlayer and targetPlayer.Character and targetPlayer.Character:FindFirstChild("HumanoidRootPart") then
+            if LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
+                LocalPlayer.Character.HumanoidRootPart.CFrame = targetPlayer.Character.HumanoidRootPart.CFrame
+                Rayfield:Notify({
+                    Title = "Teleported",
+                    Content = "Teleported to " .. selectedPlayerName,
+                    Duration = 3,
+                })
+            else
+                Rayfield:Notify({
+                    Title = "Error",
+                    Content = "Your character or HumanoidRootPart not found.",
+                    Duration = 3,
+                })
+            end
+        else
+            Rayfield:Notify({
+                Title = "Error",
+                Content = "Target player or HumanoidRootPart not found.",
+                Duration = 3,
+            })
+        end
+    end
+})
+
+local function updateDropdownOptions()
+    local newPlayerNames = {}
+    for _, player in pairs(Players:GetPlayers()) do
+        if player ~= LocalPlayer then
+            table.insert(newPlayerNames, player.Name)
+        end
+    end
+
+    if #newPlayerNames == 0 then
+        newPlayerNames = {"No players found"}
+        selectedPlayerName = nil
+    else
+        if selectedPlayerName == nil or not table.find(newPlayerNames, selectedPlayerName) then
+            selectedPlayerName = nil
+        end
+    end
+
+    playerDropdown:Refresh(newPlayerNames)
+end
+
+Players.PlayerAdded:Connect(updateDropdownOptions)
+Players.PlayerRemoving:Connect(updateDropdownOptions)
+
+
+end
