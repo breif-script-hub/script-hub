@@ -12,7 +12,9 @@ local gameScripts = {
     [2693023319] = "",    -- Expedition Antarctica
     [109652885385286] = "",    -- Dig the backyard
     [189707] = "",    -- Natural disasters
-    [189707] = "",    -- Trashy game
+    [109983668079237] = "https://raw.githubusercontent.com/breif-script-hub/script-hub/refs/heads/main/Games/trashy%20games",    -- Trashy game
+    [126884695634066] = "https://raw.githubusercontent.com/breif-script-hub/script-hub/refs/heads/main/Games/trashy%20games",    -- Trashy game
+    [127742093697776] = "https://raw.githubusercontent.com/breif-script-hub/script-hub/refs/heads/main/Games/trashy%20games",    -- Trashy game
     
 }
 local universalScript = "" -- Universal Script
