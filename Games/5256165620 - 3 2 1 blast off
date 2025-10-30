@@ -1,0 +1,1491 @@
+-- specifies the game that it can load in
+if game.PlaceId == 5256165620 then
+    local Players = game:GetService("Players")
+    local player = Players.LocalPlayer
+    local playerGui = player:WaitForChild("PlayerGui")
+    local screenGui = playerGui:WaitForChild("ScreenGui")
+    wait(0.5)
+
+    local children = screenGui:GetChildren()
+    local target = children[29]
+
+    if target then
+        target:Destroy()
+    end;
+    -- loading rayfield libery
+    local Rayfield = loadstring(game:HttpGet('https://pastefy.app/gfsVc4lI/raw'))()
+-- creates the window for thhe 
+    local Window = Rayfield:CreateWindow({
+        Name = "3 2 1 blastt off",
+        Icon = 0,
+        LoadingTitle = "Script Hub",
+        LoadingSubtitle = "by Breif",
+        ShowText = "Rayfield",
+        Theme = "Default",
+        ToggleUIKeybind = "K",
+        DisableRayfieldPrompts = false,
+        DisableBuildWarnings = true,
+        ConfigurationSaving = {
+            Enabled = true,
+            FolderName = "script_hub_configs",
+            FileName = "default_config"
+        },
+        Discord = {
+            Enabled = false,
+            Invite = "noinvitelink",
+            RememberJoins = true
+        },
+        KeySystem = false,
+        KeySettings = {
+            Title = "Untitled",
+            Subtitle = "Key System",
+            Note = "No method of obtaining the key is provided",
+            FileName = "Key",
+            SaveKey = true,
+            GrabKeyFromSite = false,
+            Key = {"Hello"}
+        }
+    })
+
+    local MainTab = Window:CreateTab("Main")
+local function tryDeleteTouchInterest(parent)
+    if not parent then
+        warn("Error: Parent is nil")
+        return
+    end
+
+    local lockdown = parent:FindFirstChild("Lockdown")
+    if not lockdown then
+        warn("Error: No Lockdown in "..parent.Name)
+        return
+    end
+
+    local part1 = lockdown:FindFirstChild("Part1")
+    if not part1 then
+        warn("Error: No Part1 in "..parent.Name)
+        return
+    end
+
+    local touchInterest = part1:FindFirstChild("TouchInterest")
+    if touchInterest then
+        touchInterest:Destroy()
+    end
+end
+
+local function deleteAll()
+    local launchpad = workspace:FindFirstChild("Launchpad")
+    tryDeleteTouchInterest(launchpad)
+
+    local indices = {12, 13, 14, 15, 16, 17, 18, 19}
+    local children = workspace:GetChildren()
+    for _, i in ipairs(indices) do
+        local child = children[i]
+        tryDeleteTouchInterest(child)
+    end
+end
+-- removes all the forcefeilds
+MainTab:CreateToggle({
+    Name = "Deleet Forcefeild Effect",
+    CurrentValue = False,
+    Flag = "AutoDeleteForcefield",
+    Save = False,
+    Callback = function(value)
+        if value then
+            deleteAll()
+        end
+    end
+}) 
+if MainTab.Flags and MainTab.Flags["AutoDeleteForcefield"] then
+    deleteAll()
+end
+
+
+    local MiscTab = Window:CreateTab("Misc")
+    local ServerTab = Window:CreateTab("Server")
+-- fly code
+    local flying = false
+    local flySpeed = 50
+    local bodyGyro, bodyVelocity
+    local UIS = game:GetService("UserInputService")
+    local RS = game:GetService("RunService")
+    local player = game.Players.LocalPlayer
+    local hrp
+
+    local directions = {
+        Forward = false, Backward = false, Left = false, Right = false, Up = false, Down = false
+    }
+
+    UIS.InputBegan:Connect(function(input, gameProcessed)
+        if gameProcessed or not flying then return end
+        local key = input.KeyCode
+        if key == Enum.KeyCode.W then directions.Forward = true end
+        if key == Enum.KeyCode.S then directions.Backward = true end
+        if key == Enum.KeyCode.A then directions.Left = true end
+        if key == Enum.KeyCode.D then directions.Right = true end
+        if key == Enum.KeyCode.Space then directions.Up = true end
+        if key == Enum.KeyCode.LeftControl then directions.Down = true end
+    end)
+
+    UIS.InputEnded:Connect(function(input)
+        if not flying then return end
+        local key = input.KeyCode
+        if key == Enum.KeyCode.W then directions.Forward = false end
+        if key == Enum.KeyCode.S then directions.Backward = false end
+        if key == Enum.KeyCode.A then directions.Left = false end
+        if key == Enum.KeyCode.D then directions.Right = false end
+        if key == Enum.KeyCode.Space then directions.Up = false end
+        if key == Enum.KeyCode.LeftControl then directions.Down = false end
+    end)
+
+    local function getDirectionVector()
+        local cam = workspace.CurrentCamera
+        local moveVector = Vector3.new()
+        if directions.Forward then moveVector += cam.CFrame.LookVector end
+        if directions.Backward then moveVector -= cam.CFrame.LookVector end
+        if directions.Right then moveVector += cam.CFrame.RightVector end
+        if directions.Left then moveVector -= cam.CFrame.RightVector end
+        if directions.Up then moveVector += cam.CFrame.UpVector end
+        if directions.Down then moveVector -= cam.CFrame.UpVector end
+        return moveVector.Magnitude > 0 and moveVector.Unit * flySpeed or Vector3.new()
+    end
+
+    local flyConnection
+    local function startFly()
+        flying = true
+        hrp = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
+        if not hrp then return end
+        bodyGyro = Instance.new("BodyGyro", hrp)
+        bodyGyro.P = 9e4
+        bodyGyro.MaxTorque = Vector3.new(9e9, 9e9, 9e9)
+        bodyGyro.CFrame = hrp.CFrame
+        bodyVelocity = Instance.new("BodyVelocity", hrp)
+        bodyVelocity.Velocity = Vector3.new()
+        bodyVelocity.MaxForce = Vector3.new(9e9, 9e9, 9e9)
+        flyConnection = RS.RenderStepped:Connect(function()
+            if flying then
+                bodyGyro.CFrame = workspace.CurrentCamera.CFrame
+                bodyVelocity.Velocity = getDirectionVector()
+            end
+        end)
+    end
+
+    local function stopFly()
+        flying = false
+        if flyConnection then flyConnection:Disconnect() flyConnection = nil end
+        if bodyGyro then bodyGyro:Destroy() bodyGyro = nil end
+        if bodyVelocity then bodyVelocity:Destroy() bodyVelocity = nil end
+        for k in pairs(directions) do directions[k] = false end
+    end
+
+    MiscTab:CreateToggle({
+        Name = "Fly",
+        CurrentValue = false,
+        Flag = "flyToggle",
+        Callback = function(value)
+            if value then startFly() else stopFly() end
+        end
+    })
+
+    MiscTab:CreateSlider({
+        Name = "Fly Speed",
+        Range = {50, 700},
+        Increment = 1,
+        Suffix = "Speed",
+        CurrentValue = flySpeed,
+        Flag = "flySpeedSlider",
+        Callback = function(value)
+            flySpeed = value
+        end
+    })
+-- code to make a working no clip.
+    local noclip = false
+    local noclipConnection
+    MiscTab:CreateToggle({
+        Name = "NoClip",
+        CurrentValue = false,
+        Flag = "noclipToggle",
+        Callback = function(value)
+            noclip = value
+            if noclip and not noclipConnection then
+                noclipConnection = game:GetService("RunService").Stepped:Connect(function()
+                    local char = player.Character
+                    if char then
+                        for _, v in pairs(char:GetDescendants()) do
+                            if v:IsA("BasePart") then v.CanCollide = false end
+                        end
+                    end
+                end)
+            elseif not noclip and noclipConnection then
+                noclipConnection:Disconnect()
+                noclipConnection = nil
+            end
+        end
+    })
+
+    local HttpService = game:GetService("HttpService")
+    local TeleportService = game:GetService("TeleportService")
+    local Players = game:GetService("Players")
+-- code to create a rejoin.
+    ServerTab:CreateButton({
+        Name = "Rejoin Server",
+        Callback = function()
+            TeleportService:Teleport(game.PlaceId, Players.LocalPlayer)
+        end
+    })
+-- hops the server player is in to a diffrent server
+ServerTab:CreateButton({
+    Name = "Server Hop",
+    Callback = function()
+        local HttpService = game:GetService("HttpService")
+        local TeleportService = game:GetService("TeleportService")
+        local Players = game:GetService("Players")
+
+        local placeId = game.PlaceId
+        local currentJobId = game.JobId
+
+        local function getServers(cursor)
+            local url = "https://games.roblox.com/v1/games/"..placeId.."/servers/Public?sortOrder=Desc&limit=100"
+            if cursor then
+                url = url .. "&cursor=" .. cursor
+            end
+            local success, response = pcall(function()
+                return HttpService:JSONDecode(game:HttpGet(url))
+            end)
+            if success and response then
+                return response
+            else
+                return nil
+            end
+        end
+
+        local cursor = nil
+        while true do
+            local servers = getServers(cursor)
+            if not servers or not servers.data then
+                break
+            end
+
+            for _, server in ipairs(servers.data) do
+                if server.playing >= 3 and server.id ~= currentJobId then
+                    TeleportService:TeleportToPlaceInstance(placeId, server.id, Players.LocalPlayer)
+                    return
+                end
+            end
+
+            if servers.nextPageCursor then
+                cursor = servers.nextPageCursor
+            else
+                break
+            end
+        end
+
+        warn("No suitable server found to hop to.")
+    end
+})
+
+    ServerTab:CreateButton({
+        Name = "Leave Game",
+        Callback = function()
+            local RunService = game:GetService("RunService")
+            if RunService:IsStudio() then return end
+            if typeof(game.Close) == "function" then game:Close()
+            elseif typeof(game.Shutdown) == "function" then game:Shutdown()
+            end
+        end
+    })
+local Players = game:GetService("Players")
+local player = Players.LocalPlayer
+-- gives a tool that lets player tp.
+MiscTab:CreateButton({
+    Name = "Give Teleportation Tool",
+    Callback = function()
+        local backpack = player:WaitForChild("Backpack")
+
+        local existingTool = backpack:FindFirstChild("Teleportation Tool")
+        if existingTool then
+            existingTool:Destroy()
+        end
+
+        local tool = Instance.new("Tool")
+        tool.Name = "Teleportation Tool"
+        tool.RequiresHandle = false
+        tool.Parent = backpack
+        local mouse
+        tool.Equipped:Connect(function()
+            mouse = player:GetMouse()
+        end)
+
+        tool.Activated:Connect(function()
+            if not mouse then return end
+            local target = mouse.Target
+            local hitPos = mouse.Hit.Position
+
+            if target and target:IsA("BasePart") then
+                local rayOrigin = hitPos + Vector3.new(0, 5, 0)
+                local rayDirection = Vector3.new(0, -10, 0) 
+
+                local raycastParams = RaycastParams.new()
+                raycastParams.FilterDescendantsInstances = {player.Character}
+                raycastParams.FilterType = Enum.RaycastFilterType.Blacklist
+
+                local rayResult = workspace:Raycast(rayOrigin, rayDirection, raycastParams)
+
+                if rayResult then
+                    local teleportPos = rayResult.Position + Vector3.new(0, 3, 0) 
+
+                    local character = player.Character
+                    local hrp = character and character:FindFirstChild("HumanoidRootPart")
+                    if hrp then
+                        hrp.CFrame = CFrame.new(teleportPos)
+                    end
+                else
+                    warn("Could not find surface to teleport to.")
+                end
+            else
+                warn("Must click on a valid BasePart.")
+            end
+        end)
+    end
+})
+-- inf jump code
+local UserInputService = game:GetService("UserInputService")
+local player = game.Players.LocalPlayer
+local character = player.Character or player.CharacterAdded:Wait()
+local humanoid = character:WaitForChild("Humanoid")
+
+local canInfJump = false
+
+
+UserInputService.JumpRequest:Connect(function()
+    if canInfJump then
+        if humanoid and humanoid:GetState() ~= Enum.HumanoidStateType.Jumping then
+            humanoid:ChangeState(Enum.HumanoidStateType.Jumping)
+        end
+    end
+end)
+
+MiscTab:CreateToggle({
+    Name = "Infinite Jump",
+    CurrentValue = false,
+    Flag = "infJumpToggle",
+    Save = true,
+    Callback = function(value)
+        canInfJump = value
+    end
+})
+    local TpTab = Window:CreateTab("Teleportation")
+    TpTab:CreateLabel("local Spawn area")
+    TpTab:CreateButton({
+        Name = "Teleport to spawn",
+        Callback = function()
+            local player = game.Players.LocalPlayer
+            local char = player.Character or player.CharacterAdded:Wait()
+            local hrp = char:WaitForChild("HumanoidRootPart")
+            local targetCFrame = CFrame.new(-0.437188268, 28.6390953, 1.64073324, 0.000268262287, -1.55916009e-08, -0.99999994, 1.66312319e-09, 1, -1.5591155e-08, 0.99999994, -1.65894065e-09, 0.000268262287)
+            hrp.CFrame = targetCFrame
+        end
+    })
+-- button to copy charicters cframe this was really helpfull in development.
+MiscTab:CreateButton({
+    Name = "Copy Cframe Location",
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/breif-script-huub/script-hub/refs/heads/main/copy%20c%20frame%20location.lua"))()
+    end
+})
+    local ShopTab = Window:CreateTab("Guis")
+    ShopTab:CreateLabel("below are the guis that are avalable to use.")
+    ShopTab:CreateLabel("shops")
+    -- teleports player to the drone shop
+    ShopTab:CreateButton({
+        Name = "drone shop - reqiures teleport",
+        Callback = function()
+            local player = game.Players.LocalPlayer
+            local char = player.Character or player.CharacterAdded:Wait()
+            local hrp = char:WaitForChild("HumanoidRootPart")
+            local targetCFrame = CFrame.new(35.8141899, 3.08813906, -89.7394485, 0.974972129, 2.41089126e-09, -0.222327128, 3.63166852e-09, 1, 2.67698645e-08, 0.222327128, -2.69072906e-08, 0.974972129)
+            hrp.CFrame = targetCFrame
+        end
+    })
+    -- opens fuel scoop shop no teleport required
+ShopTab:CreateButton({
+    Name = "Fuel Scoop shop",
+    Callback = function()
+        local touchInterest = workspace.MainIsland.Shops.FuelScoopShop.ShopDetector.OpenDetector:FindFirstChild("TouchInterest")
+        if touchInterest then
+            firetouchinterest(game.Players.LocalPlayer.Character.HumanoidRootPart, touchInterest.Parent, 0)
+            firetouchinterest(game.Players.LocalPlayer.Character.HumanoidRootPart, touchInterest.Parent, 1)
+        else
+            warn("TouchInterest not found!")
+        end
+    end
+})
+-- opens the backkpack shop for player
+ShopTab:CreateButton({
+    Name = "Backpack Shop",
+    Callback = function()
+        local touchInterest = workspace.MainIsland.Shops.BackpackShop.ShopDetector.OpenDetector:FindFirstChild("TouchInterest")
+        local player = game.Players.LocalPlayer
+        local character = player.Character or player.CharacterAdded:Wait()
+        local hrp = character:FindFirstChild("HumanoidRootPart")
+        
+        if touchInterest and hrp then
+            firetouchinterest(hrp, touchInterest.Parent, 0) 
+            firetouchinterest(hrp, touchInterest.Parent, 1) 
+        else
+            warn("TouchInterest or HumanoidRootPart not found!")
+        end
+    end
+})
+-- opens rocket shop for player
+ShopTab:CreateButton({
+    Name = "Rocket Shop",
+    Callback = function()
+        local touchInterest = workspace.MainIsland.Shops.RocketShop.ShopDetector.OpenDetector:FindFirstChild("TouchInterest")
+        local player = game.Players.LocalPlayer
+        local character = player.Character or player.CharacterAdded:Wait()
+        local hrp = character:FindFirstChild("HumanoidRootPart")
+        
+        if touchInterest and hrp then
+            firetouchinterest(hrp, touchInterest.Parent, 0) 
+            firetouchinterest(hrp, touchInterest.Parent, 1) 
+        else
+            warn("TouchInterest or HumanoidRootPart not found!")
+        end
+    end
+})
+-- opens the gem shop for player
+ShopTab:CreateButton({
+    Name = "Gem Shop",
+    Callback = function()
+        local touchInterest = workspace.MainIsland.Shops.GemShop.ShopDetector.OpenDetector:FindFirstChild("TouchInterest")
+        local player = game.Players.LocalPlayer
+        local character = player.Character or player.CharacterAdded:Wait()
+        local hrp = character:FindFirstChild("HumanoidRootPart")
+
+        if touchInterest and hrp then
+            firetouchinterest(hrp, touchInterest.Parent, 0) 
+            firetouchinterest(hrp, touchInterest.Parent, 1) 
+        else
+            warn("TouchInterest or HumanoidRootPart not found!")
+        end
+    end
+})
+    ShopTab:CreateLabel("Rank Up")
+    -- brings u to the rank up screen werer u can pay to rank up.
+ShopTab:CreateButton({
+    Name = "Rank Up",
+    Callback = function()
+        local touchInterest = workspace.MainIsland.Shops.RankUp.ShopDetector.OpenDetector:FindFirstChild("TouchInterest")
+        local player = game.Players.LocalPlayer
+        local character = player.Character or player.CharacterAdded:Wait()
+        local hrp = character:FindFirstChild("HumanoidRootPart")
+
+        if touchInterest and hrp then
+            firetouchinterest(hrp, touchInterest.Parent, 0)
+            firetouchinterest(hrp, touchInterest.Parent, 1)
+        else
+            warn("TouchInterest or HumanoidRootPart not found!")
+        end
+    end
+})
+-- these are options to teleport to islands some of them autotmaticallly do tasks for you depending on how easy it is.
+    TpTab:CreateLabel("prize chests and tasks")
+TpTab:CreateButton({
+    Name = "prize #1",
+    Callback = function()
+        local player = game.Players.LocalPlayer
+        local char = player.Character or player.CharacterAdded:Wait()
+        local hrp = char:WaitForChild("HumanoidRootPart")
+
+ 
+        local targetCFrame = CFrame.new(43.0528793, 215.881088, -8.39923954, 0.0133950375, 3.43270408e-08, -0.999910295, 7.06670491e-08, 1, 3.52767913e-08, 0.999910295, -7.11332433e-08, 0.0133950375) 
+
+        hrp.CFrame = targetCFrame
+    end
+})
+TpTab:CreateButton({
+    Name = "prize #2",
+    Callback = function()
+        local player = game.Players.LocalPlayer
+        local char = player.Character or player.CharacterAdded:Wait()
+        local hrp = char:WaitForChild("HumanoidRootPart")
+
+ 
+        local targetCFrame = CFrame.new(-0.843847871, 806.88092, -1.96924686, -0.042443376, -1.49036747e-08, -0.999098897, 3.08904013e-08, 1, -1.62293929e-08, 0.999098897, -3.15513979e-08, -0.042443376) 
+
+        hrp.CFrame = targetCFrame
+    end
+})
+TpTab:CreateButton({
+    Name = "prize #3",
+    Callback = function()
+        local player = game.Players.LocalPlayer
+        local char = player.Character or player.CharacterAdded:Wait()
+        local hrp = char:WaitForChild("HumanoidRootPart")
+
+ 
+        local targetCFrame = CFrame.new(3.65302706, 1430.38074, 2.25012755, -0.0182535909, -1.11593607e-07, -0.999833405, 2.65009046e-08, 1, -1.12096018e-07, 0.999833405, -2.85426438e-08, -0.0182535909) 
+
+        hrp.CFrame = targetCFrame
+    end
+})
+TpTab:CreateButton({
+    Name = "prize #4",
+    Callback = function()
+        local player = game.Players.LocalPlayer
+        local char = player.Character or player.CharacterAdded:Wait()
+        local hrp = char:WaitForChild("HumanoidRootPart")
+
+ 
+        local targetCFrame = CFrame.new(3.54831553, 3131.24707, -33.7055931, 0.030144915, -3.42594504e-08, -0.999545515, -2.19481744e-09, 1, -3.43412196e-08, 0.999545515, 3.22903326e-09, 0.030144915) 
+
+        hrp.CFrame = targetCFrame
+    end
+})
+TpTab:CreateButton({
+    Name = "prize #5",
+    Callback = function()
+        local player = game.Players.LocalPlayer
+        local char = player.Character or player.CharacterAdded:Wait()
+        local hrp = char:WaitForChild("HumanoidRootPart")
+        
+        local teleportCFrame = CFrame.new(-34.6322174, 5016.33984, -52.5426254, -0.0889598802, -1.88398346e-08, -0.996035218, -9.02667996e-10, 1, -1.88342071e-08, 0.996035218, -7.76399722e-10, -0.0889598802)
+        
+        local function fireTouch(touchInterest)
+            if touchInterest and touchInterest:IsA("TouchTransmitter") then
+                firetouchinterest(hrp, touchInterest.Parent, 0)
+                firetouchinterest(hrp, touchInterest.Parent, 1)
+            end
+        end
+        
+        local moonIsland = workspace.Islands.MoonIsland
+        
+        local touchPaths = {
+            moonIsland.Moonling.Detector.TouchInterest,
+            moonIsland:GetChildren()[15].Detector.TouchInterest,
+            moonIsland:GetChildren()[4].Detector.TouchInterest,
+            moonIsland:GetChildren()[26].Detector.TouchInterest,
+            moonIsland:GetChildren()[25].Detector.TouchInterest,
+            moonIsland:GetChildren()[24].Detector.TouchInterest,
+            moonIsland:GetChildren()[5].Detector.TouchInterest,
+            moonIsland:GetChildren()[20].Detector.TouchInterest,
+            moonIsland:GetChildren()[19].Detector.TouchInterest,
+            moonIsland:GetChildren()[18].Detector.TouchInterest,
+            moonIsland:GetChildren()[17].Detector.TouchInterest,
+            moonIsland:GetChildren()[16].Detector.TouchInterest,
+            moonIsland:GetChildren()[14].Detector.TouchInterest,
+            moonIsland:GetChildren()[13].Detector.TouchInterest,
+            moonIsland:GetChildren()[12].Detector.TouchInterest,
+            moonIsland:GetChildren()[11].Detector.TouchInterest,
+            moonIsland:GetChildren()[10].Detector.TouchInterest,
+            moonIsland:GetChildren()[9].Detector.TouchInterest,
+            moonIsland:GetChildren()[8].Detector.TouchInterest,
+            moonIsland:GetChildren()[6].Detector.TouchInterest,
+        }
+        
+        for _, touchInterest in ipairs(touchPaths) do
+            fireTouch(touchInterest)
+            wait(0.1)
+        end
+        
+        local toDelete = {
+            moonIsland:GetChildren()[7],
+            moonIsland.MoonlingDad,
+            moonIsland.MoonlingMum,
+        }
+        
+        for _, obj in ipairs(toDelete) do
+            if obj and obj.Parent then
+                obj:Destroy()
+            end
+        end
+        
+        wait(0.2)
+        hrp.CFrame = teleportCFrame
+    end
+})
+TpTab:CreateButton({
+    Name = "prize #6",
+    Callback = function()
+        local player = game.Players.LocalPlayer
+        local char = player.Character or player.CharacterAdded:Wait()
+        local hrp = char:WaitForChild("HumanoidRootPart")
+
+        if workspace.Islands.DarkMatterIsland:FindFirstChild("Shield") then
+            workspace.Islands.DarkMatterIsland.Shield:Destroy()
+        end
+        if workspace.Islands.DarkMatterIsland:FindFirstChild("crystal2") then
+            workspace.Islands.DarkMatterIsland.crystal2:Destroy()
+        end
+        if workspace.Islands.DarkMatterIsland:FindFirstChild("CenterCrystal") then
+            workspace.Islands.DarkMatterIsland.CenterCrystal:Destroy()
+        end
+        if workspace.Islands.DarkMatterIsland:FindFirstChild("crystal1") then
+            workspace.Islands.DarkMatterIsland.crystal1:Destroy()
+        end
+        if workspace.Islands.DarkMatterIsland:FindFirstChild("crystal3") then
+            workspace.Islands.DarkMatterIsland.crystal3:Destroy()
+        end
+        if workspace.Islands.DarkMatterIsland:GetChildren()[6] then
+            workspace.Islands.DarkMatterIsland:GetChildren()[6]:Destroy()
+        end
+        if workspace.Islands.DarkMatterIsland:GetChildren()[5] then
+            workspace.Islands.DarkMatterIsland:GetChildren()[5]:Destroy()
+        end
+        if workspace.Islands.DarkMatterIsland:FindFirstChild("SmallGem") then
+            workspace.Islands.DarkMatterIsland.SmallGem:Destroy()
+        end
+        if workspace.Islands.DarkMatterIsland:FindFirstChild("TragetGem") then
+            workspace.Islands.DarkMatterIsland.TragetGem:Destroy()
+        end
+
+        local targetCFrame = CFrame.new(66.5811234, 6816.89453, -1.67202735, 0.00364438724, -6.93712963e-08, -0.999993384, 1.64582747e-08, 1, -6.93117741e-08, 0.999993384, -1.62055667e-08, 0.00364438724)
+        hrp.CFrame = targetCFrame
+    end
+})
+TpTab:CreateButton({
+    Name = "prize #7",
+    Callback = function()
+        local player = game.Players.LocalPlayer
+        local char = player.Character or player.CharacterAdded:Wait()
+        local hrp = char:WaitForChild("HumanoidRootPart")
+        local targetCFrame = CFrame.new(7.32767963, 8622.8457, -7.16486788, -0.011172533, -7.00728222e-08, -0.999937594, -6.20377847e-08, 1, -6.93840363e-08, 0.999937594, 6.12587172e-08, -0.011172533)
+        hrp.CFrame = targetCFrame
+    end
+})
+TpTab:CreateButton({
+    Name = "prize #8",
+    Callback = function()
+        local player = game.Players.LocalPlayer
+        local char = player.Character or player.CharacterAdded:Wait()
+        local hrp = char:WaitForChild("HumanoidRootPart")
+
+        local marsStation = workspace.Islands.MarsStationZero.Station
+        if marsStation:FindFirstChild("ControlStation") then
+            marsStation.ControlStation:Destroy()
+        end
+        if marsStation:FindFirstChild("Reactor") then
+            marsStation.Reactor:Destroy()
+        end
+
+        local startCFrame = CFrame.new(-20.9861107, 11270.3398, -1.38744771, -0.0567505211, 7.59472627e-08, 0.99838841, -2.82073973e-08, 1, -7.76732278e-08, -0.99838841, -3.25699325e-08, -0.0567505211)
+        local prizePart = marsStation.Prize.Part
+
+        local staircaseFolder = workspace:FindFirstChild("MarsStaircase") or Instance.new("Folder")
+        staircaseFolder.Name = "MarsStaircase"
+        staircaseFolder.Parent = workspace
+
+        for _, child in pairs(staircaseFolder:GetChildren()) do
+            child:Destroy()
+        end
+
+        local stepSize = Vector3.new(4, 1, 4)
+        local stepHeight = 1
+        local stepLength = 4
+        local currentPos = startCFrame.Position
+        local direction = startCFrame.LookVector.Unit
+
+        while currentPos.Y < prizePart.Position.Y do
+            local step = Instance.new("Part")
+            step.Anchored = true
+            step.Size = stepSize
+            step.CFrame = CFrame.new(currentPos)
+            step.Parent = staircaseFolder
+
+            currentPos = currentPos + Vector3.new(direction.X * stepLength, stepHeight, direction.Z * stepLength)
+        end
+
+        local tpCFrame = CFrame.new(-39.0950737, 11278.4355, -0.559619129, -0.0710119233, 2.68454983e-08, 0.997475445, -4.96136421e-09, 1, -2.72666512e-08, -0.997475445, -6.88509649e-09, -0.0710119233)
+        hrp.CFrame = tpCFrame
+    end
+})
+TpTab:CreateButton({
+    Name = "prize #9",
+    Callback = function()
+        local player = game.Players.LocalPlayer
+        local char = player.Character or player.CharacterAdded:Wait()
+        local hrp = char:WaitForChild("HumanoidRootPart")
+
+        local function fireTouchOnTouchInterest(touchInterest)
+            if touchInterest and touchInterest:IsA("TouchTransmitter") then
+                firetouchinterest(hrp, touchInterest.Parent, 0)
+                task.wait(0.1)
+                firetouchinterest(hrp, touchInterest.Parent, 1)
+            end
+        end
+
+        local function fireTouch(partOrTouchInterest)
+            if typeof(partOrTouchInterest) == "Instance" then
+                if partOrTouchInterest:IsA("TouchTransmitter") then
+                    fireTouchOnTouchInterest(partOrTouchInterest)
+                elseif partOrTouchInterest:FindFirstChild("TouchInterest") then
+                    fireTouchOnTouchInterest(partOrTouchInterest.TouchInterest)
+                elseif partOrTouchInterest:IsA("BasePart") then
+                    firetouchinterest(hrp, partOrTouchInterest, 0)
+                    task.wait(0.1)
+                    firetouchinterest(hrp, partOrTouchInterest, 1)
+                end
+            end
+        end
+
+        local redCrystals = {
+            workspace.Islands.AsteroidIsland.Crystals.RedCrystals:GetChildren()[9].TouchInterest,
+            workspace.Islands.AsteroidIsland.Crystals.RedCrystals:GetChildren()[7],
+            workspace.Islands.AsteroidIsland.Crystals.RedCrystals:GetChildren()[8],
+            workspace.Islands.AsteroidIsland.Crystals.RedCrystals:GetChildren()[10],
+            workspace.Islands.AsteroidIsland.Crystals.RedCrystals:GetChildren()[2],
+        }
+
+        local greenCrystals = {
+            workspace.Islands.AsteroidIsland.Crystals.GreenCrystals:GetChildren()[3].TouchInterest,
+            workspace.Islands.AsteroidIsland.Crystals.GreenCrystals:GetChildren()[7].TouchInterest,
+            workspace.Islands.AsteroidIsland.Crystals.GreenCrystals:GetChildren()[6],
+            workspace.Islands.AsteroidIsland.Crystals.GreenCrystals:GetChildren()[4],
+            workspace.Islands.AsteroidIsland.Crystals.GreenCrystals:GetChildren()[8],
+        }
+
+        local blueCrystals = {
+            workspace.Islands.AsteroidIsland.Crystals.BlueCrystals:GetChildren()[7].TouchInterest,
+            workspace.Islands.AsteroidIsland.Crystals.BlueCrystals.BlueCrystal.TouchInterest,
+            workspace.Islands.AsteroidIsland.Crystals.BlueCrystals:GetChildren()[8].TouchInterest,
+            workspace.Islands.AsteroidIsland.Crystals.BlueCrystals:GetChildren()[2].TouchInterest,
+            workspace.Islands.AsteroidIsland.Crystals.BlueCrystals:GetChildren()[12].TouchInterest,
+            workspace.Islands.AsteroidIsland.Crystals.BlueCrystals:GetChildren()[4].TouchInterest,
+            workspace.Islands.AsteroidIsland.Crystals.BlueCrystals:GetChildren()[7].TouchInterest,
+        }
+
+        local function loopFire(partsList, totalFires)
+            local timesEach = math.floor(totalFires / #partsList)
+            for i = 1, timesEach do
+                for _, part in ipairs(partsList) do
+                    fireTouch(part)
+                    task.wait(1)
+                end
+            end
+        end
+
+        local threadsDone = 0
+
+        local function checkAndTeleport()
+            threadsDone += 1
+            if threadsDone == 3 then
+              
+                local targetCFrame = CFrame.new(
+                    3.34224081, 15299.2891, 10.6775894,
+                    -0.882339299, -1.54734838e-08, -0.470613837,
+                    -7.75310127e-09, 1, -1.83433144e-08,
+                    0.470613837, -1.25363107e-08, -0.882339299
+                )
+                hrp.CFrame = targetCFrame
+            end
+        end
+
+        task.spawn(function()
+            loopFire(redCrystals, 40)
+            checkAndTeleport()
+        end)
+
+        task.spawn(function()
+            loopFire(greenCrystals, 40)
+            checkAndTeleport()
+        end)
+
+        task.spawn(function()
+            loopFire(blueCrystals, 45)
+            checkAndTeleport()
+        end)
+    end
+})
+TpTab:CreateButton({
+    Name = "prize #10",
+    Callback = function()
+        local player = game.Players.LocalPlayer
+        local char = player.Character or player.CharacterAdded:Wait()
+        local hrp = char:WaitForChild("HumanoidRootPart")
+
+        local function fireTouchOnTouchInterest(ti)
+            if ti and ti:IsA("TouchTransmitter") then
+                firetouchinterest(hrp, ti.Parent, 0)
+                task.wait(0.1)
+                firetouchinterest(hrp, ti.Parent, 1)
+            end
+        end
+
+        local detectors = {
+            workspace.Islands.MoonBerryIsland.Berrys:GetChildren()[35].Detector.TouchInterest,
+            workspace.Islands.MoonBerryIsland.Berrys.LunarBerry.Detector.TouchInterest,
+            workspace.Islands.MoonBerryIsland.Berrys:GetChildren()[18].Detector.TouchInterest,
+            workspace.Islands.MoonBerryIsland.Berrys:GetChildren()[33].Detector.TouchInterest,
+            workspace.Islands.MoonBerryIsland.Berrys:GetChildren()[32].Detector.TouchInterest,
+            workspace.Islands.MoonBerryIsland.Berrys:GetChildren()[31].Detector.TouchInterest,
+            workspace.Islands.MoonBerryIsland.Berrys:GetChildren()[30].Detector.TouchInterest,
+            workspace.Islands.MoonBerryIsland.Berrys:GetChildren()[29].Detector.TouchInterest,
+            workspace.Islands.MoonBerryIsland.Berrys:GetChildren()[28].Detector.TouchInterest,
+            workspace.Islands.MoonBerryIsland.Berrys:GetChildren()[27].Detector.TouchInterest,
+            workspace.Islands.MoonBerryIsland.Berrys:GetChildren()[26].Detector.TouchInterest,
+            workspace.Islands.MoonBerryIsland.Berrys:GetChildren()[25].Detector.TouchInterest,
+            workspace.Islands.MoonBerryIsland.Berrys:GetChildren()[24].Detector.TouchInterest,
+            workspace.Islands.MoonBerryIsland.Berrys:GetChildren()[23].Detector.TouchInterest,
+            workspace.Islands.MoonBerryIsland.Berrys:GetChildren()[22].Detector.TouchInterest,
+            workspace.Islands.MoonBerryIsland.Berrys:GetChildren()[21].Detector.TouchInterest,
+            workspace.Islands.MoonBerryIsland.Berrys:GetChildren()[20].Detector.TouchInterest,
+            workspace.Islands.MoonBerryIsland.Berrys:GetChildren()[19].Detector.TouchInterest,
+            workspace.Islands.MoonBerryIsland.Berrys:GetChildren()[34].Detector.TouchInterest,
+            workspace.Islands.MoonBerryIsland.Berrys:GetChildren()[17].Detector.TouchInterest,
+            workspace.Islands.MoonBerryIsland.Berrys:GetChildren()[16].Detector.TouchInterest,
+            workspace.Islands.MoonBerryIsland.Berrys:GetChildren()[15].Detector.TouchInterest,
+            workspace.Islands.MoonBerryIsland.Berrys:GetChildren()[14].Detector.TouchInterest,
+        }
+
+        for _, ti in ipairs(detectors) do
+            fireTouchOnTouchInterest(ti)
+            task.wait(0.2)
+        end
+
+        -- Delete objects
+        local toDelete = {
+            workspace.Islands.MoonBerryIsland.Hut:FindFirstChild("Moonling"),
+            workspace.Islands.MoonBerryIsland.Hut.Shop:GetChildren()[5],
+            workspace.Islands.MoonBerryIsland.Hut.Shop:GetChildren()[13],
+            workspace.Islands.MoonBerryIsland.Hut:FindFirstChild("Part"),
+            workspace.Islands.MoonBerryIsland.Hut.Shop:FindFirstChild("LunarBerry"),
+        }
+
+        for _, obj in ipairs(toDelete) do
+            if obj then
+                obj:Destroy()
+            end
+        end
+
+        -- Final TP
+        hrp.CFrame = CFrame.new(
+            -9.89580822, 18410.959, 6.69732904,
+            0.0799658, -8.71365842e-08, -0.996797621,
+            -1.20667618e-08, 1, -8.83845601e-08,
+            0.996797621, 1.90958609e-08, 0.0799658
+        )
+    end
+})
+TpTab:CreateButton({
+    Name = "prize #11",
+    Callback = function()
+        local player = game.Players.LocalPlayer
+        local char = player.Character or player.CharacterAdded:Wait()
+        local hrp = char:WaitForChild("HumanoidRootPart")
+
+        local startCFrame = CFrame.new(
+            -0.779196918, 22539.4922, 61.0656128,
+            0.99696523, -1.95025383e-08, -0.0778480917,
+            2.48972789e-08, 1, 6.83277293e-08,
+            0.0778480917, -7.00585758e-08, 0.99696523
+        )
+
+        local destinationPart = workspace.Islands.Vanish.Prize.Click
+        local destinationPos = destinationPart.Position
+        local bridgeWidth = 10
+        local bridgeStep = 6
+        local bridgeHeight = 2
+        local bridgeMaterial = Enum.Material.SmoothPlastic
+        local bridgeColor = BrickColor.Gray()
+
+        local function getDirection(from, to)
+            return (to - from).Unit
+        end
+
+        local function createBridgePart(cframe)
+            local part = Instance.new("Part")
+            part.Anchored = true
+            part.Size = Vector3.new(bridgeWidth, bridgeHeight, bridgeStep)
+            part.CFrame = cframe
+            part.Material = bridgeMaterial
+            part.BrickColor = bridgeColor
+            part.CanCollide = true
+            part.Parent = workspace
+        end
+
+        -- Build bridge
+        local currentCFrame = startCFrame
+        local direction = getDirection(currentCFrame.Position, destinationPos)
+
+        while (currentCFrame.Position - destinationPos).Magnitude > bridgeStep do
+            createBridgePart(currentCFrame)
+            currentCFrame = currentCFrame + (direction * bridgeStep)
+            task.wait(0.05)
+        end
+
+        -- Teleport player just above bridge start
+        hrp.CFrame = startCFrame + Vector3.new(0, 5, 0)
+
+        -- On-screen red instruction text
+        local gui = Instance.new("ScreenGui", player:WaitForChild("PlayerGui"))
+        gui.Name = "BridgeInstruction"
+
+        local label = Instance.new("TextLabel", gui)
+        label.Size = UDim2.new(1, 0, 0, 50)
+        label.Position = UDim2.new(0, 0, 0.85, 0)
+        label.Text = "Walk across the bridge and claim the prize!"
+        label.TextColor3 = Color3.new(1, 0, 0)
+        label.TextStrokeTransparency = 0.6
+        label.BackgroundTransparency = 1
+        label.Font = Enum.Font.SourceSansBold
+        label.TextScaled = true
+
+        task.delay(8, function()
+            gui:Destroy()
+        end)
+    end
+})
+TpTab:CreateButton({
+    Name = "Prize 12",
+    Callback = function()
+        local player = game.Players.LocalPlayer
+        local char = player.Character or player.CharacterAdded:Wait()
+        local hrp = char:WaitForChild("HumanoidRootPart")
+
+        local function fireProximityPrompt(prompt, holdTime)
+            prompt:InputHoldBegin()
+            task.wait(holdTime or 1)
+            prompt:InputHoldEnd()
+        end
+
+        local function showMessage(text, duration)
+            local screenGui = Instance.new("ScreenGui")
+            screenGui.Name = "ActivateButtonMessageGui"
+            screenGui.ResetOnSpawn = false
+            screenGui.Parent = player:WaitForChild("PlayerGui")
+
+            local message = Instance.new("TextLabel")
+            message.Size = UDim2.new(1, 0, 0, 50)
+            message.Position = UDim2.new(0, 0, 0, 0) -- top of screen
+            message.BackgroundTransparency = 1
+            message.Text = text
+            message.TextColor3 = Color3.new(1, 0, 0) -- red color
+            message.TextStrokeTransparency = 0
+            message.TextScaled = true
+            message.Font = Enum.Font.SourceSansBold
+            message.Parent = screenGui
+
+            task.delay(duration or 5, function()
+                if screenGui and screenGui.Parent then
+                    screenGui:Destroy()
+                end
+            end)
+        end
+
+   
+        local startCFrame = CFrame.new(
+            4.72449017, 27941.2656, -0.122531518,
+            -0.0395417847, -3.90252053e-09, 0.999217927,
+            -1.05495781e-08, 1, 3.48809936e-09,
+            -0.999217927, -1.04034017e-08, -0.0395417847
+        )
+        hrp.CFrame = startCFrame
+
+ 
+        showMessage("Activate button", 5)
+
+
+        local beginPrompt = workspace.Islands.FallingStar.Begin.Btn.Attachment.ProximityPrompt
+        fireProximityPrompt(beginPrompt, 1)
+
+
+        local function touchStar(part)
+            firetouchinterest(hrp, part, 0)
+            firetouchinterest(hrp, part, 1)
+        end
+
+
+        local firedStars = {}
+        local starsTouched = 0
+        local maxStars = 10
+
+    
+        while starsTouched < maxStars do
+            for _, child in ipairs(workspace.Islands.FallingStar:GetChildren()) do
+                if not firedStars[child] then
+                    local mainPart = child:FindFirstChild("Main")
+                    if mainPart and mainPart:FindFirstChild("TouchInterest") then
+                        touchStar(mainPart)
+                        firedStars[child] = true
+                        starsTouched = starsTouched + 1
+                        if starsTouched >= maxStars then break end
+                        task.wait(0.1) -- small delay to avoid spamming
+                    end
+                end
+            end
+            task.wait(0.1)
+        end
+
+        -- Teleport to second spot
+        local finalCFrame = CFrame.new(
+            -46.360321, 27961.5586, -7.6845727,
+            -0.556883395, -2.88217699e-08, -0.830590665,
+            -6.5729175e-08, 1, 9.3688941e-09,
+            0.830590665, 5.98114198e-08, -0.556883395
+        )
+        hrp.CFrame = finalCFrame
+
+
+        local prizePrompt = workspace.Islands.FallingStar.Prize.Click.Attachment.ProximityPrompt
+        fireProximityPrompt(prizePrompt, 1)
+    end
+})
+
+
+TpTab:CreateButton({
+    Name = "tp to end",
+    Callback = function()
+        local player = game.Players.LocalPlayer
+        local char = player.Character or player.CharacterAdded:Wait()
+        local hrp = char:WaitForChild("HumanoidRootPart")
+
+        local targetCFrame = CFrame.new(
+            0.9553563, 33970.4844, -11.5057535,
+            -0.99877423, -1.75868902e-08, -0.0494983122,
+            -1.96156744e-08, 1, 4.05011491e-08,
+            0.0494983122, 4.14224459e-08, -0.99877423
+        )
+
+        hrp.CFrame = targetCFrame
+    end
+})
+-- this code allows player to modify there walkspeed
+MiscTab:CreateSlider({
+    Name = "WalkSpeed",
+    Range = {16, 99},
+    Increment = 1,
+    Suffix = "Speed",
+    CurrentValue = 16,
+    Callback = function(value)
+        local player = game.Players.LocalPlayer
+        local char = player.Character or player.CharacterAdded:Wait()
+        local humanoid = char:FindFirstChildWhichIsA("Humanoid")
+        if humanoid then
+            humanoid.WalkSpeed = value
+        end
+    end
+})
+local Players = game:GetService("Players")
+local RunService = game:GetService("RunService")
+ 
+local VisTab = Window:CreateTab("Visuals")
+VisTab:CreateLabel("Assistance features")
+-- full bright code to enable player to see as if they were in day
+VisTab:CreateToggle({
+    Name = "Full Bright",
+    Flag = "FullBrightToggle",
+    Callback = function(state)
+        local Lighting = game:GetService("Lighting")
+        if state then
+            Lighting.Brightness = 2
+            Lighting.ClockTime = 14
+            Lighting.FogEnd = 100000
+            Lighting.Ambient = Color3.new(1, 1, 1)
+            Lighting.OutdoorAmbient = Color3.new(1, 1, 1)
+        else
+            Lighting.Brightness = 1
+            Lighting.ClockTime = 14
+            Lighting.FogEnd = 1000
+            Lighting.Ambient = Color3.new(0.5, 0.5, 0.5)
+            Lighting.OutdoorAmbient = Color3.new(0.5, 0.5, 0.5)
+        end
+    end
+})
+-- removes fog
+VisTab:CreateToggle({
+    Name = "No Fog",
+    Flag = "NoFogToggle",
+    Callback = function(state)
+        local Lighting = game:GetService("Lighting")
+        if state then
+            Lighting.FogStart = 0
+            Lighting.FogEnd = 100000
+        else
+            Lighting.FogStart = 0
+            Lighting.FogEnd = 1000
+        end
+    end
+})
+ 
+local AutoTab = Window:CreateTab("Automation")
+local Players = game:GetService("Players")
+local RunService = game:GetService("RunService")
+local player = Players.LocalPlayer
+
+local autoStoreFuelEnabled = false
+local autoStoreFuelLoop
+local savedLaunchpad = nil
+
+local function findOwnedLaunchpad()
+    local possiblePads = {}
+
+    for _, child in ipairs(workspace:GetChildren()) do
+        if child.Name:match("Launchpad") then
+            table.insert(possiblePads, child)
+        end
+    end
+
+    for _, pad in ipairs(possiblePads) do
+        local values = pad:FindFirstChild("Values")
+        local owner = values and values:FindFirstChild("Owner")
+        if owner and owner.Value and owner.Value.Name == player.Name then
+            return pad
+        end
+    end
+
+    return nil
+end
+
+local function setNotificationEnabled(enabled)
+    local screenGui = player.PlayerGui:FindFirstChild("ScreenGui")
+    if screenGui then
+        for _, child in ipairs(screenGui:GetChildren()) do
+            if child:IsA("GuiObject") and child.Name == "FuelNotification" then
+                child.Enabled = enabled
+            end
+        end
+    end
+end
+-- automatically stores the fuel regardelss of range that is in ur backpack.
+AutoTab:CreateToggle({
+    Name = "Auto Store Fuel",
+    CurrentValue = false,
+    Callback = function(Value)
+        autoStoreFuelEnabled = Value
+
+        if Value then
+            savedLaunchpad = nil
+            setNotificationEnabled(false)
+
+            autoStoreFuelLoop = RunService.Heartbeat:Connect(function()
+                if not autoStoreFuelEnabled then
+                    if autoStoreFuelLoop then
+                        autoStoreFuelLoop:Disconnect()
+                        autoStoreFuelLoop = nil
+                    end
+                    return
+                end
+
+                if not savedLaunchpad then
+                    savedLaunchpad = findOwnedLaunchpad()
+                    if not savedLaunchpad then
+                        task.wait(1)
+                        return
+                    end
+                end
+
+                local fuelCollector = savedLaunchpad:FindFirstChild("FuelCollector")
+                local pad = fuelCollector and fuelCollector:FindFirstChild("CollectorPad")
+                local hrp = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
+
+                if pad and pad:FindFirstChild("TouchInterest") and hrp then
+                    firetouchinterest(hrp, pad, 0)
+                    task.wait(0.5)
+                    firetouchinterest(hrp, pad, 1)
+                    task.wait(10)
+                else
+                    savedLaunchpad = nil
+                    task.wait(5)
+                end
+            end)
+
+        else
+            if autoStoreFuelLoop then
+                autoStoreFuelLoop:Disconnect()
+                autoStoreFuelLoop = nil
+            end
+            savedLaunchpad = nil
+            setNotificationEnabled(true)
+        end
+    end
+})
+local autoAddAllEnabled = false
+local autoAddAllLoop
+--  this automatically adds all fuel when u walk past it the range for this is 10 studss
+AutoTab:CreateToggle({
+    Name = "Auto Add All Fuel",
+    CurrentValue = false,
+    Callback = function(Value)
+        autoAddAllEnabled = Value
+
+        if Value then
+            autoAddAllLoop = RunService.Heartbeat:Connect(function()
+                if not autoAddAllEnabled then
+                    if autoAddAllLoop then
+                        autoAddAllLoop:Disconnect()
+                        autoAddAllLoop = nil
+                    end
+                    return
+                end
+
+                if not savedLaunchpad then
+                    savedLaunchpad = findOwnedLaunchpad()
+                    if not savedLaunchpad then
+                        task.wait(1)
+                        return
+                    end
+                end
+
+                local fuelCollector = savedLaunchpad:FindFirstChild("FuelCollector")
+                local addAll = fuelCollector and fuelCollector:FindFirstChild("TransferToRocket")
+                    and fuelCollector.TransferToRocket:FindFirstChild("AddAll")
+
+                local attachment = addAll and addAll:FindFirstChild("Attachment")
+                local prompt = attachment and attachment:FindFirstChildWhichIsA("ProximityPrompt")
+                local hrp = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
+
+                if prompt and hrp and attachment:IsA("Attachment") and attachment.Parent:IsA("BasePart") then
+                    prompt.MaxActivationDistance = 10
+                    prompt.HoldDuration = 0
+
+                    local dist = (hrp.Position - attachment.Parent.Position).Magnitude
+                    if dist <= prompt.MaxActivationDistance then
+                        fireproximityprompt(prompt)
+                        task.wait(1)
+                    end
+                else
+                    savedLaunchpad = nil
+                    task.wait(2)
+                end
+            end)
+        else
+            if autoAddAllLoop then
+                autoAddAllLoop:Disconnect()
+                autoAddAllLoop = nil
+            end
+        end
+    end
+})
+-- Nametags
+local Players = game:GetService("Players")
+local RunService = game:GetService("RunService")
+
+local nametagRadius = 2750
+local nametagEnabled = false
+local nametagFolder = Instance.new("Folder")
+nametagFolder.Name = "Nametags"
+nametagFolder.Parent = workspace
+
+local playerNametags = {}
+local localPlayer = Players.LocalPlayer
+
+local function createNametag(player)
+    if not player.Character or not player.Character:FindFirstChild("HumanoidRootPart") then return nil end
+    local billboard = Instance.new("BillboardGui")
+    billboard.Name = "NametagGui"
+    billboard.Adornee = player.Character.HumanoidRootPart
+    billboard.Size = UDim2.new(0, 100, 0, 30)
+    billboard.StudsOffset = Vector3.new(0, 3, 0)
+    billboard.AlwaysOnTop = true
+    billboard.Parent = nametagFolder
+
+    local textLabel = Instance.new("TextLabel")
+    textLabel.BackgroundTransparency = 1
+    textLabel.Size = UDim2.new(1, 0, 1, 0)
+    textLabel.Text = player.Name
+    textLabel.TextColor3 = Color3.new(1, 1, 1)
+    textLabel.TextStrokeColor3 = Color3.new(0, 0, 0)
+    textLabel.TextStrokeTransparency = 0
+    textLabel.Font = Enum.Font.SourceSansBold
+    textLabel.TextScaled = true
+    textLabel.Parent = billboard
+
+    return billboard
+end
+
+local function updateNametags()
+    if not localPlayer.Character or not localPlayer.Character:FindFirstChild("HumanoidRootPart") then return end
+    local localHRP = localPlayer.Character.HumanoidRootPart
+
+    for _, plr in pairs(Players:GetPlayers()) do
+        if plr ~= localPlayer then
+            local char = plr.Character
+            if char and char:FindFirstChild("HumanoidRootPart") then
+                local distance = (char.HumanoidRootPart.Position - localHRP.Position).Magnitude
+                if distance <= nametagRadius then
+                    if not playerNametags[plr] then
+                        playerNametags[plr] = createNametag(plr)
+                    end
+                    if playerNametags[plr] then
+                        playerNametags[plr].Enabled = true
+                        playerNametags[plr].Adornee = plr.Character.HumanoidRootPart
+                    end
+                else
+                    if playerNametags[plr] then
+                        playerNametags[plr].Enabled = false
+                    end
+                end
+            elseif playerNametags[plr] then
+                playerNametags[plr]:Destroy()
+                playerNametags[plr] = nil
+            end
+        end
+    end
+end
+
+local function clearNametags()
+    for _, gui in pairs(playerNametags) do
+        if gui then gui:Destroy() end
+    end
+    playerNametags = {}
+end
+
+local function onPlayerAdded(player)
+    if nametagEnabled and player ~= localPlayer then
+        player.CharacterAdded:Connect(function()
+            task.wait(1)
+            if nametagEnabled then
+                if playerNametags[player] then playerNametags[player]:Destroy() end
+                playerNametags[player] = createNametag(player)
+            end
+        end)
+    end
+end
+
+local function onPlayerRemoving(player)
+    if playerNametags[player] then
+        playerNametags[player]:Destroy()
+        playerNametags[player] = nil
+    end
+end
+
+local updateConnection
+local function toggleNametags(state)
+    nametagEnabled = state
+    if nametagEnabled then
+        for _, player in ipairs(Players:GetPlayers()) do
+            if player ~= localPlayer then
+                onPlayerAdded(player)
+            end
+        end
+        updateConnection = RunService.RenderStepped:Connect(updateNametags)
+        Players.PlayerAdded:Connect(onPlayerAdded)
+        Players.PlayerRemoving:Connect(onPlayerRemoving)
+    else
+        if updateConnection then
+            updateConnection:Disconnect()
+            updateConnection = nil
+        end
+        clearNametags()
+    end
+end
+
+VisTab:CreateToggle({
+    Name = "Nametags",
+    Flag = "NametagsToggle",
+    Callback = function(state)
+        toggleNametags(state)
+        Rayfield:Notify({
+            Title = "Nametags",
+            Content = state and "Nametags Enabled" or "Nametags Disabled",
+            Duration = 3
+        })
+    end
+})
+
+VisTab:CreateSlider({
+    Name = "Nametag Radius",
+    Range = {50, 10000},
+    Increment = 10,
+    CurrentValue = nametagRadius,
+    Flag = "NametagRadiusSlider",
+    Callback = function(value)
+        nametagRadius = value
+    end
+})
+-- player Teleportation
+MiscTab:CreateLabel("Player Teleportation")
+
+local Players = game:GetService("Players")
+local LocalPlayer = Players.LocalPlayer
+
+local playerNames = {}
+for _, player in pairs(Players:GetPlayers()) do
+    if player ~= LocalPlayer then
+        table.insert(playerNames, player.Name)
+    end
+end
+if #playerNames == 0 then
+    playerNames = {"No players found"}
+end
+
+local selectedPlayerName = nil
+
+local playerDropdown = MiscTab:CreateDropdown({
+    Name = "Select Player",
+    Options = playerNames,
+    CurrentOption = playerNames[1],
+    MultipleOptions = false,
+    Flag = "PlayerDropdown",
+    Callback = function(selection)
+        selectedPlayerName = table.concat(selection, ", ")
+        Rayfield:Notify({
+            Title = "Player Selected",
+            Content = "You selected: " .. selectedPlayerName,
+            Duration = 3,
+        })
+    end
+})
+
+
+MiscTab:CreateButton({
+    Name = "Teleport to Player",
+    Callback = function()
+        if selectedPlayerName == nil or selectedPlayerName == "No players found" then
+            Rayfield:Notify({
+                Title = "Error",
+                Content = "No valid target player selected.",
+                Duration = 3,
+            })
+            return
+        end
+
+        local targetPlayer = Players:FindFirstChild(selectedPlayerName)
+        if targetPlayer and targetPlayer.Character and targetPlayer.Character:FindFirstChild("HumanoidRootPart") then
+            if LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
+                LocalPlayer.Character.HumanoidRootPart.CFrame = targetPlayer.Character.HumanoidRootPart.CFrame
+                Rayfield:Notify({
+                    Title = "Teleported",
+                    Content = "Teleported to " .. selectedPlayerName,
+                    Duration = 3,
+                })
+            else
+                Rayfield:Notify({
+                    Title = "Error",
+                    Content = "Your character or HumanoidRootPart not found.",
+                    Duration = 3,
+                })
+            end
+        else
+            Rayfield:Notify({
+                Title = "Error",
+                Content = "Target player or HumanoidRootPart not found.",
+                Duration = 3,
+            })
+        end
+    end
+})
+
+local function updateDropdownOptions()
+    local newPlayerNames = {}
+    for _, player in pairs(Players:GetPlayers()) do
+        if player ~= LocalPlayer then
+            table.insert(newPlayerNames, player.Name)
+        end
+    end
+
+    if #newPlayerNames == 0 then
+        newPlayerNames = {"No players found"}
+        selectedPlayerName = nil
+    else
+        if selectedPlayerName == nil or not table.find(newPlayerNames, selectedPlayerName) then
+            selectedPlayerName = nil
+        end
+    end
+
+    playerDropdown:Refresh(newPlayerNames)
+end
+
+Players.PlayerAdded:Connect(updateDropdownOptions)
+Players.PlayerRemoving:Connect(updateDropdownOptions)
+end;
