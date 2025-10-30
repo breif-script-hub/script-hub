@@ -11,7 +11,10 @@ local gameScripts = {
     [95425238757150] = "https://pastebin.com/raw/SVvvz32K",-- Wall Hop to Admin Obby
     [2693023319] = "https://pastefy.app/mNCkm96a/raw",    -- Expedition Antarctica
     [109652885385286] = "https://pastefy.app/Rslw9Hts/raw",    -- Dig the backyard
-    [189707] = "https://pastefy.app/N4CYF6ua/raw",    -- Natural disasters
+    [189707] = "https://pastefy.app/N4CYF6ua/raw",    -- trashy game
+    [189707] = "https://pastefy.app/N4CYF6ua/raw",    -- trashy game
+    [189707] = "https://pastefy.app/N4CYF6ua/raw",    -- trashy game
+    [189707] = "https://pastefy.app/N4CYF6ua/raw",    -- trashy game
 }
 local universalScript = "https://pastefy.app/J1JjXK69/raw" -- Universal Script
 
