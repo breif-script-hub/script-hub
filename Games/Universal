@@ -4,7 +4,7 @@ local UserInputService = game:GetService("UserInputService")
 local Debris = game:GetService("Debris")
 local RunService = game:GetService("RunService")
 -- loads ui libery
-local Rayfield = loadstring(game:HttpGet("https://raw.githubusercontent.com/breif-script-hub/script-hub/refs/heads/main/Dependencies%20/%20side%20scrips/Rayfield"))()
+local Rayfield = loadstring(game:HttpGet("https://raw.githubusercontent.com/breif-script-hub/script-hub/refs/heads/main/Dependencies%20/Rayfield"))()
 -- Creaet the windw we will use for script.
 local Window = Rayfield:CreateWindow({
     Name = "Universal build",
