@@ -309,7 +309,7 @@ if game.PlaceId == 13501167264 then
     MainTab:CreateButton({
         Name = "Load Teleport Ui By Breif",
         Callback = function()
-            loadstring(game:HttpGet("https://pastefy.app/f0XQxr9b/raw"))()
+            loadstring(game:HttpGet("https://raw.githubusercontent.com/breif-script-hub/script-hub/refs/heads/main/Dependencies%20/%20side%20scrips/teleport%20gui%20by%20brief"))()
             notifyCustom("Teleport UI", "Teleport UI made by breif successfully loaded you can toggle it with right shiftt")
         end
     })
