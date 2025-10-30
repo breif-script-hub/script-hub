@@ -1,0 +1,1154 @@
+-- this makes sure player has right game loaded.
+if game.PlaceId == 13461044782 then
+    -- this loads the ui.
+    local Rayfield = loadstring(game:HttpGet('https://pastefy.app/gfsVc4lI/raw'))()
+    -- this creates the window we will be using.
+    local Window = Rayfield:CreateWindow({
+        Name = "Every Second You Get higher jump power",
+        LoadingTitle = "Script Hub",
+        LoadingSubtitle = "by Breif",
+        ConfigurationSaving = {
+            Enabled = true,
+            FolderName = "script_hub_configs",
+            FileName = "default_config"
+        },
+        Discord = { Enabled = false },
+        KeySystem = false
+    })
+-- this seaction is all win teleporots and functions to do wins.
+    local MainTab = Window:CreateTab("Worlds - wins")
+    MainTab:CreateLabel("(Warning you must be in the world to use Teleportation features)")
+    MainTab:CreateLabel("World 1 - Spawn")
+    
+    MainTab:CreateButton({
+        Name = "Teleport to spawn",
+        Callback = function()
+            local player = game.Players.LocalPlayer
+            local char = player.Character or player.CharacterAdded:Wait()
+            local hrp = char:WaitForChild("HumanoidRootPart")
+            local targetCFrame = CFrame.new(0, 2.99802518, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1)
+            hrp.CFrame = targetCFrame
+        end
+    })
+    MainTab:CreateButton({
+        Name = "teleport to win location 1",
+        Callback = function()
+            local player = game.Players.LocalPlayer
+            local char = player.Character or player.CharacterAdded:Wait()
+            local hrp = char:WaitForChild("HumanoidRootPart")
+            local targetCFrame = CFrame.new(-0.0323028527, 318.823456, 103.741074, -0.998943865, -3.01384055e-08, 0.0459467955, -3.35361499e-08, 1, -7.31786756e-08, -0.0459467955, -7.46422657e-08, -0.998943865   )
+            hrp.CFrame = targetCFrame
+        end
+    })
+MainTab:CreateButton({
+    Name = "Get + 1 win location 1",
+    Callback = function()
+        local pad = workspace:WaitForChild("WinnerPads"):WaitForChild("WinnerPad")
+        local player = game.Players.LocalPlayer
+        local char = player.Character or player.CharacterAdded:Wait()
+        local root = char:WaitForChild("HumanoidRootPart")
+        firetouchinterest(root, pad, 0) 
+        firetouchinterest(root, pad, 1) 
+    end
+})
+    MainTab:CreateButton({
+        Name = "teleport to win location VIP",
+        Callback = function()
+            local player = game.Players.LocalPlayer
+            local char = player.Character or player.CharacterAdded:Wait()
+            local hrp = char:WaitForChild("HumanoidRootPart")
+            local targetCFrame = CFrame.new(120.476768, 192.823471, -60.7275009, -0.0195463002, -2.52177106e-08, -0.999808967, 1.18701964e-08, 1, -2.54545931e-08, 0.999808967, -1.23654713e-08, -0.0195463002)
+            hrp.CFrame = targetCFrame
+        end
+    })
+MainTab:CreateButton({
+    Name = "get vip win (requires vip)",
+    Callback = function()
+        local vipPad = workspace:WaitForChild("WinnerPads"):WaitForChild("VIPWinnerPad")
+        local player = game.Players.LocalPlayer
+        local char = player.Character or player.CharacterAdded:Wait()
+        local root = char:WaitForChild("HumanoidRootPart")
+        firetouchinterest(root, vipPad, 0)
+        firetouchinterest(root, vipPad, 1)
+    end
+})
+    MainTab:CreateButton({
+        Name = "Teleport to win location 2",
+        Callback = function()
+            local player = game.Players.LocalPlayer
+            local char = player.Character or player.CharacterAdded:Wait()
+            local hrp = char:WaitForChild("HumanoidRootPart")
+            local targetCFrame = CFrame.new(551.675293, 3.8234818, 49.8291206, 0.196674243, 1.90327487e-09, -0.980468869, 5.08600841e-08, 1, 1.21433166e-08, 0.980468869, -5.22550074e-08, 0.196674243)
+            hrp.CFrame = targetCFrame
+        end
+    })
+MainTab:CreateButton({
+    Name = "trigger win location 2 + 2 wins",
+    Callback = function()
+        local pads = workspace:WaitForChild("WinnerPads"):GetChildren()
+        local thirdPad = pads[3]
+        if not thirdPad or not thirdPad:IsA("BasePart") then
+            warn("Third pad is not valid")
+            return
+        end
+
+        local player = game.Players.LocalPlayer
+        local char = player.Character or player.CharacterAdded:Wait()
+        local root = char:WaitForChild("HumanoidRootPart")
+
+        firetouchinterest(root, thirdPad, 0)
+        firetouchinterest(root, thirdPad, 1)
+    end
+})
+    MainTab:CreateLabel("World 2- Beach")
+    MainTab:CreateButton({
+        Name = "Spawn",
+        Callback = function()
+            local player = game.Players.LocalPlayer
+            local char = player.Character or player.CharacterAdded:Wait()
+            local hrp = char:WaitForChild("HumanoidRootPart")
+            local targetCFrame = CFrame.new(-1002.69727, 4.82348156, -77.7052841, -0.997433484, 4.68251748e-08, -0.0715990141, 4.17388044e-08, 1, 7.25357907e-08, 0.0715990141, 6.9361171e-08, -0.997433484)
+            hrp.CFrame = targetCFrame
+        end
+    })
+    MainTab:CreateButton({
+        Name = "Tp win location",
+        Callback = function()
+            local player = game.Players.LocalPlayer
+            local char = player.Character or player.CharacterAdded:Wait()
+            local hrp = char:WaitForChild("HumanoidRootPart")
+            local targetCFrame = CFrame.new(-999.017029, 1368.82336, 115.509422, -0.999959707, -2.58318646e-08, 0.00897858478, -2.55572434e-08, 1, 3.07009529e-08, -0.00897858478, 3.04702468e-08, -0.999959707)
+            hrp.CFrame = targetCFrame
+        end
+    })
+MainTab:CreateButton({
+    Name = "Get win + 3",
+    Callback = function()
+        local pads = workspace:WaitForChild("WinnerPads"):GetChildren()
+        local fourthPad = pads[4]
+
+        if not fourthPad or not fourthPad:IsA("BasePart") then
+            warn("4th WinnerPad is not a valid part")
+            return
+        end
+
+        local player = game.Players.LocalPlayer
+        local char = player.Character or player.CharacterAdded:Wait()
+        local root = char:WaitForChild("HumanoidRootPart")
+
+        firetouchinterest(root, fourthPad, 0)
+        firetouchinterest(root, fourthPad, 1)
+    end
+})
+    MainTab:CreateLabel("World 3 - Artic")
+    MainTab:CreateButton({
+        Name = "Spawn",
+        Callback = function()
+            local player = game.Players.LocalPlayer
+            local char = player.Character or player.CharacterAdded:Wait()
+            local hrp = char:WaitForChild("HumanoidRootPart")
+            local targetCFrame = CFrame.new(-2002.57654, 4.82348156, -85.4308243, -0.994013965, -5.05426385e-08, 0.109252825, -5.43398677e-08, 1, -3.17790487e-08, -0.109252825, -3.75256022e-08, -0.994013965)
+            hrp.CFrame = targetCFrame
+        end
+    })
+    MainTab:CreateButton({
+        Name = "Tp to win location",
+        Callback = function()
+            local player = game.Players.LocalPlayer
+            local char = player.Character or player.CharacterAdded:Wait()
+            local hrp = char:WaitForChild("HumanoidRootPart")
+            local targetCFrame = CFrame.new(-1999.98608, 2418.82324, 128.85965, -0.9997648, -1.46747352e-08, 0.0216884781, -1.48260195e-08, 1, -6.81457291e-09, -0.0216884781, -7.13452364e-09, -0.9997648)
+            hrp.CFrame = targetCFrame
+        end
+    })
+MainTab:CreateButton({
+    Name = "get win + 5",
+    Callback = function()
+        local pads = workspace:WaitForChild("WinnerPads"):GetChildren()
+        local fifthPad = pads[5]
+
+        if not fifthPad or not fifthPad:IsA("BasePart") then
+            warn("5th WinnerPad is not a valid part")
+            return
+        end
+
+        local player = game.Players.LocalPlayer
+        local char = player.Character or player.CharacterAdded:Wait()
+        local root = char:WaitForChild("HumanoidRootPart")
+        firetouchinterest(root, fifthPad, 0)
+        firetouchinterest(root, fifthPad, 1)
+        print("Touched:", fifthPad.Name)
+    end
+})
+    MainTab:CreateLabel("World 4 - Volcano")
+    MainTab:CreateButton({
+        Name = "Spawn",
+        Callback = function()
+            local player = game.Players.LocalPlayer
+            local char = player.Character or player.CharacterAdded:Wait()
+            local hrp = char:WaitForChild("HumanoidRootPart")
+            local targetCFrame = CFrame.new(-3000, 4.82348156, -90, -0.999992311, -6.20473202e-08, 0.00392487179, -6.20717202e-08, 1, -6.09511996e-09, -0.00392487179, -6.33869623e-09, -0.999992311)
+            hrp.CFrame = targetCFrame
+        end
+    })
+    MainTab:CreateButton({
+        Name = "Win location tp",
+        Callback = function()
+            local player = game.Players.LocalPlayer
+            local char = player.Character or player.CharacterAdded:Wait()
+            local hrp = char:WaitForChild("HumanoidRootPart")
+            local targetCFrame = CFrame.new(-3000.86597, 4418.82275, 131.268723, -0.999788821, -7.66661756e-08, -0.0205508973, -7.61475434e-08, 1, -2.60191797e-08, 0.0205508973, -2.44487843e-08, -0.999788821)
+            hrp.CFrame = targetCFrame
+        end
+    })
+MainTab:CreateButton({
+    Name = "win + 10 wins",
+    Callback = function()
+        local pads = workspace:WaitForChild("WinnerPads"):GetChildren()
+        local sixthPad = pads[6]
+
+        if not sixthPad or not sixthPad:IsA("BasePart") then
+            warn("6th WinnerPad is not a valid part")
+            return
+        end
+
+        local player = game.Players.LocalPlayer
+        local char = player.Character or player.CharacterAdded:Wait()
+        local root = char:WaitForChild("HumanoidRootPart")
+
+        firetouchinterest(root, sixthPad, 0)
+        firetouchinterest(root, sixthPad, 1)
+
+        print("Touched:", sixthPad.Name)
+    end
+})
+    MainTab:CreateLabel("World 5 - Forest")
+    MainTab:CreateButton({
+        Name = "spawn",
+        Callback = function()
+            local player = game.Players.LocalPlayer
+            local char = player.Character or player.CharacterAdded:Wait()
+            local hrp = char:WaitForChild("HumanoidRootPart")
+            local targetCFrame = CFrame.new(-3999.82373, 4.82348156, -100.045113, -0.989611447, 8.24894641e-09, -0.143767685, 1.26354782e-09, 1, 4.86794001e-08, 0.143767685, 4.79920352e-08, -0.989611447)
+            hrp.CFrame = targetCFrame
+        end
+    })
+    MainTab:CreateButton({
+        Name = "Win Location tp",
+        Callback = function()
+            local player = game.Players.LocalPlayer
+            local char = player.Character or player.CharacterAdded:Wait()
+            local hrp = char:WaitForChild("HumanoidRootPart")
+            local targetCFrame = CFrame.new(-4000.21851, 10368.8223, 146.276108, -0.999979258, -7.70154358e-08, -0.0064382283, -7.73460087e-08, 1, 5.10964391e-08, 0.0064382283, 5.159335e-08, -0.999979258)
+            hrp.CFrame = targetCFrame
+        end
+    })
+MainTab:CreateButton({
+    Name = "win + 20 wins",
+    Callback = function()
+        local pads = workspace:WaitForChild("WinnerPads"):GetChildren()
+        local seventhPad = pads[7]
+
+        if not seventhPad or not seventhPad:IsA("BasePart") then
+            warn("7th WinnerPad is not a valid part")
+            return
+        end
+
+        local player = game.Players.LocalPlayer
+        local char = player.Character or player.CharacterAdded:Wait()
+        local root = char:WaitForChild("HumanoidRootPart")
+
+        firetouchinterest(root, seventhPad, 0)
+        firetouchinterest(root, seventhPad, 1)
+
+        print("Touched:", seventhPad.Name)
+    end
+})
+    MainTab:CreateLabel("World 6 - Desert")
+    MainTab:CreateButton({
+        Name = "spawn",
+        Callback = function()
+            local player = game.Players.LocalPlayer
+            local char = player.Character or player.CharacterAdded:Wait()
+            local hrp = char:WaitForChild("HumanoidRootPart")
+            local targetCFrame = CFrame.new(-5000, 4.82348156, -112.5, -0.999981582, -1.0465849e-07, 0.00607176544, -1.04765171e-07, 1, -1.72515637e-08, -0.00607176544, -1.78873556e-08, -0.999981582)
+            hrp.CFrame = targetCFrame
+        end
+    })
+    MainTab:CreateButton({
+        Name = "Tp win location",
+        Callback = function()
+            local player = game.Players.LocalPlayer
+            local char = player.Character or player.CharacterAdded:Wait()
+            local hrp = char:WaitForChild("HumanoidRootPart")
+            local targetCFrame = CFrame.new(-5001.81445, 20243.8223, 157.099121, -0.997260451, -3.36694006e-10, -0.0739706084, 1.02829599e-10, 1, -5.93805982e-09, 0.0739706084, -5.92939875e-09, -0.997260451)
+            hrp.CFrame = targetCFrame
+        end
+    })
+MainTab:CreateButton({
+    Name = "Trigger Touch on 8th WinnerPad",
+    Callback = function()
+        local pads = workspace:WaitForChild("WinnerPads"):GetChildren()
+        local eighthPad = pads[8]
+
+        if not eighthPad or not eighthPad:IsA("BasePart") then
+            warn("8th WinnerPad is not a valid part")
+            return
+        end
+
+        local player = game.Players.LocalPlayer
+        local char = player.Character or player.CharacterAdded:Wait()
+        local root = char:WaitForChild("HumanoidRootPart")
+
+        firetouchinterest(root, eighthPad, 0)
+        firetouchinterest(root, eighthPad, 1)
+
+        print("Touched:", eighthPad.Name)
+    end
+})
+  MainTab:CreateLabel("World 7 - Candy land")
+    MainTab:CreateButton({
+        Name = "Spawn",
+        Callback = function()
+            local player = game.Players.LocalPlayer
+            local char = player.Character or player.CharacterAdded:Wait()
+            local hrp = char:WaitForChild("HumanoidRootPart")
+            local targetCFrame = CFrame.new(-6000, 4.82348156, -121.5, -1, -7.76236533e-08, 1.87663348e-13, -7.76236533e-08, 1, -2.74717813e-08, -1.85530885e-13, -2.74717813e-08, -1)
+            hrp.CFrame = targetCFrame
+        end
+    })
+    MainTab:CreateButton({
+        Name = "Tp win location",
+        Callback = function()
+            local player = game.Players.LocalPlayer
+            local char = player.Character or player.CharacterAdded:Wait()
+            local hrp = char:WaitForChild("HumanoidRootPart")
+            local targetCFrame = CFrame.new(-6000.86865, 33368.8203, 164.573532, -0.998770595, -1.87582181e-08, -0.0495712534, -1.84070856e-08, 1, -7.53992424e-09, 0.0495712534, -6.61819266e-09, -0.998770595)
+            hrp.CFrame = targetCFrame
+        end
+    })
+MainTab:CreateButton({
+    Name = "Get wins + 50",
+    Callback = function()
+        local pads = workspace:WaitForChild("WinnerPads"):GetChildren()
+        local ninthPad = pads[9]
+
+        if not ninthPad or not ninthPad:IsA("BasePart") then
+            warn("9th WinnerPad is not a valid part")
+            return
+        end
+
+        local player = game.Players.LocalPlayer
+        local char = player.Character or player.CharacterAdded:Wait()
+        local root = char:WaitForChild("HumanoidRootPart")
+
+        firetouchinterest(root, ninthPad, 0)
+        firetouchinterest(root, ninthPad, 1)
+
+        print("Touched:", ninthPad.Name)
+    end
+})
+  MainTab:CreateLabel("World 8  - Moon")
+ MainTab:CreateButton({
+        Name = "Spawn",
+        Callback = function()
+            local player = game.Players.LocalPlayer
+            local char = player.Character or player.CharacterAdded:Wait()
+            local hrp = char:WaitForChild("HumanoidRootPart")
+            local targetCFrame = CFrame.new(-7000, 4.82348156, -131.999985, -1, -8.56977544e-10, -2.76286914e-13, -8.56977544e-10, 1, 5.30516431e-09, 2.76282361e-13, 5.30516431e-09, -1)
+            hrp.CFrame = targetCFrame
+        end
+    })
+ MainTab:CreateButton({
+        Name = "Tp Win location",
+        Callback = function()
+            local player = game.Players.LocalPlayer
+            local char = player.Character or player.CharacterAdded:Wait()
+            local hrp = char:WaitForChild("HumanoidRootPart")
+            local targetCFrame = CFrame.new(-7000.48535, 56618.8203, 172.852051, -0.999554098, 2.5453188e-08, -0.0298588183, 2.37248567e-08, 1, 5.82377098e-08, 0.0298588183, 5.75033496e-08, -0.999554098)
+            hrp.CFrame = targetCFrame
+        end
+    })
+MainTab:CreateButton({
+    Name = "get wins + 75",
+    Callback = function()
+        local pads = workspace:WaitForChild("WinnerPads"):GetChildren()
+        local tenthPad = pads[10]
+
+        if not tenthPad or not tenthPad:IsA("BasePart") then
+            warn("10th WinnerPad is not a valid part")
+            return
+        end
+
+        local player = game.Players.LocalPlayer
+        local char = player.Character or player.CharacterAdded:Wait()
+        local root = char:WaitForChild("HumanoidRootPart")
+
+        firetouchinterest(root, tenthPad, 0)
+        firetouchinterest(root, tenthPad, 1)
+
+        print("Touched:", tenthPad.Name)
+    end
+})
+  MainTab:CreateLabel("World 9  - Grave Yard")
+ MainTab:CreateButton({
+        Name = "Spawn",
+        Callback = function()
+            local player = game.Players.LocalPlayer
+            local char = player.Character or player.CharacterAdded:Wait()
+            local hrp = char:WaitForChild("HumanoidRootPart")
+            local targetCFrame = CFrame.new(-8001.74902, 4.82348156, -142.641678, -0.998610497, 6.28746903e-08, -0.0526974835, 6.14643056e-08, 1, 2.83843669e-08, 0.0526974835, 2.51059138e-08, -0.998610497)
+            hrp.CFrame = targetCFrame
+        end
+    })
+ MainTab:CreateButton({
+        Name = "Tp win location",
+        Callback = function()
+            local player = game.Players.LocalPlayer
+            local char = player.Character or player.CharacterAdded:Wait()
+            local hrp = char:WaitForChild("HumanoidRootPart")
+            local targetCFrame = CFrame.new(-8016.04395, 85868.8125, 200.635162, -0.0398797952, -1.11348065e-07, -0.999204457, -6.15105193e-08, 1, -1.08981737e-07, 0.999204457, 5.71154182e-08, -0.0398797952)
+            hrp.CFrame = targetCFrame
+        end
+    })
+MainTab:CreateButton({
+    Name = "Get wins + 100",
+    Callback = function()
+        local pads = workspace:WaitForChild("WinnerPads"):GetChildren()
+        local eleventhPad = pads[11]
+
+        if not eleventhPad or not eleventhPad:IsA("BasePart") then
+            warn("11th WinnerPad is not a valid part")
+            return
+        end
+
+        local player = game.Players.LocalPlayer
+        local char = player.Character or player.CharacterAdded:Wait()
+        local root = char:WaitForChild("HumanoidRootPart")
+
+        firetouchinterest(root, eleventhPad, 0)
+        firetouchinterest(root, eleventhPad, 1)
+
+        print("Touched:", eleventhPad.Name)
+    end
+})
+local toggled = false
+local taskRunning
+
+MainTab:CreateToggle({
+    Name = "auto farm wins",
+    Callback = function(state)
+        toggled = state
+        if toggled then
+            local pads = workspace:WaitForChild("WinnerPads"):GetChildren()
+            local ninthPad = pads[11]
+
+            if not ninthPad or not ninthPad:IsA("BasePart") then
+                warn("9th WinnerPad is not a valid part")
+                toggled = false
+                return
+            end
+
+            local player = game.Players.LocalPlayer
+            local char = player.Character or player.CharacterAdded:Wait()
+            local root = char:WaitForChild("HumanoidRootPart")
+
+            taskRunning = coroutine.create(function()
+                while toggled do
+                    firetouchinterest(root, ninthPad, 0)
+                    firetouchinterest(root, ninthPad, 1)
+                    wait(0.2)
+                end
+            end)
+
+            coroutine.resume(taskRunning)
+        else
+            -- Toggled off, coroutine loop will stop on next iteration
+            print("Stopped spamming wins")
+        end
+    end
+})
+
+  MainTab:CreateLabel("World 10  - Void World")
+ MainTab:CreateButton({
+        Name = "Spawn",
+        Callback = function()
+            local player = game.Players.LocalPlayer
+            local char = player.Character or player.CharacterAdded:Wait()
+            local hrp = char:WaitForChild("HumanoidRootPart")
+            local targetCFrame = CFrame.new(-9000, 4.82348156, -148.5, -1, -4.59912499e-08, 6.8433723e-14, -4.59912499e-08, 1, -6.49431726e-08, -6.54469087e-14, -6.49431726e-08, -1)
+            hrp.CFrame = targetCFrame
+        end
+    })
+ MainTab:CreateButton({
+        Name = "tp win location",
+        Callback = function()
+            local player = game.Players.LocalPlayer
+            local char = player.Character or player.CharacterAdded:Wait()
+            local hrp = char:WaitForChild("HumanoidRootPart")
+            local targetCFrame = CFrame.new(-8991.35059, 120868.812, 186.557022, 0.262647003, -1.70290306e-08, 0.96489197, -9.71948353e-08, 1, 4.41054162e-08, -0.96489197, -1.05366674e-07, 0.262647003)
+            hrp.CFrame = targetCFrame
+        end
+    })
+MainTab:CreateButton({
+    Name = "give 150 wins",
+    Callback = function()
+        local winnerPad = workspace:WaitForChild("WinnerPads")
+            :WaitForChild("WinnerPad")
+            :WaitForChild("WinnerPad") 
+
+        local player = game.Players.LocalPlayer
+        local character = player.Character or player.CharacterAdded:Wait()
+        local rootPart = character:WaitForChild("HumanoidRootPart")
+
+        firetouchinterest(rootPart, winnerPad, 0)
+        firetouchinterest(rootPart, winnerPad, 1)
+
+        print("Touch triggered on:", winnerPad:GetFullName())
+    end
+})
+
+
+
+    local PetsTab = Window:CreateTab("Pets - Gambling")
+    PetsTab:CreateLabel("non-toggleables ")
+    -- these alllwo o to buy thhingsg  for wins or robux.
+PetsTab:CreateButton({
+    Name = "Buy Common Egg - uses wins - 2",
+    Callback = function()
+        local args = { "CommonEgg" }
+        game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("BuyPetEgg"):InvokeServer(unpack(args))
+    end
+})
+PetsTab:CreateButton({
+    Name = "Buy Uncommon Egg - sues wins - 5",
+    Callback = function()
+        local args = { "UncommonEgg" }
+        game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("BuyPetEgg"):InvokeServer(unpack(args))
+    end
+})
+PetsTab:CreateButton({
+    Name = "Buy Rare Egg - costs 15 wins",
+    Callback = function()
+        local args = { "RareEgg" }
+        game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("BuyPetEgg"):InvokeServer(unpack(args))
+    end
+})
+PetsTab:CreateButton({
+    Name = "Buy Legendary Egg - costs 40 wins",
+    Callback = function()
+        local args = { "LegendaryEgg" }
+        game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("BuyPetEgg"):InvokeServer(unpack(args))
+    end
+})
+PetsTab:CreateButton({
+    Name = "Buy Godly Egg -costs robux - 400",
+    Callback = function()
+        game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("BuyGodlyEgg"):FireServer()
+    end
+})
+    -- these allow you to automaticallly buy thinggs for wins or robux.
+    PetsTab:CreateLabel("toggleables")
+local commonEggToggled = false
+local function toggleCommonEgg()
+    commonEggToggled = not commonEggToggled
+    while commonEggToggled do
+        game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("BuyPetEgg"):InvokeServer("CommonEgg")
+        wait(0.5)
+    end
+end
+PetsTab:CreateToggle({
+    Name = "Toggle Common Egg - costs 2 wins per run",
+    Callback = toggleCommonEgg
+})
+local uncommonEggToggled = false
+local function toggleUncommonEgg()
+    uncommonEggToggled = not uncommonEggToggled
+    while uncommonEggToggled do
+        game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("BuyPetEgg"):InvokeServer("UncommonEgg")
+        wait(0.5)
+    end
+end
+PetsTab:CreateToggle({
+    Name = "Toggle Uncommon Egg - costs 5 wins per run",
+    Callback = toggleUncommonEgg
+})
+
+
+local rareEggToggled = false
+local function toggleRareEgg()
+    rareEggToggled = not rareEggToggled
+    while rareEggToggled do
+        game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("BuyPetEgg"):InvokeServer("RareEgg")
+        wait(0.5)
+    end
+end
+PetsTab:CreateToggle({
+    Name = "Toggle Rare Egg - costs 15 per run",
+    Callback = toggleRareEgg
+})
+
+
+local legendaryEggToggled = false
+local function toggleLegendaryEgg()
+    legendaryEggToggled = not legendaryEggToggled
+    while legendaryEggToggled do
+        game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("BuyPetEgg"):InvokeServer("LegendaryEgg")
+        wait(0.5)
+    end
+end
+PetsTab:CreateToggle({
+    Name = "Toggle Legendary Egg - costs 40 wins per run",
+    Callback = toggleLegendaryEgg
+})
+
+
+local godlyEggToggled = false
+local function toggleGodlyEgg()
+    godlyEggToggled = not godlyEggToggled
+    while godlyEggToggled do
+        game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("BuyGodlyEgg"):FireServer()
+        wait(0.5)
+    end
+end
+PetsTab:CreateToggle({
+    Name = "Toggle Godly Egg - costs 400 robux",
+    Callback = toggleGodlyEgg
+})
+local MiscTab = Window:CreateTab("Misc")
+MiscTab:CreateLabel("Automatic")
+local counter = 1
+local running = false
+-- this automatically clamis all the free rewards.
+local toggle = MiscTab:CreateToggle({
+    Name = "auto Claim Free Rewards",
+    Default = false,
+    Callback = function(state)
+        running = state
+        if running then
+            while running do
+                -- Run the claim function
+                local args = {counter}
+                game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("ClaimFreeReward"):FireServer(unpack(args))
+
+               
+                counter = counter + 1
+                if counter > 8 then
+                    counter = 1
+                end
+
+               
+                wait(1)
+            end
+        end
+    end
+})
+local vipCounter = 1
+local vipRunning = false
+-- this automatically claims all the vip rewards.
+local vipToggle = MiscTab:CreateToggle({
+    Name = "auto Claim VIP Rewards",
+    Default = false,
+    Callback = function(state)
+        vipRunning = state
+        if vipRunning then
+            while vipRunning do
+                
+                local args = {vipCounter}
+                game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("ClaimVIPReward"):FireServer(unpack(args))
+
+                
+                vipCounter = vipCounter + 1
+                if vipCounter > 8 then
+                    vipCounter = 1
+                end
+
+               
+                wait(1)
+            end
+        end
+    end
+})
+local ServerTab= Window:CreateTab("Server")
+ServerTab:CreateButton({
+    Name = "Rejoin Server",
+    Callback = function()
+        local player = game.Players.LocalPlayer
+        local screenGui = Instance.new("ScreenGui")
+        screenGui.Name = "RejoinWarningGui"
+        screenGui.ResetOnSpawn = false
+        screenGui.Parent = player:WaitForChild("PlayerGui")
+
+        local textLabel = Instance.new("TextLabel")
+        textLabel.Size = UDim2.new(0, 400, 0, 50) -- Smaller box
+        textLabel.Position = UDim2.new(0.5, -200, 0.4, 0) -- Centered horizontally
+        textLabel.BackgroundTransparency = 1 -- no background
+        textLabel.TextColor3 = Color3.new(1, 0, 0) -- red text
+        textLabel.Text = "Rejoining not possible on this experience"
+        textLabel.TextScaled = true
+        textLabel.Font = Enum.Font.SourceSansBold
+        textLabel.Parent = screenGui
+
+        delay(5, function()
+            screenGui:Destroy()
+        end)
+    end
+})
+
+
+-- Server hop to 7+ players
+ServerTab:CreateButton({
+    Name = "Hop Server (7+ Players)",
+    Callback = function()
+        local success, result = pcall(function()
+            return HttpService:JSONDecode(
+                game:HttpGet(
+                    "https://games.roblox.com/v1/games/"..game.PlaceId.."/servers/Public?sortOrder=Desc&limit=100"
+                )
+            )
+        end)
+
+        if success and result and result.data then
+            for _, server in ipairs(result.data) do
+                if server.playing >= 7 and server.id ~= game.JobId then
+                    TeleportService:TeleportToPlaceInstance(game.PlaceId, server.id, Players.LocalPlayer)
+                    return
+                end
+            end
+        end
+
+        warn("No suitable server found with 7+ players.")
+    end
+})
+
+ServerTab:CreateButton({
+    Name = "Leave Game",
+    Callback = function()
+        local RunService = game:GetService("RunService")
+        local TeleportService = game:GetService("TeleportService")
+
+        if RunService:IsStudio() then
+            warn("Can't close game in Studio.")
+            return
+        end
+
+        if typeof(game.Close) == "function" then
+            game:Close() -- preferred method on supported executors
+        elseif typeof(game.Shutdown) == "function" then
+            game:Shutdown() -- fallback shutdown method
+        else
+            warn("No available method to close or shutdown the game.")
+        end
+    end
+})
+local Players = game:GetService("Players")
+local RunService = game:GetService("RunService")
+ 
+local VisTab = Window:CreateTab("Visuals")
+VisTab:CreateLabel("Assistance features")
+ 
+VisTab:CreateToggle({
+    Name = "Full Bright",
+    Flag = "FullBrightToggle",
+    Callback = function(state)
+        local Lighting = game:GetService("Lighting")
+        if state then
+            Lighting.Brightness = 2
+            Lighting.ClockTime = 14
+            Lighting.FogEnd = 100000
+            Lighting.Ambient = Color3.new(1, 1, 1)
+            Lighting.OutdoorAmbient = Color3.new(1, 1, 1)
+        else
+            Lighting.Brightness = 1
+            Lighting.ClockTime = 14
+            Lighting.FogEnd = 1000
+            Lighting.Ambient = Color3.new(0.5, 0.5, 0.5)
+            Lighting.OutdoorAmbient = Color3.new(0.5, 0.5, 0.5)
+        end
+    end
+})
+ 
+VisTab:CreateToggle({
+    Name = "No Fog",
+    Flag = "NoFogToggle",
+    Callback = function(state)
+        local Lighting = game:GetService("Lighting")
+        if state then
+            Lighting.FogStart = 0
+            Lighting.FogEnd = 100000
+        else
+            Lighting.FogStart = 0
+            Lighting.FogEnd = 1000
+        end
+    end
+})
+ 
+
+
+    local flying = false
+    local flySpeed = 50
+    local bodyGyro, bodyVelocity
+    local UIS = game:GetService("UserInputService")
+    local RS = game:GetService("RunService")
+    local player = game.Players.LocalPlayer
+    local hrp
+
+    local directions = {
+        Forward = false, Backward = false, Left = false, Right = false, Up = false, Down = false
+    }
+
+    UIS.InputBegan:Connect(function(input, gameProcessed)
+        if gameProcessed or not flying then return end
+        local key = input.KeyCode
+        if key == Enum.KeyCode.W then directions.Forward = true end
+        if key == Enum.KeyCode.S then directions.Backward = true end
+        if key == Enum.KeyCode.A then directions.Left = true end
+        if key == Enum.KeyCode.D then directions.Right = true end
+        if key == Enum.KeyCode.Space then directions.Up = true end
+        if key == Enum.KeyCode.LeftControl then directions.Down = true end
+    end)
+
+    UIS.InputEnded:Connect(function(input)
+        if not flying then return end
+        local key = input.KeyCode
+        if key == Enum.KeyCode.W then directions.Forward = false end
+        if key == Enum.KeyCode.S then directions.Backward = false end
+        if key == Enum.KeyCode.A then directions.Left = false end
+        if key == Enum.KeyCode.D then directions.Right = false end
+        if key == Enum.KeyCode.Space then directions.Up = false end
+        if key == Enum.KeyCode.LeftControl then directions.Down = false end
+    end)
+
+    local function getDirectionVector()
+        local cam = workspace.CurrentCamera
+        local moveVector = Vector3.new()
+        if directions.Forward then moveVector += cam.CFrame.LookVector end
+        if directions.Backward then moveVector -= cam.CFrame.LookVector end
+        if directions.Right then moveVector += cam.CFrame.RightVector end
+        if directions.Left then moveVector -= cam.CFrame.RightVector end
+        if directions.Up then moveVector += cam.CFrame.UpVector end
+        if directions.Down then moveVector -= cam.CFrame.UpVector end
+        return moveVector.Magnitude > 0 and moveVector.Unit * flySpeed or Vector3.new()
+    end
+
+    local flyConnection
+    local function startFly()
+        flying = true
+        hrp = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
+        if not hrp then return end
+        bodyGyro = Instance.new("BodyGyro", hrp)
+        bodyGyro.P = 9e4
+        bodyGyro.MaxTorque = Vector3.new(9e9, 9e9, 9e9)
+        bodyGyro.CFrame = hrp.CFrame
+        bodyVelocity = Instance.new("BodyVelocity", hrp)
+        bodyVelocity.Velocity = Vector3.new()
+        bodyVelocity.MaxForce = Vector3.new(9e9, 9e9, 9e9)
+        flyConnection = RS.RenderStepped:Connect(function()
+            if flying then
+                bodyGyro.CFrame = workspace.CurrentCamera.CFrame
+                bodyVelocity.Velocity = getDirectionVector()
+            end
+        end)
+    end
+
+    local function stopFly()
+        flying = false
+        if flyConnection then flyConnection:Disconnect() flyConnection = nil end
+        if bodyGyro then bodyGyro:Destroy() bodyGyro = nil end
+        if bodyVelocity then bodyVelocity:Destroy() bodyVelocity = nil end
+        for k in pairs(directions) do directions[k] = false end
+    end
+
+    MiscTab:CreateToggle({
+        Name = "Fly",
+        CurrentValue = false,
+        Flag = "flyToggle",
+        Callback = function(value)
+            if value then startFly() else stopFly() end
+        end
+    })
+
+    MiscTab:CreateSlider({
+        Name = "Fly Speed",
+        Range = {50, 700},
+        Increment = 1,
+        Suffix = "Speed",
+        CurrentValue = flySpeed,
+        Flag = "flySpeedSlider",
+        Callback = function(value)
+            flySpeed = value
+        end
+    })
+
+    local noclip = false
+    local noclipConnection
+    MiscTab:CreateToggle({
+        Name = "NoClip",
+        CurrentValue = false,
+        Flag = "noclipToggle",
+        Callback = function(value)
+            noclip = value
+            if noclip and not noclipConnection then
+                noclipConnection = game:GetService("RunService").Stepped:Connect(function()
+                    local char = player.Character
+                    if char then
+                        for _, v in pairs(char:GetDescendants()) do
+                            if v:IsA("BasePart") then v.CanCollide = false end
+                        end
+                    end
+                end)
+            elseif not noclip and noclipConnection then
+                noclipConnection:Disconnect()
+                noclipConnection = nil
+            end
+        end
+    })
+MiscTab:CreateSlider({
+    Name = "WalkSpeed",
+    Range = {16, 99},
+    Increment = 1,
+    Suffix = "Speed",
+    CurrentValue = 16,
+    Callback = function(value)
+        local player = game.Players.LocalPlayer
+        local char = player.Character or player.CharacterAdded:Wait()
+        local humanoid = char:FindFirstChildWhichIsA("Humanoid")
+        if humanoid then
+            humanoid.WalkSpeed = value
+        end
+    end
+})
+-- code to add
+local Players = game:GetService("Players")
+local RunService = game:GetService("RunService")
+
+local nametagRadius = 2750
+local nametagEnabled = false
+local nametagFolder = Instance.new("Folder")
+nametagFolder.Name = "Nametags"
+nametagFolder.Parent = workspace
+
+local playerNametags = {}
+local localPlayer = Players.LocalPlayer
+
+local function createNametag(player)
+    if not player.Character or not player.Character:FindFirstChild("HumanoidRootPart") then return nil end
+    local billboard = Instance.new("BillboardGui")
+    billboard.Name = "NametagGui"
+    billboard.Adornee = player.Character.HumanoidRootPart
+    billboard.Size = UDim2.new(0, 100, 0, 30)
+    billboard.StudsOffset = Vector3.new(0, 3, 0)
+    billboard.AlwaysOnTop = true
+    billboard.Parent = nametagFolder
+
+    local textLabel = Instance.new("TextLabel")
+    textLabel.BackgroundTransparency = 1
+    textLabel.Size = UDim2.new(1, 0, 1, 0)
+    textLabel.Text = player.Name
+    textLabel.TextColor3 = Color3.new(1, 1, 1)
+    textLabel.TextStrokeColor3 = Color3.new(0, 0, 0)
+    textLabel.TextStrokeTransparency = 0
+    textLabel.Font = Enum.Font.SourceSansBold
+    textLabel.TextScaled = true
+    textLabel.Parent = billboard
+
+    return billboard
+end
+
+local function updateNametags()
+    if not localPlayer.Character or not localPlayer.Character:FindFirstChild("HumanoidRootPart") then return end
+    local localHRP = localPlayer.Character.HumanoidRootPart
+
+    for _, plr in pairs(Players:GetPlayers()) do
+        if plr ~= localPlayer then
+            local char = plr.Character
+            if char and char:FindFirstChild("HumanoidRootPart") then
+                local distance = (char.HumanoidRootPart.Position - localHRP.Position).Magnitude
+                if distance <= nametagRadius then
+                    if not playerNametags[plr] then
+                        playerNametags[plr] = createNametag(plr)
+                    end
+                    if playerNametags[plr] then
+                        playerNametags[plr].Enabled = true
+                        playerNametags[plr].Adornee = plr.Character.HumanoidRootPart
+                    end
+                else
+                    if playerNametags[plr] then
+                        playerNametags[plr].Enabled = false
+                    end
+                end
+            elseif playerNametags[plr] then
+                playerNametags[plr]:Destroy()
+                playerNametags[plr] = nil
+            end
+        end
+    end
+end
+
+local function clearNametags()
+    for _, gui in pairs(playerNametags) do
+        if gui then gui:Destroy() end
+    end
+    playerNametags = {}
+end
+
+local function onPlayerAdded(player)
+    if nametagEnabled and player ~= localPlayer then
+        player.CharacterAdded:Connect(function()
+            task.wait(1)
+            if nametagEnabled then
+                if playerNametags[player] then playerNametags[player]:Destroy() end
+                playerNametags[player] = createNametag(player)
+            end
+        end)
+    end
+end
+
+local function onPlayerRemoving(player)
+    if playerNametags[player] then
+        playerNametags[player]:Destroy()
+        playerNametags[player] = nil
+    end
+end
+
+local updateConnection
+local function toggleNametags(state)
+    nametagEnabled = state
+    if nametagEnabled then
+        for _, player in ipairs(Players:GetPlayers()) do
+            if player ~= localPlayer then
+                onPlayerAdded(player)
+            end
+        end
+        updateConnection = RunService.RenderStepped:Connect(updateNametags)
+        Players.PlayerAdded:Connect(onPlayerAdded)
+        Players.PlayerRemoving:Connect(onPlayerRemoving)
+    else
+        if updateConnection then
+            updateConnection:Disconnect()
+            updateConnection = nil
+        end
+        clearNametags()
+    end
+end
+
+VisTab:CreateToggle({
+    Name = "Nametags",
+    Flag = "NametagsToggle",
+    Callback = function(state)
+        toggleNametags(state)
+        Rayfield:Notify({
+            Title = "Nametags",
+            Content = state and "Nametags Enabled" or "Nametags Disabled",
+            Duration = 3
+        })
+    end
+})
+
+VisTab:CreateSlider({
+    Name = "Nametag Radius",
+    Range = {50, 10000},
+    Increment = 10,
+    CurrentValue = nametagRadius,
+    Flag = "NametagRadiusSlider",
+    Callback = function(value)
+        nametagRadius = value
+    end
+})
+-- player Teleportation
+MiscTab:CreateLabel("Player Teleportation")
+
+local Players = game:GetService("Players")
+local LocalPlayer = Players.LocalPlayer
+
+local playerNames = {}
+for _, player in pairs(Players:GetPlayers()) do
+    if player ~= LocalPlayer then
+        table.insert(playerNames, player.Name)
+    end
+end
+if #playerNames == 0 then
+    playerNames = {"No players found"}
+end
+
+local selectedPlayerName = nil
+
+local playerDropdown = MiscTab:CreateDropdown({
+    Name = "Select Player",
+    Options = playerNames,
+    CurrentOption = playerNames[1],
+    MultipleOptions = false,
+    Flag = "PlayerDropdown",
+    Callback = function(selection)
+        selectedPlayerName = table.concat(selection, ", ")
+        Rayfield:Notify({
+            Title = "Player Selected",
+            Content = "You selected: " .. selectedPlayerName,
+            Duration = 3,
+        })
+    end
+})
+
+-- Teleport Button
+MiscTab:CreateButton({
+    Name = "Teleport to Player",
+    Callback = function()
+        if selectedPlayerName == nil or selectedPlayerName == "No players found" then
+            Rayfield:Notify({
+                Title = "Error",
+                Content = "No valid target player selected.",
+                Duration = 3,
+            })
+            return
+        end
+
+        local targetPlayer = Players:FindFirstChild(selectedPlayerName)
+        if targetPlayer and targetPlayer.Character and targetPlayer.Character:FindFirstChild("HumanoidRootPart") then
+            if LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
+                LocalPlayer.Character.HumanoidRootPart.CFrame = targetPlayer.Character.HumanoidRootPart.CFrame
+                Rayfield:Notify({
+                    Title = "Teleported",
+                    Content = "Teleported to " .. selectedPlayerName,
+                    Duration = 3,
+                })
+            else
+                Rayfield:Notify({
+                    Title = "Error",
+                    Content = "Your character or HumanoidRootPart not found.",
+                    Duration = 3,
+                })
+            end
+        else
+            Rayfield:Notify({
+                Title = "Error",
+                Content = "Target player or HumanoidRootPart not found.",
+                Duration = 3,
+            })
+        end
+    end
+})
+
+local function updateDropdownOptions()
+    local newPlayerNames = {}
+    for _, player in pairs(Players:GetPlayers()) do
+        if player ~= LocalPlayer then
+            table.insert(newPlayerNames, player.Name)
+        end
+    end
+
+    if #newPlayerNames == 0 then
+        newPlayerNames = {"No players found"}
+        selectedPlayerName = nil
+    else
+        if selectedPlayerName == nil or not table.find(newPlayerNames, selectedPlayerName) then
+            selectedPlayerName = nil
+        end
+    end
+
+    playerDropdown:Refresh(newPlayerNames)
+end
+
+Players.PlayerAdded:Connect(updateDropdownOptions)
+Players.PlayerRemoving:Connect(updateDropdownOptions)
+
+end
