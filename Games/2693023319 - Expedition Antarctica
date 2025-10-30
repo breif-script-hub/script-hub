@@ -8,7 +8,7 @@ if game.PlaceId == 2693023319 then
     local RunService = game:GetService("RunService")
 
     -- load rayfield ui libery
-    local Rayfield = loadstring(game:HttpGet("https://raw.githubusercontent.com/breif-script-hub/script-hub/refs/heads/main/Dependencies%20/%20side%20scrips/Rayfield"))()
+    local Rayfield = loadstring(game:HttpGet("https://raw.githubusercontent.com/breif-script-hub/script-hub/refs/heads/main/Dependencies%20/Rayfield"))()
 -- creating windw for script
     local Window = Rayfield:CreateWindow({
         Name = "missions expedition antartica",
