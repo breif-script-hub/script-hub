@@ -1,0 +1,972 @@
+-- checks if user is in right game. 
+if game.PlaceId == 14218711698 then
+    local Players = game:GetService("Players")
+    local player = Players.LocalPlayer
+    local UserInputService = game:GetService("UserInputService")
+    local Debris = game:GetService("Debris")
+    local RunService = game:GetService("RunService")
+-- ui libery loader.
+    local Rayfield = loadstring(game:HttpGet('https://pastefy.app/gfsVc4lI/raw'))()
+-- creates window we will use in script
+    local Window = Rayfield:CreateWindow({
+        Name = "criminal tycoon",
+        Icon = 0,
+        LoadingTitle = "Script Hub",
+        LoadingSubtitle = "by Breif",
+        ShowText = "Rayfield",
+        Theme = "Default",
+        ToggleUIKeybind = "K",
+        DisableRayfieldPrompts = false,
+        DisableBuildWarnings = true,
+        ConfigurationSaving = {
+            Enabled = true,
+            FolderName = "script_hub_configs",
+            FileName = "default_config"
+        },
+        Discord = {
+            Enabled = false,
+            Invite = "",
+            RememberJoins = true
+        },
+        KeySystem = false
+    })
+local MainTab = Window:CreateTab("Main")
+local MiscTab = Window:CreateTab("misc")
+local Section = MiscTab:CreateSection("Location")
+local Section = MainTab:CreateSection("Utility features")
+local TeleportsTab = Window:CreateTab("Teleports") 
+-- fly
+    local Section = MiscTab:CreateSection("General")
+        local flying = false
+        local flySpeed = 50
+        local bodyGyro, bodyVelocity
+        local UIS = game:GetService("UserInputService")
+        local RS = game:GetService("RunService")
+        local player = game.Players.LocalPlayer
+        local hrp
+
+        local directions = {
+            Forward = false, Backward = false, Left = false, Right = false, Up = false, Down = false
+        }
+
+        UIS.InputBegan:Connect(function(input, gameProcessed)
+            if gameProcessed or not flying then return end
+            local key = input.KeyCode
+            if key == Enum.KeyCode.W then directions.Forward = true end
+            if key == Enum.KeyCode.S then directions.Backward = true end
+            if key == Enum.KeyCode.A then directions.Left = true end
+            if key == Enum.KeyCode.D then directions.Right = true end
+            if key == Enum.KeyCode.Space then directions.Up = true end
+            if key == Enum.KeyCode.LeftControl then directions.Down = true end
+        end)
+
+        UIS.InputEnded:Connect(function(input)
+            if not flying then return end
+            local key = input.KeyCode
+            if key == Enum.KeyCode.W then directions.Forward = false end
+            if key == Enum.KeyCode.S then directions.Backward = false end
+            if key == Enum.KeyCode.A then directions.Left = false end
+            if key == Enum.KeyCode.D then directions.Right = false end
+            if key == Enum.KeyCode.Space then directions.Up = false end
+            if key == Enum.KeyCode.LeftControl then directions.Down = false end
+        end)
+
+        local function getDirectionVector()
+            local cam = workspace.CurrentCamera
+            local moveVector = Vector3.new()
+            if directions.Forward then moveVector += cam.CFrame.LookVector end
+            if directions.Backward then moveVector -= cam.CFrame.LookVector end
+            if directions.Right then moveVector += cam.CFrame.RightVector end
+            if directions.Left then moveVector -= cam.CFrame.RightVector end
+            if directions.Up then moveVector += cam.CFrame.UpVector end
+            if directions.Down then moveVector -= cam.CFrame.UpVector end
+            return moveVector.Magnitude > 0 and moveVector.Unit * flySpeed or Vector3.new()
+        end
+
+        local flyConnection
+        local function startFly()
+            flying = true
+            hrp = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
+            if not hrp then return end
+            bodyGyro = Instance.new("BodyGyro", hrp)
+            bodyGyro.P = 9e4
+            bodyGyro.MaxTorque = Vector3.new(9e9, 9e9, 9e9)
+            bodyGyro.CFrame = hrp.CFrame
+            bodyVelocity = Instance.new("BodyVelocity", hrp)
+            bodyVelocity.Velocity = Vector3.new()
+            bodyVelocity.MaxForce = Vector3.new(9e9, 9e9, 9e9)
+            flyConnection = RS.RenderStepped:Connect(function()
+                if flying then
+                    bodyGyro.CFrame = workspace.CurrentCamera.CFrame
+                    bodyVelocity.Velocity = getDirectionVector()
+                end
+            end)
+        end
+
+        local function stopFly()
+            flying = false
+            if flyConnection then flyConnection:Disconnect() flyConnection = nil end
+            if bodyGyro then bodyGyro:Destroy() bodyGyro = nil end
+            if bodyVelocity then bodyVelocity:Destroy() bodyVelocity = nil end
+            for k in pairs(directions) do directions[k] = false end
+        end
+
+MiscTab:CreateToggle({
+    Name = "Fly",
+    CurrentValue = false,
+    Flag = "flyToggle",
+    Callback = function(value)
+        if value then
+            startFly()
+            Rayfield:Notify({
+                Title = "Fly",
+                Content = "Fly enabled",
+                Duration = 3
+            })
+        else
+            stopFly()
+            Rayfield:Notify({
+                Title = "Fly",
+                Content = "Fly disabled",
+                Duration = 3
+            })
+        end
+    end
+})
+
+
+        MiscTab:CreateSlider({
+            Name = "Fly Speed",
+            Range = {50, 700},
+            Increment = 1,
+            Suffix = "Speed",
+            CurrentValue = flySpeed,
+            Flag = "flySpeedSlider",
+            Callback = function(value)
+                flySpeed = value
+            end
+        })
+-- noclip
+        local noclip = false
+        local noclipConnection
+MiscTab:CreateToggle({
+    Name = "NoClip",
+    CurrentValue = false,
+    Flag = "noclipToggle",
+    Callback = function(value)
+        noclip = value
+        if noclip and not noclipConnection then
+            noclipConnection = game:GetService("RunService").Stepped:Connect(function()
+                local char = player.Character
+                if char then
+                    for _, v in pairs(char:GetDescendants()) do
+                        if v:IsA("BasePart") then v.CanCollide = false end
+                    end
+                end
+            end)
+            Rayfield:Notify({
+                Title = "NoClip",
+                Content = "NoClip enabled",
+                Duration = 3
+            })
+        elseif not noclip and noclipConnection then
+            noclipConnection:Disconnect()
+            noclipConnection = nil
+            Rayfield:Notify({
+                Title = "NoClip",
+                Content = "NoClip disabled",
+                Duration = 3
+            })
+        end
+    end
+})
+-- walkspeed code
+    local currentWalkSpeed = 22
+    local player = game.Players.LocalPlayer
+
+    MiscTab:CreateSlider({
+        Name = "WalkSpeed",
+        Range = {20, 116},
+        Increment = 1,
+        Suffix = "Speed",
+        CurrentValue = currentWalkSpeed,
+        Callback = function(value)
+            currentWalkSpeed = value
+        end
+    })
+    task.spawn(function()
+        while true do
+            task.wait(0.01)
+            local char = player.Character or player.CharacterAdded:Wait()
+            local humanoid = char:FindFirstChildWhichIsA("Humanoid")
+            if humanoid then
+                humanoid.WalkSpeed = currentWalkSpeed
+            end
+        end
+    end)
+local UserInputService = game:GetService("UserInputService")
+local player = game.Players.LocalPlayer
+
+local character = player.Character or player.CharacterAdded:Wait()
+local humanoid = character:WaitForChild("Humanoid")
+
+local canInfJump = false
+
+
+player.CharacterAdded:Connect(function(char)
+    character = char
+    humanoid = char:WaitForChild("Humanoid")
+end)
+
+UserInputService.JumpRequest:Connect(function()
+    if canInfJump then
+        if humanoid and humanoid:GetState() ~= Enum.HumanoidStateType.Jumping then
+            humanoid:ChangeState(Enum.HumanoidStateType.Jumping)
+        end
+    end
+end)
+-- inf jump
+MiscTab:CreateToggle({
+    Name = "Infinite Jump",
+    CurrentValue = false,
+    Flag = "infJumpToggle",
+    Save = true,
+    Callback = function(value)
+        canInfJump = value
+        Rayfield:Notify({
+            Title = "Infinite Jump",
+            Content = value and "Enabled" or "Disabled",
+            Duration = 3
+        })
+    end
+})
+
+-- create visual tab
+local VisTab = Window:CreateTab("Visuals")
+-- creates visual section
+local Section = VisTab:CreateSection("Visuals")
+-- full bright
+VisTab:CreateToggle({
+    Name = "Full Bright",
+    Flag = "FullBrightToggle",
+    Callback = function(state)
+        local Lighting = game:GetService("Lighting")
+        if state then
+            Lighting.Brightness = 2
+            Lighting.ClockTime = 14
+            Lighting.FogEnd = 100000
+            Lighting.Ambient = Color3.new(1, 1, 1)
+            Lighting.OutdoorAmbient = Color3.new(1, 1, 1)
+
+            Rayfield:Notify({
+                Title = "Full Bright",
+                Content = "Full Bright toggled ON",
+                Duration = 3
+            })
+        else
+            Lighting.Brightness = 1
+            Lighting.ClockTime = 14
+            Lighting.FogEnd = 1000
+            Lighting.Ambient = Color3.new(0.5, 0.5, 0.5)
+            Lighting.OutdoorAmbient = Color3.new(0.5, 0.5, 0.5)
+
+            Rayfield:Notify({
+                Title = "Full Bright",
+                Content = "Full Bright toggled OFF",
+                Duration = 3
+            })
+        end
+    end
+})
+-- no fog
+VisTab:CreateToggle({
+    Name = "No Fog",
+    Flag = "NoFogToggle",
+    Callback = function(state)
+        local Lighting = game:GetService("Lighting")
+        if state then
+            Lighting.FogStart = 0
+            Lighting.FogEnd = 100000
+            Rayfield:Notify({
+                Title = "No Fog",
+                Content = "no Fog Enabled",
+                Duration = 3
+            })
+        else
+            Lighting.FogStart = 0
+            Lighting.FogEnd = 1000
+            Rayfield:Notify({
+                Title = "No Fog",
+                Content = "no Fog Disabled",
+                Duration = 3
+            })
+        end
+    end
+})
+
+ -- nametags
+local Players = game:GetService("Players")
+local RunService = game:GetService("RunService")
+
+local nametagRadius = 2750
+local nametagEnabled = false
+local nametagFolder = Instance.new("Folder")
+nametagFolder.Name = "Nametags"
+nametagFolder.Parent = workspace
+
+local playerNametags = {}
+local localPlayer = Players.LocalPlayer
+
+local function createNametag(player)
+    if not player.Character or not player.Character:FindFirstChild("HumanoidRootPart") then return nil end
+    local billboard = Instance.new("BillboardGui")
+    billboard.Name = "NametagGui"
+    billboard.Adornee = player.Character.HumanoidRootPart
+    billboard.Size = UDim2.new(0, 100, 0, 30)
+    billboard.StudsOffset = Vector3.new(0, 3, 0)
+    billboard.AlwaysOnTop = true
+    billboard.Parent = nametagFolder
+
+    local textLabel = Instance.new("TextLabel")
+    textLabel.BackgroundTransparency = 1
+    textLabel.Size = UDim2.new(1, 0, 1, 0)
+    textLabel.Text = player.Name
+    textLabel.TextColor3 = Color3.new(1, 1, 1)
+    textLabel.TextStrokeColor3 = Color3.new(0, 0, 0)
+    textLabel.TextStrokeTransparency = 0
+    textLabel.Font = Enum.Font.SourceSansBold
+    textLabel.TextScaled = true
+    textLabel.Parent = billboard
+
+    return billboard
+end
+
+local function updateNametags()
+    if not localPlayer.Character or not localPlayer.Character:FindFirstChild("HumanoidRootPart") then return end
+    local localHRP = localPlayer.Character.HumanoidRootPart
+
+    for _, plr in pairs(Players:GetPlayers()) do
+        if plr ~= localPlayer then
+            local char = plr.Character
+            if char and char:FindFirstChild("HumanoidRootPart") then
+                local distance = (char.HumanoidRootPart.Position - localHRP.Position).Magnitude
+                if distance <= nametagRadius then
+                    if not playerNametags[plr] then
+                        playerNametags[plr] = createNametag(plr)
+                    end
+                    if playerNametags[plr] then
+                        playerNametags[plr].Enabled = true
+                        playerNametags[plr].Adornee = plr.Character.HumanoidRootPart
+                    end
+                else
+                    if playerNametags[plr] then
+                        playerNametags[plr].Enabled = false
+                    end
+                end
+            elseif playerNametags[plr] then
+                playerNametags[plr]:Destroy()
+                playerNametags[plr] = nil
+            end
+        end
+    end
+end
+
+local function clearNametags()
+    for _, gui in pairs(playerNametags) do
+        if gui then gui:Destroy() end
+    end
+    playerNametags = {}
+end
+
+local function onPlayerAdded(player)
+    if nametagEnabled and player ~= localPlayer then
+        player.CharacterAdded:Connect(function()
+            task.wait(1)
+            if nametagEnabled then
+                if playerNametags[player] then playerNametags[player]:Destroy() end
+                playerNametags[player] = createNametag(player)
+            end
+        end)
+    end
+end
+
+local function onPlayerRemoving(player)
+    if playerNametags[player] then
+        playerNametags[player]:Destroy()
+        playerNametags[player] = nil
+    end
+end
+
+local updateConnection
+local function toggleNametags(state)
+    nametagEnabled = state
+    if nametagEnabled then
+        for _, player in ipairs(Players:GetPlayers()) do
+            if player ~= localPlayer then
+                onPlayerAdded(player)
+            end
+        end
+        updateConnection = RunService.RenderStepped:Connect(updateNametags)
+        Players.PlayerAdded:Connect(onPlayerAdded)
+        Players.PlayerRemoving:Connect(onPlayerRemoving)
+    else
+        if updateConnection then
+            updateConnection:Disconnect()
+            updateConnection = nil
+        end
+        clearNametags()
+    end
+end
+
+VisTab:CreateToggle({
+    Name = "Nametags",
+    Flag = "NametagsToggle",
+    Callback = function(state)
+        toggleNametags(state)
+        Rayfield:Notify({
+            Title = "Nametags",
+            Content = state and "Nametags Enabled" or "Nametags Disabled",
+            Duration = 3
+        })
+    end
+})
+
+VisTab:CreateSlider({
+    Name = "Nametag Radius",
+    Range = {50, 10000},
+    Increment = 10,
+    CurrentValue = nametagRadius,
+    Flag = "NametagRadiusSlider",
+    Callback = function(value)
+        nametagRadius = value
+    end
+})
+
+local Players = game:GetService("Players")
+local localPlayer = Players.LocalPlayer
+local selectedPlayerName = nil
+-- no e wait
+local noEWaitEnabled = false
+local connection = nil
+local function fixPrompt(prompt)
+    if prompt:IsA("ProximityPrompt") then
+        pcall(function()
+            prompt.HoldDuration = 0
+        end)
+    end
+end
+local function fixAllPrompts(obj)
+    fixPrompt(obj)
+    for _, child in ipairs(obj:GetDescendants()) do
+        fixPrompt(child)
+    end
+end
+
+local function enableNoEWait()
+    if connection then return end 
+    for _, obj in ipairs(workspace:GetDescendants()) do
+        fixAllPrompts(obj)
+    end
+    connection = workspace.DescendantAdded:Connect(function(descendant)
+        fixAllPrompts(descendant)
+    end)
+end
+
+local function disableNoEWait()
+    if connection then
+        connection:Disconnect()
+        connection = nil
+    end
+end
+
+MainTab:CreateToggle({
+    Name = "No E Wait",
+    CurrentValue = false,
+    Callback = function(state)
+        noEWaitEnabled = state
+        if state then
+            enableNoEWait()
+        else
+            disableNoEWait()
+        end
+    end
+})
+-- disable laser damage
+
+local toggleEnabled = false
+local connectedParts = {}
+
+
+local function isDangerous(obj)
+    local nameLower = obj.Name:lower()
+    local nameCheck = nameLower:find("laser") ~= nil or nameLower:find("forcefield") ~= nil
+    local jewelryCheck = obj:IsDescendantOf(workspace:FindFirstChild("Map") 
+                        and workspace.Map:FindFirstChild("JewelryStore") 
+                        and workspace.Map.JewelryStore)
+    return nameCheck or jewelryCheck
+end
+
+
+local function disablePart(obj)
+    if not toggleEnabled then return end
+    if connectedParts[obj] then return end
+    connectedParts[obj] = true
+
+    if obj:IsA("BasePart") and obj.CanTouch then
+        obj.CanTouch = false
+    end
+
+    for _, child in ipairs(obj:GetChildren()) do
+        disablePart(child)
+    end
+end
+local function scanAll()
+    for _, obj in ipairs(workspace:GetDescendants()) do
+        if isDangerous(obj) then
+            disablePart(obj)
+        end
+    end
+end
+
+-- Always keep this listener active (cheap, no lag)
+workspace.DescendantAdded:Connect(function(obj)
+    if isDangerous(obj) then
+        disablePart(obj)
+    end
+end)
+
+
+MainTab:CreateToggle({
+    Name = "Disable Laser & Forcefield damage",
+    CurrentValue = false,
+    Callback = function(value)
+        toggleEnabled = value
+        if toggleEnabled then
+            scanAll()
+        else
+            connectedParts = {} -- clear so they can be tracked again if re-enabled
+        end
+    end
+})
+
+
+-- Robbery Teleportation
+TeleportsTab:CreateLabel("Robbery Teleportation")
+
+local robberyLocations = {
+    ["Mili Base"] = CFrame.new(-6736.36426, 25.6500263, -2392.12964, -0.0891655609, -3.93123294e-08, 0.9960168, 2.51491326e-08, 1, 4.17209485e-08, -0.9960168, 2.87690298e-08, -0.0891655609),
+    ["Lab"] = CFrame.new(-4913.69385, 28.8921547, -2324.62061, 0.123625048, -4.4149715e-09, -0.992329001, -1.12816899e-07, 1, -1.85039095e-08, 0.992329001, 1.14239022e-07, 0.123625048),
+    ["Bank"] = CFrame.new(-3805.64771, 0.939950824, -1035.07654, -0.993889868, 5.94767684e-08, 0.110376075, 5.54399513e-08, 1, -3.96422735e-08, -0.110376075, -3.32808128e-08, -0.993889868),
+    ["Oil Rig"] = CFrame.new(-8213.53223, 106.550011, -2258.6001, 0.0325479172, -8.0105039e-08, 0.999470174, -2.4036181e-08, 1, 8.09302492e-08, -0.999470174, -2.66575579e-08, 0.0325479172),
+    ["Ship"] = CFrame.new(-3426.74219, 27.8238106, 3649.7832, 0.962268651, 2.37095961e-08, -0.272101253, -4.01692404e-08, 1, -5.49207435e-08, 0.272101253, 6.37786073e-08, 0.962268651),
+    ["Dock Lever Room"] = CFrame.new(-6301.47314, 46.4356766, -272.082214, -0.430669606, 1.13649982e-07, -0.90250963, 7.57394005e-08, 1, 8.97844359e-08, 0.90250963, -2.9688108e-08, -0.430669606),
+    ["Docks Main Area"] = CFrame.new(-5984.45996, 27.435688, -93.3490372, -0.908201694, -1.01283666e-08, 0.418532759, 2.56399613e-08, 1, 7.98375339e-08, -0.418532759, 8.32397475e-08, -0.908201694),
+    ["Jewel Store"] = CFrame.new(-4454.12354, 75.9172974, -814.848267, -0.982881844, -3.20487139e-08, 0.184236914, -2.97527905e-08, 1, 1.52262452e-08, -0.184236914, 9.48403756e-09, -0.982881844),
+    ["Gas Station 1"] = CFrame.new(-3923.2666, 27.9766197, 71.0926971, -0.883383274, -1.98477341e-08, -0.468651265, -2.0304626e-10, 1, -4.19680219e-08, 0.468651265, -3.69786903e-08, -0.883383274),
+    ["Gas Station 2"] = CFrame.new(-6318.41357, 28.2499981, -2129.5271, 0.806561351, 1.05595504e-07, 0.591150403, -4.23891677e-08, 1, -1.20791668e-07, -0.591150403, 7.23675129e-08, 0.806561351),
+    ["Shop 1"] = CFrame.new(-4441.8623, 28.6994572, -1608.3114, 0.999975026, 5.61508919e-08, 0.00706339581, -5.61119329e-08, 1, -5.71392267e-09, -0.00706339581, 5.31743938e-09, 0.999975026),
+    ["Shop 2"] = CFrame.new(-6125.71094, 28.9076176, -1450.2843, -0.0854989439, 1.00675493e-07, 0.996338248, 7.40260973e-08, 1, -9.46930783e-08, -0.996338248, 6.56588739e-08, -0.0854989439),
+    ["Flag"] = CFrame.new(-5338.11816, 29.0608616, -871.312256, 0.140926942, 2.47295819e-08, 0.990019977, 2.13521467e-08, 1, -2.80182988e-08, -0.990019977, 2.50875871e-08, 0.140926942),
+}
+
+local selectedRobbery = nil 
+
+local robberyNames = {
+    "Mili Base",
+    "Lab",
+    "Bank",
+    "Oil Rig",
+    "Ship",
+    "Dock Lever Room",
+    "Docks Main Area",
+    "Jewel Store",
+    "Gas Station 1",
+    "Gas Station 2",
+    "Shop 1",
+    "Shop 2",
+    "Flag"
+}
+-- lets you select robbery to tp to
+local robberyDropdown = TeleportsTab:CreateDropdown({
+    Name = "Robbery Locations",
+    Options = robberyNames,
+    CurrentOption = {"Select a robbery"}, 
+    Flag = "RobberyDropdown",
+    Callback = function(option)
+        if type(option) == "table" then option = option[1] end
+        if type(option) == "string" and option ~= "Select a robbery" then
+            selectedRobbery = option
+            Rayfield:Notify({
+                Title = "Robbery Selected",
+                Content = "You selected: " .. option,
+                Duration = 3
+            })
+        else
+            selectedRobbery = nil
+        end
+    end
+})
+-- lets you tp to robbery
+TeleportsTab:CreateButton({
+    Name = "Teleport to Robbery",
+    Callback = function()
+        local player = game.Players.LocalPlayer
+        local character = player.Character
+        if not character or not character.PrimaryPart then
+            Rayfield:Notify({
+                Title = "Error",
+                Content = "Could not find your character!",
+                Duration = 3
+            })
+            return
+        end
+
+        if not selectedRobbery then
+            Rayfield:Notify({
+                Title = "Error",
+                Content = "Please select a robbery first!",
+                Duration = 3
+            })
+            return
+        end
+
+        local robberyCFrame = robberyLocations[selectedRobbery]
+        if not robberyCFrame then
+            Rayfield:Notify({
+                Title = "Error",
+                Content = "Location no tfound",
+                Duration = 3
+            })
+            return
+        end
+
+        local playerRotation = CFrame.new(Vector3.new(), character.PrimaryPart.CFrame.LookVector, character.PrimaryPart.CFrame.UpVector)
+        local newCFrame = CFrame.new(robberyCFrame.Position) * playerRotation.Rotation
+        character:FindFirstChild("HumanoidRootPart").CFrame = newCFrame
+
+
+        Rayfield:Notify({
+            Title = "Teleported",
+            Content = "Teleported to " .. selectedRobbery,
+            Duration = 3
+        })
+    end
+})
+-- base Teleports  
+TeleportsTab:CreateLabel("Base Teleportation")
+TeleportsTab:CreateButton({
+    Name = "Set Base",
+    Callback = function()
+        local player = game.Players.LocalPlayer
+        local character = player.Character
+        if not character or not character.PrimaryPart then
+            Rayfield:Notify({
+                Title = "Error",
+                Content = "Error!",
+                Duration = 3
+            })
+            return
+        end
+
+        baseCFrame = character.PrimaryPart.CFrame
+        Rayfield:Notify({
+            Title = "Base Set",
+            Content = "Your base has been set!",
+            Duration = 3
+        })
+    end
+})
+TeleportsTab:CreateLabel("Seporator")
+-- Teleporting to base
+TeleportsTab:CreateButton({
+    Name = "Teleport to Base",
+    Callback = function()
+        local player = game.Players.LocalPlayer
+        local character = player.Character
+        if not character or not character.PrimaryPart then
+            Rayfield:Notify({
+                Title = "Error",
+                Content = "Character's primary part is missing!",
+                Duration = 3
+            })
+            return
+        end
+
+        if baseCFrame then
+            local basePosition = baseCFrame.Position
+            local currentRotation = character.PrimaryPart.CFrame - character.PrimaryPart.CFrame.Position
+            local newCFrame = CFrame.new(basePosition) * currentRotation
+            character:FindFirstChild("HumanoidRootPart").CFrame = newCFrame
+
+            Rayfield:Notify({
+                Title = "Teleported",
+                Content = "Teleported to Your base!",
+                Duration = 3
+            })
+        else
+            Rayfield:Notify({
+                Title = "Error",
+                Content = "Please set a base before using this feature!",
+                Duration = 3
+            })
+        end
+    end
+})
+-- player selector
+TeleportsTab:CreateLabel("Player Teleportation")
+
+local Players = game:GetService("Players")
+local LocalPlayer = Players.LocalPlayer
+
+local playerNames = {}
+for _, player in pairs(Players:GetPlayers()) do
+    if player ~= LocalPlayer then
+        table.insert(playerNames, player.Name)
+    end
+end
+if #playerNames == 0 then
+    playerNames = {"No players found"}
+end
+
+local selectedPlayerName = nil
+
+local playerDropdown = TeleportsTab:CreateDropdown({
+    Name = "Select Player",
+    Options = playerNames,
+    CurrentOption = {},
+    MultipleOptions = false,
+    Flag = "PlayerDropdown",
+    Callback = function(selection)
+        selectedPlayerName = table.concat(selection, ", ")
+        Rayfield:Notify({
+            Title = "Player Selected",
+            Content = "You selected: " .. selectedPlayerName,
+            Duration = 3,
+        })
+    end
+})
+
+-- Teleport Button
+TeleportsTab:CreateButton({
+    Name = "Teleport to Player",
+    Callback = function()
+        if selectedPlayerName == nil or selectedPlayerName == "No players found" then
+            Rayfield:Notify({
+                Title = "Error",
+                Content = "No valid target player selected.",
+                Duration = 3,
+            })
+            return
+        end
+
+        local targetPlayer = Players:FindFirstChild(selectedPlayerName)
+        if targetPlayer and targetPlayer.Character and targetPlayer.Character:FindFirstChild("HumanoidRootPart") then
+            if LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
+                LocalPlayer.Character.HumanoidRootPart.CFrame = targetPlayer.Character.HumanoidRootPart.CFrame
+                Rayfield:Notify({
+                    Title = "Teleported",
+                    Content = "Teleported to " .. selectedPlayerName,
+                    Duration = 3,
+                })
+            else
+                Rayfield:Notify({
+                    Title = "Error",
+                    Content = "Your character or HumanoidRootPart not found.",
+                    Duration = 3,
+                })
+            end
+        else
+            Rayfield:Notify({
+                Title = "Error",
+                Content = "Target player or HumanoidRootPart not found.",
+                Duration = 3,
+            })
+        end
+    end
+})
+local function updateDropdownOptions()
+    local newPlayerNames = {}
+    for _, player in pairs(Players:GetPlayers()) do
+        if player ~= LocalPlayer then
+            table.insert(newPlayerNames, player.Name)
+        end
+    end
+
+    if #newPlayerNames == 0 then
+        newPlayerNames = {"No players found"}
+        selectedPlayerName = nil
+    else
+        if selectedPlayerName == nil or not table.find(newPlayerNames, selectedPlayerName) then
+            selectedPlayerName = nil
+        end
+    end
+
+    playerDropdown:Refresh(newPlayerNames)
+end
+Players.PlayerAdded:Connect(updateDropdownOptions)
+Players.PlayerRemoving:Connect(updateDropdownOptions)
+
+-- Airdrop Seaction 
+TeleportsTab:CreateLabel("Airdrop Teleportation select a part of airdrop to tp to.d")
+
+local Players = game:GetService("Players")
+local LocalPlayer = Players.LocalPlayer
+local selectedAirdrop = nil
+
+
+local function buildDropdownOptions()
+    local options = {"No Selection"}
+    local airdropContainer = workspace:FindFirstChild("Airdrop")
+    if airdropContainer then
+        local children = airdropContainer:GetChildren()
+        if #children > 0 then
+           
+            for _, airdrop in ipairs(children) do
+                table.insert(options, airdrop.Name)
+            end
+        else
+       
+            table.insert(options, airdropContainer.Name)
+        end
+    end
+    return options
+end
+local function getAirdropByName(name)
+    local container = workspace:FindFirstChild("Airdrop")
+    if not container then return nil end
+    local children = container:GetChildren()
+    if #children > 0 then
+        return container:FindFirstChild(name)
+    else
+        return container.Name == name and container or nil
+    end
+end
+-- select airdrop
+local airdropDropdown = TeleportsTab:CreateDropdown({
+    Name = "Select Airdrop",
+    Options = buildDropdownOptions(),
+    CurrentOption = "No Selection",
+    MultipleOptions = false,
+    Flag = "AirdropDropdown",
+    Callback = function(selection)
+        local selectedName = table.concat(selection, ", ")
+        if selectedName == "No Selection" then
+            selectedAirdrop = nil
+            Rayfield:Notify({
+                Title = "Cleared",
+                Content = "No airdrop selected.",
+                Duration = 2,
+            })
+        else
+            local airdrop = getAirdropByName(selectedName)
+            if airdrop then
+                selectedAirdrop = airdrop
+                Rayfield:Notify({
+                    Title = "Airdrop Selected",
+                    Content = selectedName .. " found and selected.",
+                    Duration = 2,
+                })
+            else
+                selectedAirdrop = nil
+                Rayfield:Notify({
+                    Title = "Not Found",
+                    Content = selectedName .. " does not exist right now.",
+                    Duration = 2,
+                })
+                airdropDropdown:SetOption("No Selection")
+            end
+        end
+    end
+})
+
+-- Teleport Button
+TeleportsTab:CreateButton({
+    Name = "Teleport to Airdrop",
+    Callback = function()
+        if not selectedAirdrop or not selectedAirdrop:IsDescendantOf(workspace) then
+            Rayfield:Notify({
+                Title = "Error",
+                Content = "No valid airdrop selected.",
+                Duration = 3,
+            })
+            return
+        end
+
+        local root = LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
+        if root then
+            local targetPos = selectedAirdrop:IsA("Model") and selectedAirdrop:GetPrimaryPartCFrame() or selectedAirdrop.CFrame
+            root.CFrame = targetPos + Vector3.new(0, 5, 0)
+            Rayfield:Notify({
+                Title = "Teleported",
+                Content = "You were teleported to the Airdrop.",
+                Duration = 3,
+            })
+        else
+            Rayfield:Notify({
+                Title = "Teleport Failed",
+                Content = "Character or root part not found.",
+                Duration = 3,
+            })
+        end
+    end
+})
+local function updateDropdown()
+    airdropDropdown:Refresh(buildDropdownOptions())
+end
+workspace.ChildAdded:Connect(function(child)
+    if child.Name == "Airdrop" then
+        updateDropdown()
+    end
+end)
+workspace.ChildRemoved:Connect(function(child)
+    if child.Name == "Airdrop" then
+        updateDropdown()
+        if selectedAirdrop == child then
+            selectedAirdrop = nil
+            airdropDropdown:SetOption("No Selection")
+        end
+    end
+end)
+updateDropdown()
+-- no fall code this is in beta and is very buggy does not work well with vehcles.
+local Players = game:GetService("Players")
+local player = Players.LocalPlayer
+local noFallEnabled = false
+local RunService = game:GetService("RunService")
+local clampConnection
+
+local VELOCITY_LIMIT = 110
+
+local function clampVelocity(char)
+    local root = char:WaitForChild("HumanoidRootPart")
+
+    clampConnection = RunService.RenderStepped:Connect(function()
+        if noFallEnabled then
+            local vel = root.Velocity
+            local clampedVel = Vector3.new(
+                vel.X,
+                math.clamp(vel.Y, -VELOCITY_LIMIT, VELOCITY_LIMIT),
+                vel.Z
+            )
+            root.Velocity = clampedVel
+        end
+    end)
+end
+
+if player.Character then
+    clampVelocity(player.Character)
+end
+
+player.CharacterAdded:Connect(clampVelocity)
+-- creates no fall toggle
+MainTab:CreateToggle({
+    Name = "No Fall",
+    CurrentValue = false,
+    Flag = "NoFallToggle",
+    Callback = function(value)
+        noFallEnabled = value
+    end
+})
+
+
+end
