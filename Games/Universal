@@ -261,7 +261,7 @@ AssistanceTab:CreateButton({
 AssistanceTab:CreateButton({
     Name = "Simple spy",
     Callback = function()
-        loadstring(game:HttpGet("https://raw.githubusercontent.com/InfernusScripts/Octo-Spy/refs/heads/main/Main.lua", true))()
+        loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/78n/SimpleSpy/main/SimpleSpyBeta.lua"))()
         notifyCustom("Octo spy", "Octo Spy was successflly Loaded")
     end
 })
