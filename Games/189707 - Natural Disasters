@@ -248,7 +248,7 @@ if game.PlaceId == 189707 then
 	Main2Tab:CreateButton({
 		Name = "Load black hole script",
 		Callback = function()
-			loadstring(game:HttpGet("https://pastebin.com/raw/LeevW9yT"))()
+			loadstring(game:HttpGet("https://raw.githubusercontent.com/breif-script-hub/script-hub/refs/heads/main/Dependencies%20/%20side%20scrips/black%20hole%20script"))()
 
 			notifyCustom("Nullfire, Successfully loaded")
 		end
