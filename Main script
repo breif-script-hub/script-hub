@@ -1,17 +1,16 @@
 -- games
 local gameScripts = {
-    [81440632616906] = "", -- Dig to Earth's Core
-    [14218711698] = "",   -- Criminal Tycoon
-    [13355910112] = "",   -- Every Second You Get Faster
-    [5256165620] = "",    -- 3 2 1 Blast Off Simulator
-    [75663528075786] = "",-- How to Train Your Dragon
-    [13461044782] = "",   -- Every Second You Jump Higher
-    [13501167264] = "",   -- Build a raft or Die
-    [15338697306] = "",   -- Go Kart Simulator
-    [95425238757150] = "",-- Wall Hop to Admin Obby
-    [2693023319] = "",    -- Expedition Antarctica
-    [109652885385286] = "",    -- Dig the backyard
-    [189707] = "",    -- Natural disasters
+    [81440632616906] = "https://raw.githubusercontent.com/breif-script-hub/script-hub/refs/heads/main/Games/81440632616906%20-%20dig%20to%20earths%20core", -- Dig to Earth's Core
+    [14218711698] = "https://raw.githubusercontent.com/breif-script-hub/script-hub/refs/heads/main/Games/14218711698%20-%20criminal%20tycoon",   -- Criminal Tycoon
+    [13355910112] = "https://raw.githubusercontent.com/breif-script-hub/script-hub/refs/heads/main/Games/13355910112%20-%20Every%20Second%20you%20get%20faster",   -- Every Second You Get Faster
+    [5256165620] = "https://raw.githubusercontent.com/breif-script-hub/script-hub/refs/heads/main/Games/5256165620%20-%203%202%201%20blast%20off",    -- 3 2 1 Blast Off Simulator
+    [75663528075786] = "https://raw.githubusercontent.com/breif-script-hub/script-hub/refs/heads/main/Games/75663528075786%20-%20how%20to%20train%20ur%20dragon",-- How to Train Your Dragon
+    [13461044782] = "https://raw.githubusercontent.com/breif-script-hub/script-hub/refs/heads/main/Games/13461044782%20-%20every%20second%20you%20jump%20higher",   -- Every Second You Jump Higher
+    [13501167264] = "https://raw.githubusercontent.com/breif-script-hub/script-hub/refs/heads/main/Games/13501167264%20-%20build%20a%20raft%20or%20die",   -- Build a raft or Die
+    [15338697306] = "https://raw.githubusercontent.com/breif-script-hub/script-hub/refs/heads/main/Games/15338697306%20-%20Go%20Kart%20Race%20Simulator",   -- Go Kart Simulator
+    [95425238757150] = "https://raw.githubusercontent.com/breif-script-hub/script-hub/refs/heads/main/Games/95425238757150%20-%20wallhop%20to%20admin%20obby",-- Wall Hop to Admin Obby
+    [2693023319] = "https://raw.githubusercontent.com/breif-script-hub/script-hub/refs/heads/main/Games/2693023319%20-%20Expedition%20Antarctica",    -- Expedition Antarctica
+    [189707] = "https://raw.githubusercontent.com/breif-script-hub/script-hub/refs/heads/main/Games/189707%20-%20Natural%20Disasters",    -- Natural disasters
     [109983668079237] = "https://raw.githubusercontent.com/breif-script-hub/script-hub/refs/heads/main/Games/trashy%20games",    -- Trashy game
     [126884695634066] = "https://raw.githubusercontent.com/breif-script-hub/script-hub/refs/heads/main/Games/trashy%20games",    -- Trashy game
     [127742093697776] = "https://raw.githubusercontent.com/breif-script-hub/script-hub/refs/heads/main/Games/trashy%20games",    -- Trashy game
@@ -19,7 +18,7 @@ local gameScripts = {
     [96342491571673] = "https://raw.githubusercontent.com/breif-script-hub/script-hub/refs/heads/main/Games/trashy%20games",    -- Trashy game
     
 }
-local universalScript = "" -- Universal Script
+local universalScript = "https://raw.githubusercontent.com/breif-script-hub/script-hub/refs/heads/main/Games/Universal" -- Universal Script
 
 local url = gameScripts[game.PlaceId] or universalScript
 pcall(function()
