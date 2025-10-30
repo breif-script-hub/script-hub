@@ -1,0 +1,697 @@
+-- check correct place.
+if game.PlaceId == 2693023319 then
+
+    local Players = game:GetService("Players")
+    local player = Players.LocalPlayer
+    local UserInputService = game:GetService("UserInputService")
+    local Debris = game:GetService("Debris")
+    local RunService = game:GetService("RunService")
+
+    -- load rayfield ui libery
+    local Rayfield = loadstring(game:HttpGet('https://pastefy.app/gfsVc4lI/raw'))()
+-- creating windw for script
+    local Window = Rayfield:CreateWindow({
+        Name = "missions expedition antartica",
+        Icon = 0,
+        LoadingTitle = "Script Hub",
+        LoadingSubtitle = "by Breif",
+        ShowText = "Rayfield",
+        Theme = "Default",
+        ToggleUIKeybind = "K",
+        DisableRayfieldPrompts = false,
+        DisableBuildWarnings = true,
+        ConfigurationSaving = {
+            Enabled = true,
+            FolderName = "script_hub_configs",
+            FileName = "default_config"
+        },
+        Discord = {
+            Enabled = false,
+            Invite = "noinvitelink",
+            RememberJoins = true
+        },
+        KeySystem = false
+    })
+-- creating tabs
+    local MainTab = Window:CreateTab("Main")
+    local MiscTab = Window:CreateTab("misc")
+    local Section = MiscTab:CreateSection("General")
+
+
+    -- no clip code
+        local noclip = false
+        local noclipConnection
+MiscTab:CreateToggle({
+    Name = "NoClip",
+    CurrentValue = false,
+    Flag = "noclipToggle",
+    Callback = function(value)
+        noclip = value
+        if noclip and not noclipConnection then
+            noclipConnection = game:GetService("RunService").Stepped:Connect(function()
+                local char = player.Character
+                if char then
+                    for _, v in pairs(char:GetDescendants()) do
+                        if v:IsA("BasePart") then v.CanCollide = false end
+                    end
+                end
+            end)
+            Rayfield:Notify({
+                Title = "NoClip",
+                Content = "NoClip enabled",
+                Duration = 3
+            })
+        elseif not noclip and noclipConnection then
+            noclipConnection:Disconnect()
+            noclipConnection = nil
+            Rayfield:Notify({
+                Title = "NoClip",
+                Content = "NoClip disabled",
+                Duration = 3
+            })
+        end
+    end
+})
+
+    -- walkspeed 
+    local currentWalkSpeed = 16
+    local player = game.Players.LocalPlayer
+
+    MiscTab:CreateSlider({
+        Name = "WalkSpeed",
+        Range = {16, 500},
+        Increment = 1,
+        Suffix = "Speed",
+        CurrentValue = currentWalkSpeed,
+        Callback = function(value)
+            currentWalkSpeed = value
+        end
+    })
+    task.spawn(function()
+        while true do
+            task.wait(0.01)
+            local char = player.Character or player.CharacterAdded:Wait()
+            local humanoid = char:FindFirstChildWhichIsA("Humanoid")
+            if humanoid then
+                humanoid.WalkSpeed = currentWalkSpeed
+            end
+        end
+    end)
+
+-- inf jump code
+local UserInputService = game:GetService("UserInputService")
+local player = game.Players.LocalPlayer
+
+local character = player.Character or player.CharacterAdded:Wait()
+local humanoid = character:WaitForChild("Humanoid")
+
+local canInfJump = false
+
+
+player.CharacterAdded:Connect(function(char)
+    character = char
+    humanoid = char:WaitForChild("Humanoid")
+end)
+
+UserInputService.JumpRequest:Connect(function()
+    if canInfJump then
+        if humanoid and humanoid:GetState() ~= Enum.HumanoidStateType.Jumping then
+            humanoid:ChangeState(Enum.HumanoidStateType.Jumping)
+        end
+    end
+end)
+MiscTab:CreateToggle({
+    Name = "Infinite Jump",
+    CurrentValue = false,
+    Flag = "infJumpToggle",
+    Save = true,
+    Callback = function(value)
+        canInfJump = value
+        Rayfield:Notify({
+            Title = "Infinite Jump",
+            Content = value and "Enabled" or "Disabled",
+            Duration = 3
+        })
+    end
+})
+    local ServerTab = Window:CreateTab("Server")
+    -- code to create a rejoin button
+ServerTab:CreateButton({
+    Name = "Rejoin",
+    Callback = function()
+        game:GetService("TeleportService"):Teleport(game.PlaceId, game.Players.LocalPlayer)
+    end
+})
+-- no fall damage code this disables damage from falling
+local originalFallDamage
+MainTab:CreateToggle({
+    Name = "No Fall",
+    CurrentValue = false,
+    Flag = "fallDamageToggle",
+    Callback = function(value)
+        local player = game.Players.LocalPlayer
+        local charFolder = workspace:FindFirstChild("Characters%")
+        if not charFolder or not charFolder:FindFirstChild(player.Name) then return end
+        local char = charFolder[player.Name]
+        local clientFall = char:FindFirstChild("Client_Fall_Damage")
+
+        if value then
+            if clientFall then
+                originalFallDamage = clientFall:Clone()
+                clientFall:Destroy()
+            end
+            Rayfield:Notify({
+                Title = "No Fall",
+                Content = "Enabled",
+                Duration = 3
+            })
+        else
+            if originalFallDamage then
+                originalFallDamage.Parent = char
+                originalFallDamage = nil
+            end
+            Rayfield:Notify({
+                Title = "no fall",
+                Content = "Disabled",
+                Duration = 3
+            })
+        end
+    end
+})
+-- simple notce
+    local Section = MainTab:CreateSection("Note removing water damage is not possible as it is handled by server Events")
+
+
+    local player = game.Players.LocalPlayer
+local firetouchinterest = firetouchinterest or function() end 
+local function touchPart(part)
+    if part and part.Parent then
+        firetouchinterest(player.Character.HumanoidRootPart, part, 0) 
+        task.wait(0.1)
+        firetouchinterest(player.Character.HumanoidRootPart, part, 1) 
+    end
+end
+-- simpe button to trigger the event to start a timer
+MainTab:CreateButton({
+    Name = "Start Timer",
+    Callback = function()
+        local timerPart = workspace:FindFirstChild("Speedrun_Timer_Start%")
+        if timerPart and timerPart:FindFirstChild("TouchPart") then
+            touchPart(timerPart.TouchPart)
+            Rayfield:Notify({Title="Timer", Content="Speedrun timer started", Duration=3})
+        else
+            Rayfield:Notify({Title="Timer", Content="Timer part not found", Duration=3})
+        end
+    end
+})
+local player = game.Players.LocalPlayer
+local firetouchinterest = firetouchinterest or function() end 
+
+local function touchPart(part)
+    if part and part.Parent then
+        firetouchinterest(player.Character.HumanoidRootPart, part, 0) 
+        task.wait(0.1)
+        firetouchinterest(player.Character.HumanoidRootPart, part, 1) 
+    end
+end
+
+MainTab:CreateButton({
+    Name = "Collect Normal Clothes",
+    Callback = function()
+        local player = game.Players.LocalPlayer
+        local char = player.Character or player.CharacterAdded:Wait()
+        local root = char:WaitForChild("HumanoidRootPart")
+
+        local gearParts = {
+            workspace["TouchParts%"].Gear.Basecamp_HelmetNormal,
+            workspace["TouchParts%"].Gear.Basecamp_OutfitNormal,
+            workspace["TouchParts%"].Gear.Basecamp_BackpackNormal
+        }
+
+        for _, part in ipairs(gearParts) do
+            if part then
+                for _, child in ipairs(part:GetChildren()) do
+                    if child:IsA("TouchTransmitter") then
+                        firetouchinterest(root, part, 0)
+                        task.wait(0.1)
+                        firetouchinterest(root, part, 1)
+                        break
+                    end
+                end
+                task.wait(0.5) -- delay between each gear part
+            end
+        end
+    end
+})
+
+
+
+local VisTab = Window:CreateTab("Visuals")
+local Section = VisTab:CreateSection("Visuals")
+-- toggles full bright
+VisTab:CreateToggle({
+    Name = "Full Bright",
+    Flag = "FullBrightToggle",
+    Callback = function(state)
+        local Lighting = game:GetService("Lighting")
+        if state then
+            Lighting.Brightness = 2
+            Lighting.ClockTime = 14
+            Lighting.FogEnd = 100000
+            Lighting.Ambient = Color3.new(1, 1, 1)
+            Lighting.OutdoorAmbient = Color3.new(1, 1, 1)
+
+            Rayfield:Notify({
+                Title = "Full Bright",
+                Content = "Full Bright toggled ON",
+                Duration = 3
+            })
+        else
+            Lighting.Brightness = 1
+            Lighting.ClockTime = 14
+            Lighting.FogEnd = 1000
+            Lighting.Ambient = Color3.new(0.5, 0.5, 0.5)
+            Lighting.OutdoorAmbient = Color3.new(0.5, 0.5, 0.5)
+
+            Rayfield:Notify({
+                Title = "Full Bright",
+                Content = "Full Bright toggled OFF",
+                Duration = 3
+            })
+        end
+    end
+})
+-- this disables fog which can be annoying.
+
+VisTab:CreateToggle({
+    Name = "No Fog",
+    Flag = "NoFogToggle",
+    Callback = function(state)
+        local Lighting = game:GetService("Lighting")
+        if state then
+            Lighting.FogStart = 0
+            Lighting.FogEnd = 100000
+            Rayfield:Notify({
+                Title = "No Fog",
+                Content = "no Fog Enabled",
+                Duration = 3
+            })
+        else
+            Lighting.FogStart = 0
+            Lighting.FogEnd = 1000
+            Rayfield:Notify({
+                Title = "No Fog",
+                Content = "no Fog Disabled",
+                Duration = 3
+            })
+        end
+    end
+})
+
+-- teleport to camp locations
+local Players = game:GetService("Players")
+local localPlayer = Players.LocalPlayer
+
+MainTab:CreateButton({
+    Name = "Teleport to camp 0",
+    Callback = function()
+        local char = localPlayer.Character or localPlayer.CharacterAdded:Wait()
+        local hrp = char:WaitForChild("HumanoidRootPart")
+
+        hrp.CFrame = CFrame.new(-5971.76904, -159.000015, -33.4761086, 0.0836799294, -7.21220275e-08, -0.996492684, -8.12387455e-08, 1, -7.91978465e-08, 0.996492684, 8.75810855e-08, 0.0836799294)
+
+        Rayfield:Notify({
+            Title = "Teleport",
+            Content = "Teleported to target CFrame",
+            Duration = 3
+        })
+    end
+})
+local Players = game:GetService("Players")
+local localPlayer = Players.LocalPlayer
+local firetouchinterest = firetouchinterest or function() end -- failsafe
+
+MainTab:CreateButton({
+    Name = "Teleport to camp 1",
+    Callback = function()
+        local char = localPlayer.Character or localPlayer.CharacterAdded:Wait()
+        local hrp = char:WaitForChild("HumanoidRootPart")
+        hrp.CFrame = CFrame.new(-3683.69702, 228.907822, 203.900162, 
+            0.108473726, -4.08739034e-08, -0.994099319, 
+            5.82233071e-08, 1, -3.47633318e-08, 
+            0.994099319, -5.41088419e-08, 0.108473726
+        )
+
+        Rayfield:Notify({
+            Title = "Teleport",
+            Content = "Teleported to target CFrame",
+            Duration = 3
+        })
+        task.wait(0.5)
+        if workspace:FindFirstChild("Checkpoints%") and 
+           workspace["Checkpoints%"]:FindFirstChild("Camp 1") and 
+           workspace["Checkpoints%"]["Camp 1"]:FindFirstChild("SpawnLocation") then
+            firetouchinterest(hrp, workspace["Checkpoints%"]["Camp 1"].SpawnLocation, 0) 
+            firetouchinterest(hrp, workspace["Checkpoints%"]["Camp 1"].SpawnLocation, 1) 
+        end
+    end
+})
+MainTab:CreateButton({
+    Name = "Teleport to camp 2",
+    Callback = function()
+        local char = localPlayer.Character or localPlayer.CharacterAdded:Wait()
+        local hrp = char:WaitForChild("HumanoidRootPart")
+
+   
+        hrp.CFrame = CFrame.new(1812.92163, 104.984367, -89.777771, 0.999981344, -6.56838637e-08, -0.00610782346, 6.53647234e-08, 1, -5.24508224e-08, 0.00610782346, 5.20506092e-08, 0.999981344
+        )
+
+        Rayfield:Notify({
+            Title = "Teleport",
+            Content = "Teleported to target CFrame",
+            Duration = 3
+        })
+
+
+        task.wait(0.5)
+        if workspace:FindFirstChild("Checkpoints%") and 
+           workspace["Checkpoints%"]:FindFirstChild("Camp 2") and 
+           workspace["Checkpoints%"]["Camp 2"]:FindFirstChild("SpawnLocation") then
+            firetouchinterest(hrp, workspace["Checkpoints%"]["Camp 2"].SpawnLocation, 0) 
+            firetouchinterest(hrp, workspace["Checkpoints%"]["Camp 2"].SpawnLocation, 1) 
+        end
+    end
+})
+MainTab:CreateButton({
+    Name = "Teleport to camp 3",
+    Callback = function()
+        local char = localPlayer.Character or localPlayer.CharacterAdded:Wait()
+        local hrp = char:WaitForChild("HumanoidRootPart")
+
+ 
+        hrp.CFrame = CFrame.new(
+            5913.46045, 320.999969, -18.9530239, 
+            0.775235534, 2.29075088e-08, 0.631672263, 
+            9.57321866e-09, 1, -4.80138347e-08, 
+            -0.631672263, 4.32691678e-08, 0.775235534
+        )
+
+        Rayfield:Notify({
+            Title = "Teleport",
+            Content = "Teleported to Camp 3",
+            Duration = 3
+        })
+
+
+        task.wait(0.5)
+        if workspace:FindFirstChild("Checkpoints%") and 
+           workspace["Checkpoints%"]:FindFirstChild("Camp 3") and 
+           workspace["Checkpoints%"]["Camp 3"]:FindFirstChild("SpawnLocation") then
+            firetouchinterest(hrp, workspace["Checkpoints%"]["Camp 3"].SpawnLocation, 0) 
+            firetouchinterest(hrp, workspace["Checkpoints%"]["Camp 3"].SpawnLocation, 1) 
+        end
+    end
+})
+MainTab:CreateButton({
+    Name = "Teleport to camp 4",
+    Callback = function()
+        local char = localPlayer.Character or localPlayer.CharacterAdded:Wait()
+        local hrp = char:WaitForChild("HumanoidRootPart")
+
+
+        hrp.CFrame = CFrame.new(
+            9019.08789, 597.910339, 99.0210419,
+            -0.0760033503, -2.34893793e-08, 0.997107565,
+            -2.09397228e-08, 1, 2.19614122e-08,
+            -0.997107565, -1.92100149e-08, -0.0760033503
+        )
+
+        Rayfield:Notify({
+            Title = "Teleport",
+            Content = "Teleported to Camp 4",
+            Duration = 3
+        })
+
+
+        task.wait(0.5)
+        if workspace:FindFirstChild("Checkpoints%") and 
+           workspace["Checkpoints%"]:FindFirstChild("Camp 4") and 
+           workspace["Checkpoints%"]["Camp 4"]:FindFirstChild("SpawnLocation") then
+            firetouchinterest(hrp, workspace["Checkpoints%"]["Camp 4"].SpawnLocation, 0) 
+            firetouchinterest(hrp, workspace["Checkpoints%"]["Camp 4"].SpawnLocation, 1)
+        end
+    end
+})
+MainTab:CreateButton({
+    Name = "Teleport to Ending",
+    Callback = function()
+        local char = localPlayer.Character or localPlayer.CharacterAdded:Wait()
+        local hrp = char:WaitForChild("HumanoidRootPart")
+        hrp.CFrame = CFrame.new(
+            10987.5176, 549.114136, 114.663414,
+            -0.623568296, -3.97666611e-08, -0.781768858,
+            2.87993078e-08, 1, -7.38389545e-08,
+            0.781768858, -6.85580375e-08, -0.623568296
+        )
+        Rayfield:Notify({
+            Title = "Teleport",
+            Content = "Teleported to Ending",
+            Duration = 3
+        })
+    end
+})
+-- Nametags
+local Players = game:GetService("Players")
+local RunService = game:GetService("RunService")
+
+local nametagRadius = 2750
+local nametagEnabled = false
+local nametagFolder = Instance.new("Folder")
+nametagFolder.Name = "Nametags"
+nametagFolder.Parent = workspace
+
+local playerNametags = {}
+local localPlayer = Players.LocalPlayer
+
+local function createNametag(player)
+    if not player.Character or not player.Character:FindFirstChild("HumanoidRootPart") then return nil end
+    local billboard = Instance.new("BillboardGui")
+    billboard.Name = "NametagGui"
+    billboard.Adornee = player.Character.HumanoidRootPart
+    billboard.Size = UDim2.new(0, 100, 0, 30)
+    billboard.StudsOffset = Vector3.new(0, 3, 0)
+    billboard.AlwaysOnTop = true
+    billboard.Parent = nametagFolder
+
+    local textLabel = Instance.new("TextLabel")
+    textLabel.BackgroundTransparency = 1
+    textLabel.Size = UDim2.new(1, 0, 1, 0)
+    textLabel.Text = player.Name
+    textLabel.TextColor3 = Color3.new(1, 1, 1)
+    textLabel.TextStrokeColor3 = Color3.new(0, 0, 0)
+    textLabel.TextStrokeTransparency = 0
+    textLabel.Font = Enum.Font.SourceSansBold
+    textLabel.TextScaled = true
+    textLabel.Parent = billboard
+
+    return billboard
+end
+
+local function updateNametags()
+    if not localPlayer.Character or not localPlayer.Character:FindFirstChild("HumanoidRootPart") then return end
+    local localHRP = localPlayer.Character.HumanoidRootPart
+
+    for _, plr in pairs(Players:GetPlayers()) do
+        if plr ~= localPlayer then
+            local char = plr.Character
+            if char and char:FindFirstChild("HumanoidRootPart") then
+                local distance = (char.HumanoidRootPart.Position - localHRP.Position).Magnitude
+                if distance <= nametagRadius then
+                    if not playerNametags[plr] then
+                        playerNametags[plr] = createNametag(plr)
+                    end
+                    if playerNametags[plr] then
+                        playerNametags[plr].Enabled = true
+                        playerNametags[plr].Adornee = plr.Character.HumanoidRootPart
+                    end
+                else
+                    if playerNametags[plr] then
+                        playerNametags[plr].Enabled = false
+                    end
+                end
+            elseif playerNametags[plr] then
+                playerNametags[plr]:Destroy()
+                playerNametags[plr] = nil
+            end
+        end
+    end
+end
+
+local function clearNametags()
+    for _, gui in pairs(playerNametags) do
+        if gui then gui:Destroy() end
+    end
+    playerNametags = {}
+end
+
+local function onPlayerAdded(player)
+    if nametagEnabled and player ~= localPlayer then
+        player.CharacterAdded:Connect(function()
+            task.wait(1)
+            if nametagEnabled then
+                if playerNametags[player] then playerNametags[player]:Destroy() end
+                playerNametags[player] = createNametag(player)
+            end
+        end)
+    end
+end
+
+local function onPlayerRemoving(player)
+    if playerNametags[player] then
+        playerNametags[player]:Destroy()
+        playerNametags[player] = nil
+    end
+end
+
+local updateConnection
+local function toggleNametags(state)
+    nametagEnabled = state
+    if nametagEnabled then
+        for _, player in ipairs(Players:GetPlayers()) do
+            if player ~= localPlayer then
+                onPlayerAdded(player)
+            end
+        end
+        updateConnection = RunService.RenderStepped:Connect(updateNametags)
+        Players.PlayerAdded:Connect(onPlayerAdded)
+        Players.PlayerRemoving:Connect(onPlayerRemoving)
+    else
+        if updateConnection then
+            updateConnection:Disconnect()
+            updateConnection = nil
+        end
+        clearNametags()
+    end
+end
+
+VisTab:CreateToggle({
+    Name = "Nametags",
+    Flag = "NametagsToggle",
+    Callback = function(state)
+        toggleNametags(state)
+        Rayfield:Notify({
+            Title = "Nametags",
+            Content = state and "Nametags Enabled" or "Nametags Disabled",
+            Duration = 3
+        })
+    end
+})
+
+VisTab:CreateSlider({
+    Name = "Nametag Radius",
+    Range = {50, 10000},
+    Increment = 10,
+    CurrentValue = nametagRadius,
+    Flag = "NametagRadiusSlider",
+    Callback = function(value)
+        nametagRadius = value
+    end
+})
+
+
+-- player Teleportation
+MiscTab:CreateLabel("Player Teleportation")
+
+local Players = game:GetService("Players")
+local LocalPlayer = Players.LocalPlayer
+
+local playerNames = {}
+for _, player in pairs(Players:GetPlayers()) do
+    if player ~= LocalPlayer then
+        table.insert(playerNames, player.Name)
+    end
+end
+if #playerNames == 0 then
+    playerNames = {"No players found"}
+end
+
+local selectedPlayerName = nil
+
+local playerDropdown = MiscTab:CreateDropdown({
+    Name = "Select Player",
+    Options = playerNames,
+    CurrentOption = playerNames[1],
+    MultipleOptions = false,
+    Flag = "PlayerDropdown",
+    Callback = function(selection)
+        selectedPlayerName = table.concat(selection, ", ")
+        Rayfield:Notify({
+            Title = "Player Selected",
+            Content = "You selected: " .. selectedPlayerName,
+            Duration = 3,
+        })
+    end
+})
+
+-- Teleport Button
+MiscTab:CreateButton({
+    Name = "Teleport to Player",
+    Callback = function()
+        if selectedPlayerName == nil or selectedPlayerName == "No players found" then
+            Rayfield:Notify({
+                Title = "Error",
+                Content = "No valid target player selected.",
+                Duration = 3,
+            })
+            return
+        end
+
+        local targetPlayer = Players:FindFirstChild(selectedPlayerName)
+        if targetPlayer and targetPlayer.Character and targetPlayer.Character:FindFirstChild("HumanoidRootPart") then
+            if LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
+                LocalPlayer.Character.HumanoidRootPart.CFrame = targetPlayer.Character.HumanoidRootPart.CFrame
+                Rayfield:Notify({
+                    Title = "Teleported",
+                    Content = "Teleported to " .. selectedPlayerName,
+                    Duration = 3,
+                })
+            else
+                Rayfield:Notify({
+                    Title = "Error",
+                    Content = "Your character or HumanoidRootPart not found.",
+                    Duration = 3,
+                })
+            end
+        else
+            Rayfield:Notify({
+                Title = "Error",
+                Content = "Target player or HumanoidRootPart not found.",
+                Duration = 3,
+            })
+        end
+    end
+})
+
+local function updateDropdownOptions()
+    local newPlayerNames = {}
+    for _, player in pairs(Players:GetPlayers()) do
+        if player ~= LocalPlayer then
+            table.insert(newPlayerNames, player.Name)
+        end
+    end
+
+    if #newPlayerNames == 0 then
+        newPlayerNames = {"No players found"}
+        selectedPlayerName = nil
+    else
+        if selectedPlayerName == nil or not table.find(newPlayerNames, selectedPlayerName) then
+            selectedPlayerName = nil
+        end
+    end
+
+    playerDropdown:Refresh(newPlayerNames)
+end
+
+Players.PlayerAdded:Connect(updateDropdownOptions)
+Players.PlayerRemoving:Connect(updateDropdownOptions)
+    end;
