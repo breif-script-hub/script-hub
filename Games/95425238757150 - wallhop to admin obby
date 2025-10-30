@@ -6,7 +6,7 @@ if game.PlaceId == 95425238757150 then
     local RunService = game:GetService("RunService")
     local Debris = game:GetService("Debris")
     -- loads theh rayfefild ui.
-    local Rayfield = loadstring(game:HttpGet('https://pastefy.app/gfsVc4lI/raw'))()
+    local Rayfield = loadstring(game:HttpGet("https://raw.githubusercontent.com/breif-script-hub/script-hub/refs/heads/main/Dependencies%20/%20side%20scrips/Rayfield"))()
     -- creates the window for us to work with for our script.
     local Window = Rayfield:CreateWindow({
         Name = "Wall hop admin game",

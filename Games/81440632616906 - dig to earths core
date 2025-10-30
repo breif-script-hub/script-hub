@@ -1,7 +1,7 @@
 -- checks if you are in right game
 if game.PlaceId == 81440632616906 then
     -- loads the ui libery
-    local Rayfield = loadstring(game:HttpGet('https://pastefy.app/gfsVc4lI/raw'))()
+    local Rayfield = loadstring(game:HttpGet("https://raw.githubusercontent.com/breif-script-hub/script-hub/refs/heads/main/Dependencies%20/%20side%20scrips/Rayfield"))()
     -- creates the window for the script.
     local Window = Rayfield:CreateWindow({
         Name = "Dig to Earth's Core Script",

@@ -1,5 +1,5 @@
 -- loads rayfeild ui
-local Rayfield = loadstring(game:HttpGet('https://pastefy.app/gfsVc4lI/raw'))()
+local Rayfield = loadstring(game:HttpGet("https://raw.githubusercontent.com/breif-script-hub/script-hub/refs/heads/main/Dependencies%20/%20side%20scrips/Rayfield"))()
 -- creates the wnidow we will use
 local Window = Rayfield:CreateWindow({
     Name = "how to train ur dragon",

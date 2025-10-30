@@ -6,7 +6,7 @@ if game.PlaceId == 14218711698 then
     local Debris = game:GetService("Debris")
     local RunService = game:GetService("RunService")
 -- ui libery loader.
-    local Rayfield = loadstring(game:HttpGet('https://pastefy.app/gfsVc4lI/raw'))()
+    local Rayfield = loadstring(game:HttpGet("https://raw.githubusercontent.com/breif-script-hub/script-hub/refs/heads/main/Dependencies%20/%20side%20scrips/Rayfield"))()
 -- creates window we will use in script
     local Window = Rayfield:CreateWindow({
         Name = "criminal tycoon",

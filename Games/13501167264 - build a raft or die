@@ -6,7 +6,7 @@ if game.PlaceId == 13501167264 then
     local Debris = game:GetService("Debris")
     local RunService = game:GetService("RunService")
 -- this loads the ui libery
-    local Rayfield = loadstring(game:HttpGet('https://pastefy.app/gfsVc4lI/raw'))()
+    local Rayfield = loadstring(game:HttpGet("https://raw.githubusercontent.com/breif-script-hub/script-hub/refs/heads/main/Dependencies%20/%20side%20scrips/Rayfield"))()
 -- this creates the window we use for script hub.
     local Window = Rayfield:CreateWindow({
         Name = "Build a raft or die",

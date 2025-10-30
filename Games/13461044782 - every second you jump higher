@@ -1,7 +1,7 @@
 -- this makes sure player has right game loaded.
 if game.PlaceId == 13461044782 then
     -- this loads the ui.
-    local Rayfield = loadstring(game:HttpGet('https://pastefy.app/gfsVc4lI/raw'))()
+    local Rayfield = loadstring(game:HttpGet("https://raw.githubusercontent.com/breif-script-hub/script-hub/refs/heads/main/Dependencies%20/%20side%20scrips/Rayfield"))()
     -- this creates the window we will be using.
     local Window = Rayfield:CreateWindow({
         Name = "Every Second You Get higher jump power",
