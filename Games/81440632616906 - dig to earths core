@@ -1,0 +1,2182 @@
+-- checks if you are in right game
+if game.PlaceId == 81440632616906 then
+    -- loads the ui libery
+    local Rayfield = loadstring(game:HttpGet('https://pastefy.app/gfsVc4lI/raw'))()
+    -- creates the window for the script.
+    local Window = Rayfield:CreateWindow({
+        Name = "Dig to Earth's Core Script",
+        Icon = 0,
+        LoadingTitle = "Script Hub",
+        LoadingSubtitle = "by Breif",
+        ShowText = "Rayfield",
+        Theme = "Default",
+        ToggleUIKeybind = "K",
+        DisableRayfieldPrompts = false,
+        DisableBuildWarnings = true,
+        ConfigurationSaving = {
+            Enabled = true,
+            FolderName = "script_hub_configs",
+            FileName = "default_config"
+        },
+        Discord = {
+            Enabled = false,
+            Invite = "noinvitelink",
+            RememberJoins = true
+        },
+        KeySystem = false,
+        KeySettings = {
+            Title = "Untitled",
+            Subtitle = "Key System",
+            Note = "No method of obtaining the key is provided",
+            FileName = "Key",
+            SaveKey = true,
+            GrabKeyFromSite = false,
+            Key = {"Hello"}
+        }
+    })
+    -- creates the main tab
+    local MainTab = Window:CreateTab("Main")
+    -- creates the remote events label
+    MainTab:CreateLabel("Remote events")
+    -- a button thhat runs a remote to give local player 100k wins 
+    MainTab:CreateButton({ 
+        Name = "give 100k wins", 
+        Callback = function()
+            game:GetService("ReplicatedStorage").Remotes.TreasureEvent:FireServer("Cup15")
+        end 
+    })
+    -- gives local player 2.5k gems
+    MainTab:CreateButton({
+        Name = "Give 2.5k Gems",
+        Callback = function()
+            local args = { "Blackhole2" }
+            game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("TreasureEvent"):FireServer(unpack(args))
+        end
+    })
+    -- gives local player a dominus pet.
+    MainTab:CreateButton({ 
+        Name = "Give Dominus Pet", 
+        Callback = function()
+            game:GetService("ReplicatedStorage").Remotes.SpinPrizeEvent:FireServer(4)
+        end 
+    })
+    -- this button timeses cash by 10 x
+    MainTab:CreateButton({ 
+        Name = "10 x cash", 
+        Callback = function()
+            game:GetService("ReplicatedStorage").Remotes.SpinPrizeEvent:FireServer(8)
+        end 
+    })
+    -- this button gives the player 10 spins.
+    MainTab:CreateButton({ 
+        Name = "give 10 spins", 
+        Callback = function()
+            game:GetService("ReplicatedStorage").Remotes.SpinPrizeEvent:FireServer(10)
+        end 
+    })
+    -- this creates the toggles label which is were toggles will be like spam dom pet.
+    MainTab:CreateLabel("Toggles")
+
+    local function createDupeToggle(name, flag, args, useTreasureEvent)
+        local toggle = false
+        MainTab:CreateToggle({
+            Name = name,
+            CurrentValue = false,
+            Flag = flag,
+            Callback = function(value)
+                toggle = value
+                spawn(function()
+                    while toggle do
+                        if useTreasureEvent then
+                            game:GetService("ReplicatedStorage").Remotes.TreasureEvent:FireServer(unpack(args))
+                        else
+                            game:GetService("ReplicatedStorage").Remotes.SpinPrizeEvent:FireServer(args)
+                        end
+                        task.wait(0.1)
+                    end
+                end)
+            end
+        })
+    end
+
+    createDupeToggle("Dupe Gems", "dupeGems", { "Blackhole2" }, true)
+    createDupeToggle("Dupe Dominus Pet", "dupeDominus", 4, false)
+    createDupeToggle("Dupe 10 Spins", "dupeSpins", 10, false)
+MainTab:CreateButton({
+    Name = "inf money - takes a bit",
+    Callback = function()
+        local ReplicatedStorage = game:GetService("ReplicatedStorage")
+        local SpinPrizeEvent = ReplicatedStorage:WaitForChild("Remotes"):WaitForChild("SpinPrizeEvent")
+
+        local Players = game:GetService("Players")
+        local player = Players.LocalPlayer
+        local PlayerGui = player:WaitForChild("PlayerGui")
+
+        local screenGui = Instance.new("ScreenGui")
+        screenGui.Name = "ProgressGui"
+        screenGui.Parent = PlayerGui
+
+        local percentText = Instance.new("TextLabel")
+        percentText.Size = UDim2.new(0.5, 0, 0.03, 0)
+        percentText.Position = UDim2.new(0.25, 0, 0, 5)
+        percentText.BackgroundTransparency = 1
+        percentText.TextColor3 = Color3.new(1,1,1)
+        percentText.TextScaled = true
+        percentText.Font = Enum.Font.SourceSansBold
+        percentText.Text = "0%"
+        percentText.Parent = screenGui
+
+        local progressBarBackground = Instance.new("Frame")
+        progressBarBackground.Size = UDim2.new(0.5, 0, 0.05, 0)
+        progressBarBackground.Position = UDim2.new(0.25, 0, 0.04, 0)
+        progressBarBackground.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+        progressBarBackground.BorderSizePixel = 0
+        progressBarBackground.Parent = screenGui
+
+        local progressBar = Instance.new("Frame")
+        progressBar.Size = UDim2.new(0, 0, 1, 0)
+        progressBar.BackgroundColor3 = Color3.fromRGB(0, 255, 0)
+        progressBar.BorderSizePixel = 0
+        progressBar.Parent = progressBarBackground
+
+        local function updateProgress(current, total)
+            local percent = math.floor((current / total) * 100)
+            progressBar.Size = UDim2.new(current / total, 0, 1, 0)
+            percentText.Text = percent .. "%"
+        end
+
+        SpinPrizeEvent:FireServer(6)
+
+        local totalCalls = 33
+        for i = 1, totalCalls do
+            wait(4)
+            SpinPrizeEvent:FireServer(8)
+            updateProgress(i, totalCalls)
+        end
+
+        screenGui:Destroy()
+    end,
+})
+
+
+-- creates a dupe wins toggle that spams 100k wins
+    local isDupingWins = false
+    local dupingTask
+
+    MainTab:CreateToggle({
+        Name = "Dupe Wins Toggle",
+        StartingState = false,
+        Callback = function(state)
+            isDupingWins = state
+            if isDupingWins then
+                dupingTask = task.spawn(function()
+                    while isDupingWins do
+                        game:GetService("ReplicatedStorage").Remotes.TreasureEvent:FireServer("Cup15")
+                        task.wait(0.1)  -- Adjust delay as needed to avoid crashing or detection
+                    end
+                end)
+            else
+                if dupingTask then
+                    dupingTask = nil
+                end
+            end
+        end
+    })
+
+
+    local MiscTab = Window:CreateTab("Misc")
+
+
+    -- Fly code
+    local flying = false
+    local flySpeed = 50
+    local bodyGyro, bodyVelocity
+    local UIS = game:GetService("UserInputService")
+    local RS = game:GetService("RunService")
+    local player = game.Players.LocalPlayer
+    local hrp
+
+    local directions = {
+        Forward = false, Backward = false, Left = false, Right = false, Up = false, Down = false
+    }
+
+    UIS.InputBegan:Connect(function(input, gameProcessed)
+        if gameProcessed or not flying then return end
+        local key = input.KeyCode
+        if key == Enum.KeyCode.W then directions.Forward = true end
+        if key == Enum.KeyCode.S then directions.Backward = true end
+        if key == Enum.KeyCode.A then directions.Left = true end
+        if key == Enum.KeyCode.D then directions.Right = true end
+        if key == Enum.KeyCode.Space then directions.Up = true end
+        if key == Enum.KeyCode.LeftControl then directions.Down = true end
+    end)
+
+    UIS.InputEnded:Connect(function(input)
+        if not flying then return end
+        local key = input.KeyCode
+        if key == Enum.KeyCode.W then directions.Forward = false end
+        if key == Enum.KeyCode.S then directions.Backward = false end
+        if key == Enum.KeyCode.A then directions.Left = false end
+        if key == Enum.KeyCode.D then directions.Right = false end
+        if key == Enum.KeyCode.Space then directions.Up = false end
+        if key == Enum.KeyCode.LeftControl then directions.Down = false end
+    end)
+
+    local function getDirectionVector()
+        local cam = workspace.CurrentCamera
+        local moveVector = Vector3.new()
+        if directions.Forward then moveVector += cam.CFrame.LookVector end
+        if directions.Backward then moveVector -= cam.CFrame.LookVector end
+        if directions.Right then moveVector += cam.CFrame.RightVector end
+        if directions.Left then moveVector -= cam.CFrame.RightVector end
+        if directions.Up then moveVector += cam.CFrame.UpVector end
+        if directions.Down then moveVector -= cam.CFrame.UpVector end
+        return moveVector.Magnitude > 0 and moveVector.Unit * flySpeed or Vector3.new()
+    end
+
+    local flyConnection
+    local function startFly()
+        flying = true
+        hrp = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
+        if not hrp then return end
+        bodyGyro = Instance.new("BodyGyro", hrp)
+        bodyGyro.P = 9e4
+        bodyGyro.MaxTorque = Vector3.new(9e9, 9e9, 9e9)
+        bodyGyro.CFrame = hrp.CFrame
+        bodyVelocity = Instance.new("BodyVelocity", hrp)
+        bodyVelocity.Velocity = Vector3.new()
+        bodyVelocity.MaxForce = Vector3.new(9e9, 9e9, 9e9)
+        flyConnection = RS.RenderStepped:Connect(function()
+            if flying then
+                bodyGyro.CFrame = workspace.CurrentCamera.CFrame
+                bodyVelocity.Velocity = getDirectionVector()
+            end
+        end)
+    end
+
+    local function stopFly()
+        flying = false
+        if flyConnection then flyConnection:Disconnect() flyConnection = nil end
+        if bodyGyro then bodyGyro:Destroy() bodyGyro = nil end
+        if bodyVelocity then bodyVelocity:Destroy() bodyVelocity = nil end
+        for k in pairs(directions) do directions[k] = false end
+    end
+
+    MiscTab:CreateToggle({
+        Name = "Fly",
+        CurrentValue = false,
+        Flag = "flyToggle",
+        Callback = function(value)
+            if value then startFly() else stopFly() end
+        end
+    })
+
+    MiscTab:CreateSlider({
+        Name = "Fly Speed",
+        Range = {10, 150},
+        Increment = 1,
+        Suffix = "Speed",
+        CurrentValue = flySpeed,
+        Flag = "flySpeedSlider",
+        Callback = function(value)
+            flySpeed = value
+        end
+    })
+
+    -- NoClip code
+    local noclip = false
+    local noclipConnection
+    MiscTab:CreateToggle({
+        Name = "NoClip",
+        CurrentValue = false,
+        Flag = "noclipToggle",
+        Callback = function(value)
+            noclip = value
+            if noclip and not noclipConnection then
+                noclipConnection = game:GetService("RunService").Stepped:Connect(function()
+                    local char = player.Character
+                    if char then
+                        for _, v in pairs(char:GetDescendants()) do
+                            if v:IsA("BasePart") then v.CanCollide = false end
+                        end
+                    end
+                end)
+            elseif not noclip and noclipConnection then
+                noclipConnection:Disconnect()
+                noclipConnection = nil
+            end
+        end
+    })
+
+
+
+    -- ServerTab
+    local HttpService = game:GetService("HttpService")
+    local TeleportService = game:GetService("TeleportService")
+    local Players = game:GetService("Players")
+    local ServerTab = Window:CreateTab("Server")
+
+    ServerTab:CreateButton({
+        Name = "Rejoin Server",
+        Callback = function()
+            TeleportService:Teleport(game.PlaceId, Players.LocalPlayer)
+        end
+    })
+
+    ServerTab:CreateButton({
+        Name = "Hop Server (7+ Players)",
+        Callback = function()
+            local success, result = pcall(function()
+                return HttpService:JSONDecode(
+                    game:HttpGet(
+                        "https://games.roblox.com/v1/games/"..game.PlaceId.."/servers/Public?sortOrder=Desc&limit=100"
+                    )
+                )
+            end)
+            if success and result and result.data then
+                for _, server in ipairs(result.data) do
+                    if server.playing >= 7 and server.id ~= game.JobId then
+                        TeleportService:TeleportToPlaceInstance(game.PlaceId, server.id, Players.LocalPlayer)
+                        return
+                    end
+                end
+            end
+            warn("No suitable server found with 7+ players.")
+        end
+    })
+
+    ServerTab:CreateButton({
+        Name = "Leave Game",
+        Callback = function()
+            local RunService = game:GetService("RunService")
+            if RunService:IsStudio() then warn("Can't close game in Studio.") return end
+            if typeof(game.Close) == "function" then game:Close()
+            elseif typeof(game.Shutdown) == "function" then game:Shutdown()
+            else warn("No available method to close or shutdown the game.") end
+        end
+    })
+
+    -- this creates the gui tab
+    local GuiTab = Window:CreateTab("Gui")
+    GuiTab:CreateLabel("Pets")
+    -- creates a button to open the golden machne crafter.
+GuiTab:CreateButton({
+    Name = "Golden Machine",
+    Callback = function()
+        local Players = game:GetService("Players")
+        local player = Players.LocalPlayer
+        local char = player.Character or player.CharacterAdded:Wait()
+        local hrp = char:WaitForChild("HumanoidRootPart")
+        local promptPart = workspace:FindFirstChild("World1") and workspace.World1:FindFirstChild("Prompts") and
+                           workspace.World1.Prompts:FindFirstChild("GoldenMachine") and
+                           workspace.World1.Prompts.GoldenMachine:FindFirstChild("Prompt") and
+                           workspace.World1.Prompts.GoldenMachine.Prompt:FindFirstChild("Region")
+
+        if promptPart then
+            firetouchinterest(hrp, promptPart, 0)
+            task.wait(0.1)
+            firetouchinterest(hrp, promptPart, 1)
+        else
+            warn("Error acivaing golden machine didn work")
+        end
+    end
+})
+-- code to open the diamond machine.
+GuiTab:CreateButton({
+    Name = "Diamond Machne",
+    Callback = function()
+        local Players = game:GetService("Players")
+        local player = Players.LocalPlayer
+        local char = player.Character or player.CharacterAdded:Wait()
+        local hrp = char:WaitForChild("HumanoidRootPart")
+
+        local promptPart = workspace:FindFirstChild("World5") and
+                           workspace.World5:FindFirstChild("Prompts") and
+                           workspace.World5.Prompts:FindFirstChild("DiamondMachine") and
+                           workspace.World5.Prompts.DiamondMachine:FindFirstChild("Prompt") and
+                           workspace.World5.Prompts.DiamondMachine.Prompt:FindFirstChild("Region")
+
+        if promptPart then
+            firetouchinterest(hrp, promptPart, 0)
+            task.wait(0.1)
+            firetouchinterest(hrp, promptPart, 1)
+        else
+            warn("Error: Activating Diamond Machine failed.")
+        end
+    end
+})
+-- code to open void machine
+GuiTab:CreateButton({
+    Name = "Void Machine",
+    Callback = function()
+        local Players = game:GetService("Players")
+        local player = Players.LocalPlayer
+        local char = player.Character or player.CharacterAdded:Wait()
+        local hrp = char:WaitForChild("HumanoidRootPart")
+
+        local promptPart = workspace:FindFirstChild("World15") and
+                           workspace.World15:FindFirstChild("Prompts") and
+                           workspace.World15.Prompts:FindFirstChild("VoidMachine") and
+                           workspace.World15.Prompts.VoidMachine:FindFirstChild("Prompt") and
+                           workspace.World15.Prompts.VoidMachine.Prompt:FindFirstChild("Region")
+
+        if promptPart then
+            firetouchinterest(hrp, promptPart, 0)
+            task.wait(0.1)
+            firetouchinterest(hrp, promptPart, 1)
+        else
+            warn("Error: Activating Void Machine failed.")
+        end
+    end
+})
+-- opens the pet index.
+GuiTab:CreateButton({
+    Name = "Open Pet Index",
+    Callback = function()
+        local Players = game:GetService("Players")
+        local player = Players.LocalPlayer
+        local char = player.Character or player.CharacterAdded:Wait()
+        local hrp = char:WaitForChild("HumanoidRootPart")
+
+        local promptPart = workspace:FindFirstChild("World15") and
+                           workspace.World15:FindFirstChild("Prompts") and
+                           workspace.World15.Prompts:FindFirstChild("PetIndex") and
+                           workspace.World15.Prompts.PetIndex:FindFirstChild("Prompt") and
+                           workspace.World15.Prompts.PetIndex.Prompt:FindFirstChild("Region")
+
+        if promptPart then
+            firetouchinterest(hrp, promptPart, 0)
+            task.wait(0.1)
+            firetouchinterest(hrp, promptPart, 1)
+        else
+            warn("Error: Opening Pet Index failed.")
+        end
+    end
+})
+
+    GuiTab:CreateLabel("upgrades and pickaxes")
+    -- opens the pickaxe shop.
+GuiTab:CreateButton({
+    Name = "Open Pickaxe Shop",
+    Callback = function()
+        local Players = game:GetService("Players")
+        local player = Players.LocalPlayer
+        local char = player.Character or player.CharacterAdded:Wait()
+        local hrp = char:WaitForChild("HumanoidRootPart")
+
+        local promptPart = workspace:FindFirstChild("World15") and
+                           workspace.World15:FindFirstChild("Prompts") and
+                           workspace.World15.Prompts:FindFirstChild("PickaxeShop") and
+                           workspace.World15.Prompts.PickaxeShop:FindFirstChild("Prompt") and
+                           workspace.World15.Prompts.PickaxeShop.Prompt:FindFirstChild("Region")
+
+        if promptPart then
+            firetouchinterest(hrp, promptPart, 0)
+            task.wait(0.1)
+            firetouchinterest(hrp, promptPart, 1)
+        else
+            warn("Error: Opening Pickaxe Shop failed.")
+        end
+    end
+})
+-- open the upgrade gui were u can upgrade status of player with things like robux
+GuiTab:CreateButton({
+    Name = "Open Upgrades GUI",
+    Callback = function()
+        local Players = game:GetService("Players")
+        local player = Players.LocalPlayer
+        local char = player.Character or player.CharacterAdded:Wait()
+        local hrp = char:WaitForChild("HumanoidRootPart")
+
+        local promptPart = workspace:FindFirstChild("World15") and
+                           workspace.World15:FindFirstChild("Prompts") and
+                           workspace.World15.Prompts:FindFirstChild("Upgrades") and
+                           workspace.World15.Prompts.Upgrades:FindFirstChild("Prompt") and
+                           workspace.World15.Prompts.Upgrades.Prompt:FindFirstChild("Region")
+
+        if promptPart then
+            firetouchinterest(hrp, promptPart, 0)
+            task.wait(0.1)
+            firetouchinterest(hrp, promptPart, 1)
+        else
+            warn("Error: Opening Upgrades GUI failed.")
+        end
+    end
+})
+-- opens the op chest
+GuiTab:CreateButton({
+    Name = "Op Chest",
+    Callback = function()
+        local Players = game:GetService("Players")
+        local player = Players.LocalPlayer
+        local char = player.Character or player.CharacterAdded:Wait()
+        local hrp = char:WaitForChild("HumanoidRootPart")
+
+        local promptPart = workspace:FindFirstChild("World15") and
+                           workspace.World15:FindFirstChild("Prompts") and
+                           workspace.World15.Prompts:FindFirstChild("Chest") and
+                           workspace.World15.Prompts.Chest:FindFirstChild("Prompt") and
+                           workspace.World15.Prompts.Chest.Prompt:FindFirstChild("Region")
+
+        if promptPart then
+            firetouchinterest(hrp, promptPart, 0)
+            task.wait(0.1)
+            firetouchinterest(hrp, promptPart, 1)
+        else
+            warn("Error: Opening Op Chest prompt failed.")
+        end
+    end
+})
+-- opens spin wheel.
+GuiTab:CreateButton({
+    Name = "Spin Wheel",
+    Callback = function()
+        local Players = game:GetService("Players")
+        local player = Players.LocalPlayer
+        local char = player.Character or player.CharacterAdded:Wait()
+        local hrp = char:WaitForChild("HumanoidRootPart")
+
+        local promptPart = workspace:FindFirstChild("World15") and
+                           workspace.World15:FindFirstChild("Prompts") and
+                           workspace.World15.Prompts:FindFirstChild("Wheel") and
+                           workspace.World15.Prompts.Wheel:FindFirstChild("Prompt") and
+                           workspace.World15.Prompts.Wheel.Prompt:FindFirstChild("Region")
+
+        if promptPart then
+            firetouchinterest(hrp, promptPart, 0)
+            task.wait(0.1)
+            firetouchinterest(hrp, promptPart, 1)
+        else
+            warn("Error: Spinning wheel prompt failed.")
+        end
+    end
+})
+GuiTab:CreateLabel("any other guis can be accessed by buttons on screen")
+-- this creates the pets tab.
+local PetTab = Window:CreateTab("Pets")
+PetTab:CreateLabel("mythic Black Cat Hole")
+PetTab:CreateButton({
+    Name = "Get One Black Cat",
+    Callback = function()
+        local args = { "Black Cat hole" }
+        game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("PetCageEvent"):FireServer(unpack(args))
+    end
+})
+
+-- this starts calling value to call remoote to give player black cat hole
+local spamBlackCatHole = false
+local spamThread
+PetTab:CreateToggle({
+    Name = "Dupe black cats",
+    CurrentValue = false,
+    Flag = "spamBlackCatHole",
+    Callback = function(value)
+        spamBlackCatHole = value
+        if value then
+            spamThread = task.spawn(function()
+                while spamBlackCatHole do
+                    local args = { "Black Cat hole" }
+                    game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("PetCageEvent"):FireServer(unpack(args))
+                    task.wait(0.01)
+                end
+            end)
+        end
+    end
+})
+-- this starts automatically upgrading the pet to gold.
+local GoldPetRunning = false
+PetTab:CreateToggle({
+    Name = "upgrade cat Pet to gold",
+    CurrentValue = false,
+    Flag = "GoldPetToggle",
+    Callback = function(value)
+        GoldPetRunning = value
+        if value then
+            coroutine.wrap(function()
+                while GoldPetRunning do
+                    local args = {"Black Cat hole", 100}
+                    game:GetService("ReplicatedStorage"):WaitForChild("PetRemotes"):WaitForChild("GoldPetCraftEvent"):FireServer(unpack(args))
+                    task.wait(2)
+                end
+            end)()
+        end
+    end,
+})
+-- automatticaly upgrades pet to diamonod
+local DiamondRunning = false
+PetTab:CreateToggle({
+    Name = "upgrade cat Pet to diamond",
+    CurrentValue = false,
+    Flag = "DiamondToggle",
+    Callback = function(value)
+        DiamondRunning = value
+        if value then
+            coroutine.wrap(function()
+                while DiamondRunning do
+                    local args = {"Gold Black Cat hole", 100}
+                    game:GetService("ReplicatedStorage"):WaitForChild("PetRemotes"):WaitForChild("DiamondPetCraftEvent"):FireServer(unpack(args))
+                    task.wait(2)
+                end
+            end)()
+        end
+    end,
+})
+-- automatically upgrades pet to void rank
+local VoidRunning = false
+PetTab:CreateToggle({
+    Name = "upgrade cat Pet to void",
+    CurrentValue = false,
+    Flag = "VoidToggle",
+    Callback = function(value)
+        VoidRunning = value
+        if value then
+            coroutine.wrap(function()
+                while VoidRunning do
+                    local args = {"Diamond Black Cat hole", 100}
+                    game:GetService("ReplicatedStorage"):WaitForChild("PetRemotes"):WaitForChild("VoidPetCraftEvent"):FireServer(unpack(args))
+                    task.wait(2)
+                end
+            end)()
+        end
+    end,
+})
+PetTab:CreateLabel("mythic Sun God")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local PetCageEvent = ReplicatedStorage:WaitForChild("Remotes"):WaitForChild("PetCageEvent")
+-- this code gives the player 1 goold sun god
+PetTab:CreateButton({
+    Name = "Get One Sun God",
+    Callback = function()
+        local args = { "Sun God" }
+        PetCageEvent:FireServer(unpack(args))
+    end
+})
+-- this starts duping sun gods
+local spamSunGod = false
+local spamThread
+
+PetTab:CreateToggle({
+    Name = "Dupe Sun God - on mass",
+    CurrentValue = false,
+    Flag = "spamSunGod",
+    Callback = function(value)
+        spamSunGod = value
+        if value then
+            spamThread = task.spawn(function()
+                while spamSunGod do
+                    local args = { "Sun God" }
+                    PetCageEvent:FireServer(unpack(args))
+                    task.wait(0.1)
+                end
+            end)
+        else
+            spamSunGod = false
+        end
+    end
+})
+-- this statrts auto upgrading the sun gods to gold level.
+local GoldPetRunning = false
+PetTab:CreateToggle({
+    Name = "Gold Sun God",
+    CurrentValue = false,
+    Flag = "GoldSunGodToggle",
+    Callback = function(value)
+        GoldPetRunning = value
+        if value then
+            coroutine.wrap(function()
+                while GoldPetRunning do
+                    local args = {"Sun God", 100}
+                    ReplicatedStorage:WaitForChild("PetRemotes"):WaitForChild("GoldPetCraftEvent"):FireServer(unpack(args))
+                    task.wait(2)
+                end
+            end)()
+        else
+            GoldPetRunning = false
+        end
+    end,
+})
+-- this starts auto upgrading them to diamond level.
+local DiamondRunning = false
+PetTab:CreateToggle({
+    Name = "Diamond Sun God",
+    CurrentValue = false,
+    Flag = "DiamondSunGodToggle",
+    Callback = function(value)
+        DiamondRunning = value
+        if value then
+            coroutine.wrap(function()
+                while DiamondRunning do
+                    local args = {"Gold Sun God", 100}
+                    ReplicatedStorage:WaitForChild("PetRemotes"):WaitForChild("DiamondPetCraftEvent"):FireServer(unpack(args))
+                    task.wait(2)
+                end
+            end)()
+        else
+            DiamondRunning = false
+        end
+    end,
+})
+-- this statrts auto pgrading to void level.
+local VoidRunning = false
+PetTab:CreateToggle({
+    Name = "Void Sun God",
+    CurrentValue = false,
+    Flag = "VoidSunGodToggle",
+    Callback = function(value)
+        VoidRunning = value
+        if value then
+            coroutine.wrap(function()
+                while VoidRunning do
+                    local args = {"Diamond Sun God", 100}
+                    ReplicatedStorage:WaitForChild("PetRemotes"):WaitForChild("VoidPetCraftEvent"):FireServer(unpack(args))
+                    task.wait(2)
+                end
+            end)()
+        else
+            VoidRunning = false
+        end
+    end,
+})
+
+player.CharacterAdded:Connect(function(newChar)
+    char = newChar
+    humanoid = char:WaitForChild("Humanoid")
+end)
+    local AutoTab = Window:CreateTab("Automation")
+    AutoTab:CreateLabel("Auto win")
+local AutoWinEnabled = false
+local floatConnection
+
+local AutoWinEnabled = false
+local floatConnection
+
+local UserInputService = game:GetService("UserInputService")
+local RunService = game:GetService("RunService")
+
+local AutoWinEnabled = false
+local jumpConnection
+
+local UserInputService = game:GetService("UserInputService")
+local RunService = game:GetService("RunService")
+
+local AutoWinEnabled = false
+local loopTask
+local Players = game:GetService("Players")
+local player = Players.LocalPlayer
+local running = false
+local jumpLoopThread
+-- auto win for world
+AutoTab:CreateToggle({
+    Name = "Auto win World 1",
+    Flag = "AutoSuperJumpToggle",
+    Callback = function(state)
+        running = state
+        if running then
+            if not jumpLoopThread or coroutine.status(jumpLoopThread) == "dead" then
+                jumpLoopThread = coroutine.create(function()
+                    while running do
+                        local success, err = pcall(function()
+                            local character = player.Character or player.CharacterAdded:Wait()
+                            local humanoid = character:WaitForChild("Humanoid")
+                            local hrp = character:WaitForChild("HumanoidRootPart")
+
+                            local invisWalls2 = workspace.World1:FindFirstChild("InvisWalls2")
+                            if invisWalls2 and invisWalls2:GetChildren()[4] then
+                                invisWalls2:GetChildren()[4]:Destroy()
+                            end
+
+                            local map = workspace.World1:FindFirstChild("Map")
+                            if map and map:FindFirstChild("Bottom") then
+                                map.Bottom:Destroy()
+                            end
+
+                            local targetCFrame = CFrame.new(
+                                1.93578005, -447.548584, 70.577774,
+                                0.994225681, -0.0132837659, 0.106484078,
+                                -4.82870576e-07, 0.992307961, 0.123793781,
+                                -0.107309446, -0.123079009, 0.986578047
+                            )
+
+                            local existingPlatform = workspace:FindFirstChild("SuperJumpPlatform")
+                            if not existingPlatform then
+                                local platform = Instance.new("Part")
+                                platform.Name = "SuperJumpPlatform"
+                                platform.Size = Vector3.new(30, 1, 30)
+                                platform.Anchored = true
+                                platform.CanCollide = true
+                                platform.Material = Enum.Material.Grass
+                                platform.BrickColor = BrickColor.new("Lime green")
+                                platform.CFrame = targetCFrame
+                                platform.Parent = workspace
+                            end
+
+                            wait(1)
+                            hrp.CFrame = targetCFrame + Vector3.new(0, 3, 0)
+                            wait(6)
+
+                            humanoid.Jump = true
+
+                            local bodyVelocity = Instance.new("BodyVelocity")
+                            bodyVelocity.Velocity = Vector3.new(0, 300, 0)
+                            bodyVelocity.MaxForce = Vector3.new(0, math.huge, 0)
+                            bodyVelocity.P = 1250
+                            bodyVelocity.Parent = hrp
+
+                            task.delay(0.3, function()
+                                bodyVelocity:Destroy()
+                            end)
+                        end)
+                        if not success then
+                            warn("Auto Super Jump error:", err)
+                        end
+                        wait(5)
+                    end
+                end)
+                coroutine.resume(jumpLoopThread)
+            end
+        end
+    end
+})
+local Players = game:GetService("Players")
+local player = Players.LocalPlayer
+local running2 = false
+local jumpLoopThread2
+-- auto win for world
+AutoTab:CreateToggle({
+    Name = "Auto Win World 2",
+    Flag = "AutoWinWorld2Toggle",
+    Callback = function(state)
+        running2 = state
+        if running2 then
+            if not jumpLoopThread2 or coroutine.status(jumpLoopThread2) == "dead" then
+                jumpLoopThread2 = coroutine.create(function()
+                    while running2 do
+                        local success, err = pcall(function()
+                            local character = player.Character or player.CharacterAdded:Wait()
+                            local humanoid = character:WaitForChild("Humanoid")
+                            local hrp = character:WaitForChild("HumanoidRootPart")
+
+                            local invisWalls2 = workspace.World2:FindFirstChild("InvisWalls2")
+                            if invisWalls2 and invisWalls2:GetChildren()[5] then
+                                invisWalls2:GetChildren()[5]:Destroy()
+                            end
+
+                            local map = workspace.World2:FindFirstChild("Map")
+                            if map and map:FindFirstChild("Bottom") then
+                                map.Bottom:Destroy()
+                            end
+
+                            local targetCFrame = CFrame.new(
+                                -20.184948, -458.848938, -897.196655,
+                                0.983130813, 0.0697701573, 0.169073641,
+                                7.32853587e-05, 0.924235702, -0.381822467,
+                                -0.182903707, 0.375393838, 0.908639491
+                            )
+
+                            local existingPlatform = workspace:FindFirstChild("SuperJumpPlatform2")
+                            if not existingPlatform then
+                                local platform = Instance.new("Part")
+                                platform.Name = "SuperJumpPlatform2"
+                                platform.Size = Vector3.new(30, 1, 30)
+                                platform.Anchored = true
+                                platform.CanCollide = true
+                                platform.Material = Enum.Material.Grass
+                                platform.BrickColor = BrickColor.new("Lime green")
+                                platform.CFrame = targetCFrame
+                                platform.Parent = workspace
+                            end
+
+                            wait(1)
+                            hrp.CFrame = targetCFrame + Vector3.new(0, 3, 0)
+                            wait(6)
+
+                            humanoid.Jump = true
+
+                            local bodyVelocity = Instance.new("BodyVelocity")
+                            bodyVelocity.Velocity = Vector3.new(0, 300, 0)
+                            bodyVelocity.MaxForce = Vector3.new(0, math.huge, 0)
+                            bodyVelocity.P = 1250
+                            bodyVelocity.Parent = hrp
+
+                            task.delay(0.3, function()
+                                bodyVelocity:Destroy()
+                            end)
+                        end)
+                        if not success then
+                            warn("Auto Win World 2 error:", err)
+                        end
+                        wait(5)
+                    end
+                end)
+                coroutine.resume(jumpLoopThread2)
+            end
+        end
+    end
+})
+local Players = game:GetService("Players")
+local player = Players.LocalPlayer
+local running3 = false
+local jumpLoopThread3
+-- auto win for world
+AutoTab:CreateToggle({
+    Name = "Auto Win World 3",
+    Flag = "AutoWinWorld3Toggle",
+    Callback = function(state)
+        running3 = state
+        if running3 then
+            if not jumpLoopThread3 or coroutine.status(jumpLoopThread3) == "dead" then
+                jumpLoopThread3 = coroutine.create(function()
+                    while running3 do
+                        local success, err = pcall(function()
+                            local character = player.Character or player.CharacterAdded:Wait()
+                            local humanoid = character:WaitForChild("Humanoid")
+                            local hrp = character:WaitForChild("HumanoidRootPart")
+
+                            local invisWalls2 = workspace.World3:FindFirstChild("InvisWalls2")
+                            if invisWalls2 and invisWalls2:GetChildren()[5] then
+                                invisWalls2:GetChildren()[5]:Destroy()
+                            end
+
+                            local map = workspace.World3:FindFirstChild("Map")
+                            if map and map:FindFirstChild("Bottom") then
+                                map.Bottom:Destroy()
+                            end
+
+                            local targetCFrame = CFrame.new(
+                                -45.572937, -489.687286, -1992.23193,
+                                -0.0493130311, -0.0488015562, -0.997590423,
+                                -3.47162512e-07, 0.998805583, -0.0488609858,
+                                0.99878335, -0.00240913709, -0.0492541492
+                            )
+
+                            local existingPlatform = workspace:FindFirstChild("SuperJumpPlatform3")
+                            if not existingPlatform then
+                                local platform = Instance.new("Part")
+                                platform.Name = "SuperJumpPlatform3"
+                                platform.Size = Vector3.new(30, 1, 30)
+                                platform.Anchored = true
+                                platform.CanCollide = true
+                                platform.Material = Enum.Material.Grass
+                                platform.BrickColor = BrickColor.new("Lime green")
+                                platform.CFrame = targetCFrame
+                                platform.Parent = workspace
+                            end
+
+                            wait(1)
+                            hrp.CFrame = targetCFrame + Vector3.new(0, 3, 0)
+                            wait(6)
+
+                            humanoid.Jump = true
+
+                            local bodyVelocity = Instance.new("BodyVelocity")
+                            bodyVelocity.Velocity = Vector3.new(0, 300, 0)
+                            bodyVelocity.MaxForce = Vector3.new(0, math.huge, 0)
+                            bodyVelocity.P = 1250
+                            bodyVelocity.Parent = hrp
+
+                            task.delay(0.3, function()
+                                bodyVelocity:Destroy()
+                            end)
+                        end)
+                        if not success then
+                            warn("Auto Win World 3 error:", err)
+                        end
+                        wait(5)
+                    end
+                end)
+                coroutine.resume(jumpLoopThread3)
+            end
+        end
+    end
+})
+local Players = game:GetService("Players")
+local player = Players.LocalPlayer
+local running4 = false
+local jumpLoopThread4
+-- auto win for world
+AutoTab:CreateToggle({
+    Name = "Auto Win World 4",
+    Flag = "AutoWinWorld4Toggle",
+    Callback = function(state)
+        running4 = state
+        if running4 then
+            if not jumpLoopThread4 or coroutine.status(jumpLoopThread4) == "dead" then
+                jumpLoopThread4 = coroutine.create(function()
+                    while running4 do
+                        local success, err = pcall(function()
+                            local character = player.Character or player.CharacterAdded:Wait()
+                            local humanoid = character:WaitForChild("Humanoid")
+                            local hrp = character:WaitForChild("HumanoidRootPart")
+
+                            local invisWalls2 = workspace.World4:FindFirstChild("InvisWalls2")
+                            if invisWalls2 and invisWalls2:GetChildren()[5] then
+                                invisWalls2:GetChildren()[5]:Destroy()
+                            end
+
+                            local map = workspace.World4:FindFirstChild("Map")
+                            if map and map:FindFirstChild("Bottom") then
+                                map.Bottom:Destroy()
+                            end
+
+                            local targetCFrame = CFrame.new(
+                                75.1083832, -482.478149, -2976.73975,
+                                0.0465273894, -0.113983519, 0.99239254,
+                                2.19459707e-06, 0.993468463, 0.11410699,
+                                -0.998917043, -0.00530692283, 0.0462237448
+                            )
+
+                            local existingPlatform = workspace:FindFirstChild("SuperJumpPlatform4")
+                            if not existingPlatform then
+                                local platform = Instance.new("Part")
+                                platform.Name = "SuperJumpPlatform4"
+                                platform.Size = Vector3.new(30, 1, 30)
+                                platform.Anchored = true
+                                platform.CanCollide = true
+                                platform.Material = Enum.Material.Grass
+                                platform.BrickColor = BrickColor.new("Lime green")
+                                platform.CFrame = targetCFrame
+                                platform.Parent = workspace
+                            end
+
+                            wait(1)
+                            hrp.CFrame = targetCFrame + Vector3.new(0, 3, 0)
+                            wait(6)
+
+                            humanoid.Jump = true
+
+                            local bodyVelocity = Instance.new("BodyVelocity")
+                            bodyVelocity.Velocity = Vector3.new(0, 300, 0)
+                            bodyVelocity.MaxForce = Vector3.new(0, math.huge, 0)
+                            bodyVelocity.P = 1250
+                            bodyVelocity.Parent = hrp
+
+                            task.delay(0.3, function()
+                                bodyVelocity:Destroy()
+                            end)
+                        end)
+                        if not success then
+                            warn("Auto Win World 4 error:", err)
+                        end
+                        wait(5)
+                    end
+                end)
+                coroutine.resume(jumpLoopThread4)
+            end
+        end
+    end
+})
+local Players = game:GetService("Players")
+local player = Players.LocalPlayer
+local running5 = false
+local jumpLoopThread5
+-- auto win for world
+AutoTab:CreateToggle({
+    Name = "Auto Win World 5",
+    Flag = "AutoWinWorld5Toggle",
+    Callback = function(state)
+        running5 = state
+        if running5 then
+            if not jumpLoopThread5 or coroutine.status(jumpLoopThread5) == "dead" then
+                jumpLoopThread5 = coroutine.create(function()
+                    while running5 do
+                        local success, err = pcall(function()
+                            local character = player.Character or player.CharacterAdded:Wait()
+                            local humanoid = character:WaitForChild("Humanoid")
+                            local hrp = character:WaitForChild("HumanoidRootPart")
+
+                            local invisWalls2 = workspace.World5:FindFirstChild("InvisWalls2")
+                            if invisWalls2 and invisWalls2:GetChildren()[5] then
+                                invisWalls2:GetChildren()[5]:Destroy()
+                            end
+
+                            local map = workspace.World5:FindFirstChild("Map")
+                            if map and map:FindFirstChild("Bottom") then
+                                map.Bottom:Destroy()
+                            end
+
+                            local targetCFrame = CFrame.new(
+                                -74.0133209, -437.478729, -3989.04956,
+                                0.119789287, 0.0942567363, -0.988314807,
+                                1.59330909e-06, 0.995482922, 0.0949405655,
+                                0.992799342, -0.0113744373, 0.11924804
+                            )
+
+                            local existingPlatform = workspace:FindFirstChild("SuperJumpPlatform5")
+                            if not existingPlatform then
+                                local platform = Instance.new("Part")
+                                platform.Name = "SuperJumpPlatform5"
+                                platform.Size = Vector3.new(30, 1, 30)
+                                platform.Anchored = true
+                                platform.CanCollide = true
+                                platform.Material = Enum.Material.Grass
+                                platform.BrickColor = BrickColor.new("Lime green")
+                                platform.CFrame = targetCFrame
+                                platform.Parent = workspace
+                            end
+
+                            wait(1)
+                            hrp.CFrame = targetCFrame + Vector3.new(0, 3, 0)
+                            wait(6)
+
+                            humanoid.Jump = true
+
+                            local bodyVelocity = Instance.new("BodyVelocity")
+                            bodyVelocity.Velocity = Vector3.new(0, 300, 0)
+                            bodyVelocity.MaxForce = Vector3.new(0, math.huge, 0)
+                            bodyVelocity.P = 1250
+                            bodyVelocity.Parent = hrp
+
+                            task.delay(0.3, function()
+                                bodyVelocity:Destroy()
+                            end)
+                        end)
+                        if not success then
+                            warn("Auto Win World 5 error:", err)
+                        end
+                        wait(5)
+                    end
+                end)
+                coroutine.resume(jumpLoopThread5)
+            end
+        end
+    end
+})
+local Players = game:GetService("Players")
+local player = Players.LocalPlayer
+local running6 = false
+local jumpLoopThread6
+-- auto win for world
+AutoTab:CreateToggle({
+    Name = "Auto Win World 6",
+    Flag = "AutoWinWorld6Toggle",
+    Callback = function(state)
+        running6 = state
+        if running6 then
+            if not jumpLoopThread6 or coroutine.status(jumpLoopThread6) == "dead" then
+                jumpLoopThread6 = coroutine.create(function()
+                    while running6 do
+                        local success, err = pcall(function()
+                            local character = player.Character or player.CharacterAdded:Wait()
+                            local humanoid = character:WaitForChild("Humanoid")
+                            local hrp = character:WaitForChild("HumanoidRootPart")
+
+                            local invisWalls2 = workspace.World6:FindFirstChild("InvisWalls2")
+                            if invisWalls2 and invisWalls2:GetChildren()[5] then
+                                invisWalls2:GetChildren()[5]:Destroy()
+                            end
+
+                            local map = workspace.World6:FindFirstChild("Map")
+                            if map and map:FindFirstChild("Bottom") then
+                                map.Bottom:Destroy()
+                            end
+
+                            local targetCFrame = CFrame.new(
+                                -3.21367049, -455.985443, -4928.6167,
+                                0.997907817, -0.00617635576, 0.0643573999,
+                                -8.20147136e-07, 0.995425284, 0.09554331,
+                                -0.0646530911, -0.0953434631, 0.993342638
+                            )
+
+                            local existingPlatform = workspace:FindFirstChild("SuperJumpPlatform6")
+                            if not existingPlatform then
+                                local platform = Instance.new("Part")
+                                platform.Name = "SuperJumpPlatform6"
+                                platform.Size = Vector3.new(30, 1, 30)
+                                platform.Anchored = true
+                                platform.CanCollide = true
+                                platform.Material = Enum.Material.Grass
+                                platform.BrickColor = BrickColor.new("Lime green")
+                                platform.CFrame = targetCFrame
+                                platform.Parent = workspace
+                            end
+
+                            wait(1)
+                            hrp.CFrame = targetCFrame + Vector3.new(0, 3, 0)
+                            wait(6)
+
+                            humanoid.Jump = true
+
+                            local bodyVelocity = Instance.new("BodyVelocity")
+                            bodyVelocity.Velocity = Vector3.new(0, 300, 0)
+                            bodyVelocity.MaxForce = Vector3.new(0, math.huge, 0)
+                            bodyVelocity.P = 1250
+                            bodyVelocity.Parent = hrp
+
+                            task.delay(0.3, function()
+                                bodyVelocity:Destroy()
+                            end)
+                        end)
+                        if not success then
+                            warn("Auto Win World 6 error:", err)
+                        end
+                        wait(5)
+                    end
+                end)
+                coroutine.resume(jumpLoopThread6)
+            end
+        end
+    end
+})
+local Players = game:GetService("Players")
+local player = Players.LocalPlayer
+local running7 = false
+local jumpLoopThread7
+-- auto win for world
+AutoTab:CreateToggle({
+    Name = "Auto Win World 7",
+    Flag = "AutoWinWorld7Toggle",
+    Callback = function(state)
+        running7 = state
+        if running7 then
+            if not jumpLoopThread7 or coroutine.status(jumpLoopThread7) == "dead" then
+                jumpLoopThread7 = coroutine.create(function()
+                    while running7 do
+                        local success, err = pcall(function()
+                            local character = player.Character or player.CharacterAdded:Wait()
+                            local humanoid = character:WaitForChild("Humanoid")
+                            local hrp = character:WaitForChild("HumanoidRootPart")
+
+                            local invisWalls2 = workspace.World7:FindFirstChild("InvisWalls2")
+                            if invisWalls2 and invisWalls2:GetChildren()[5] then
+                                invisWalls2:GetChildren()[5]:Destroy()
+                            end
+
+                            local map = workspace.World7:FindFirstChild("Map")
+                            if map and map:FindFirstChild("Bottom") then
+                                map.Bottom:Destroy()
+                            end
+
+                            local targetCFrame = CFrame.new(
+                                -25.2042942, -466.843079, -5925.59766,
+                                0.996762156, 0.0134166181, -0.0792793557,
+                                -5.23387735e-06, 0.985991478, 0.166795686,
+                                0.0804065987, -0.166255221, 0.982799053
+                            )
+
+                            local existingPlatform = workspace:FindFirstChild("SuperJumpPlatform7")
+                            if not existingPlatform then
+                                local platform = Instance.new("Part")
+                                platform.Name = "SuperJumpPlatform7"
+                                platform.Size = Vector3.new(30, 1, 30)
+                                platform.Anchored = true
+                                platform.CanCollide = true
+                                platform.Material = Enum.Material.Grass
+                                platform.BrickColor = BrickColor.new("Lime green")
+                                platform.CFrame = targetCFrame
+                                platform.Parent = workspace
+                            end
+
+                            wait(1)
+                            hrp.CFrame = targetCFrame + Vector3.new(0, 3, 0)
+                            wait(6)
+
+                            humanoid.Jump = true
+
+                            local bodyVelocity = Instance.new("BodyVelocity")
+                            bodyVelocity.Velocity = Vector3.new(0, 300, 0)
+                            bodyVelocity.MaxForce = Vector3.new(0, math.huge, 0)
+                            bodyVelocity.P = 1250
+                            bodyVelocity.Parent = hrp
+
+                            task.delay(0.3, function()
+                                bodyVelocity:Destroy()
+                            end)
+                        end)
+                        if not success then
+                            warn("Auto Win World 7 error:", err)
+                        end
+                        wait(5)
+                    end
+                end)
+                coroutine.resume(jumpLoopThread7)
+            end
+        end
+    end
+})
+local Players = game:GetService("Players")
+local player = Players.LocalPlayer
+local running8 = false
+local jumpLoopThread8
+-- auto win for world
+AutoTab:CreateToggle({
+    Name = "Auto Win World 8",
+    Flag = "AutoWinWorld8Toggle",
+    Callback = function(state)
+        running8 = state
+        if running8 then
+            if not jumpLoopThread8 or coroutine.status(jumpLoopThread8) == "dead" then
+                jumpLoopThread8 = coroutine.create(function()
+                    while running8 do
+                        local success, err = pcall(function()
+                            local character = player.Character or player.CharacterAdded:Wait()
+                            local humanoid = character:WaitForChild("Humanoid")
+                            local hrp = character:WaitForChild("HumanoidRootPart")
+
+                            local invisWalls2 = workspace.World8:FindFirstChild("InvisWalls2")
+                            if invisWalls2 and invisWalls2:GetChildren()[5] then
+                                invisWalls2:GetChildren()[5]:Destroy()
+                            end
+
+                            local map = workspace.World8:FindFirstChild("Map")
+                            if map and map:FindFirstChild("Bottom") then
+                                map.Bottom:Destroy()
+                            end
+
+                            local targetCFrame = CFrame.new(
+                                5.20606852, -461.933472, -7069.06836,
+                                -0.999991238, 0.000448113511, -0.0041638827,
+                                1.2538986e-07, 0.994262099, 0.106971525,
+                                0.00418792618, 0.106970586, -0.994253337
+                            )
+
+                            local existingPlatform = workspace:FindFirstChild("SuperJumpPlatform8")
+                            if not existingPlatform then
+                                local platform = Instance.new("Part")
+                                platform.Name = "SuperJumpPlatform8"
+                                platform.Size = Vector3.new(30, 1, 30)
+                                platform.Anchored = true
+                                platform.CanCollide = true
+                                platform.Material = Enum.Material.Grass
+                                platform.BrickColor = BrickColor.new("Lime green")
+                                platform.CFrame = targetCFrame
+                                platform.Parent = workspace
+                            end
+
+                            wait(1)
+                            hrp.CFrame = targetCFrame + Vector3.new(0, 3, 0)
+                            wait(6)
+
+                            humanoid.Jump = true
+
+                            local bodyVelocity = Instance.new("BodyVelocity")
+                            bodyVelocity.Velocity = Vector3.new(0, 300, 0)
+                            bodyVelocity.MaxForce = Vector3.new(0, math.huge, 0)
+                            bodyVelocity.P = 1250
+                            bodyVelocity.Parent = hrp
+
+                            task.delay(0.3, function()
+                                bodyVelocity:Destroy()
+                            end)
+                        end)
+                        if not success then
+                            warn("Auto Win World 8 error:", err)
+                        end
+                        wait(5)
+                    end
+                end)
+                coroutine.resume(jumpLoopThread8)
+            end
+        end
+    end
+})
+local Players = game:GetService("Players")
+local player = Players.LocalPlayer
+local running9 = false
+local jumpLoopThread9
+-- auto win for world
+AutoTab:CreateToggle({
+    Name = "Auto Win World 9",
+    Flag = "AutoWinWorld9Toggle",
+    Callback = function(state)
+        running9 = state
+        if running9 then
+            if not jumpLoopThread9 or coroutine.status(jumpLoopThread9) == "dead" then
+                jumpLoopThread9 = coroutine.create(function()
+                    while running9 do
+                        local success, err = pcall(function()
+                            local character = player.Character or player.CharacterAdded:Wait()
+                            local humanoid = character:WaitForChild("Humanoid")
+                            local hrp = character:WaitForChild("HumanoidRootPart")
+
+                            local invisWalls2 = workspace.World9:FindFirstChild("InvisWalls2")
+                            if invisWalls2 and invisWalls2:GetChildren()[5] then
+                                invisWalls2:GetChildren()[5]:Destroy()
+                            end
+
+                            local map = workspace.World9:FindFirstChild("Map")
+                            if map and map:FindFirstChild("Bottom") then
+                                map.Bottom:Destroy()
+                            end
+
+                            local targetCFrame = CFrame.new(
+                                17.4222984, -452.240692, -8058.7583,
+                                -0.996215165, -0.00517151132, 0.0867674127,
+                                -6.50696279e-07, 0.998228967, 0.0594889708,
+                                -0.0869213939, 0.0592637584, -0.994450867
+                            )
+
+                            local existingPlatform = workspace:FindFirstChild("SuperJumpPlatform9")
+                            if not existingPlatform then
+                                local platform = Instance.new("Part")
+                                platform.Name = "SuperJumpPlatform9"
+                                platform.Size = Vector3.new(30, 1, 30)
+                                platform.Anchored = true
+                                platform.CanCollide = true
+                                platform.Material = Enum.Material.Grass
+                                platform.BrickColor = BrickColor.new("Lime green")
+                                platform.CFrame = targetCFrame
+                                platform.Parent = workspace
+                            end
+
+                            wait(1)
+                            hrp.CFrame = targetCFrame + Vector3.new(0, 3, 0)
+                            wait(6)
+
+                            humanoid.Jump = true
+
+                            local bodyVelocity = Instance.new("BodyVelocity")
+                            bodyVelocity.Velocity = Vector3.new(0, 300, 0)
+                            bodyVelocity.MaxForce = Vector3.new(0, math.huge, 0)
+                            bodyVelocity.P = 1250
+                            bodyVelocity.Parent = hrp
+
+                            task.delay(0.3, function()
+                                bodyVelocity:Destroy()
+                            end)
+                        end)
+                        if not success then
+                            warn("Auto Win World 9 error:", err)
+                        end
+                        wait(5)
+                    end
+                end)
+                coroutine.resume(jumpLoopThread9)
+            end
+        end
+    end
+})
+local Players = game:GetService("Players")
+local player = Players.LocalPlayer
+local running10 = false
+local jumpLoopThread10
+-- auto win for world
+AutoTab:CreateToggle({
+    Name = "Auto Win World 10",
+    Flag = "AutoWinWorld10Toggle",
+    Callback = function(state)
+        running10 = state
+        if running10 then
+            if not jumpLoopThread10 or coroutine.status(jumpLoopThread10) == "dead" then
+                jumpLoopThread10 = coroutine.create(function()
+                    while running10 do
+                        local success, err = pcall(function()
+                            local character = player.Character or player.CharacterAdded:Wait()
+                            local humanoid = character:WaitForChild("Humanoid")
+                            local hrp = character:WaitForChild("HumanoidRootPart")
+
+                            local invisWalls2 = workspace.World10:FindFirstChild("InvisWalls2")
+                            if invisWalls2 and invisWalls2:GetChildren()[5] then
+                                invisWalls2:GetChildren()[5]:Destroy()
+                            end
+
+                            local map = workspace.World10:FindFirstChild("Map")
+                            if map and map:FindFirstChild("Bottom") then
+                                map.Bottom:Destroy()
+                            end
+
+                            local targetCFrame = CFrame.new(
+                                11.7324743, -482.99939, -9006.11133,
+                                0.0242010113, -0.0465572774, 0.998622417,
+                                -3.37879641e-07, 0.998914957, 0.0465709269,
+                                -0.999707103, -0.0011274009, 0.0241747387
+                            )
+
+                            local existingPlatform = workspace:FindFirstChild("SuperJumpPlatform10")
+                            if not existingPlatform then
+                                local platform = Instance.new("Part")
+                                platform.Name = "SuperJumpPlatform10"
+                                platform.Size = Vector3.new(30, 1, 30)
+                                platform.Anchored = true
+                                platform.CanCollide = true
+                                platform.Material = Enum.Material.Grass
+                                platform.BrickColor = BrickColor.new("Lime green")
+                                platform.CFrame = targetCFrame
+                                platform.Parent = workspace
+                            end
+
+                            wait(1)
+                            hrp.CFrame = targetCFrame + Vector3.new(0, 3, 0)
+                            wait(6)
+
+                            humanoid.Jump = true
+
+                            local bodyVelocity = Instance.new("BodyVelocity")
+                            bodyVelocity.Velocity = Vector3.new(0, 300, 0)
+                            bodyVelocity.MaxForce = Vector3.new(0, math.huge, 0)
+                            bodyVelocity.P = 1250
+                            bodyVelocity.Parent = hrp
+
+                            task.delay(0.3, function()
+                                bodyVelocity:Destroy()
+                            end)
+                        end)
+                        if not success then
+                            warn("Auto Win World 10 error:", err)
+                        end
+                        wait(5)
+                    end
+                end)
+                coroutine.resume(jumpLoopThread10)
+            end
+        end
+    end
+})
+local Players = game:GetService("Players")
+local player = Players.LocalPlayer
+local running11 = false
+local jumpLoopThread11
+-- auto win for world
+AutoTab:CreateToggle({
+    Name = "Auto Win World 11",
+    Flag = "AutoWinWorld11Toggle",
+    Callback = function(state)
+        running11 = state
+        if running11 then
+            if not jumpLoopThread11 or coroutine.status(jumpLoopThread11) == "dead" then
+                jumpLoopThread11 = coroutine.create(function()
+                    while running11 do
+                        local success, err = pcall(function()
+                            local character = player.Character or player.CharacterAdded:Wait()
+                            local humanoid = character:WaitForChild("Humanoid")
+                            local hrp = character:WaitForChild("HumanoidRootPart")
+
+                            local invisWalls2 = workspace.World11:FindFirstChild("InvisWalls2")
+                            if invisWalls2 and invisWalls2:GetChildren()[5] then
+                                invisWalls2:GetChildren()[5]:Destroy()
+                            end
+
+                            local map = workspace.World11:FindFirstChild("Map")
+                            if map and map:FindFirstChild("Bottom") then
+                                map.Bottom:Destroy()
+                            end
+
+                            local targetCFrame = CFrame.new(
+                                -8.81916428, -452.72287, -10032.8984,
+                                -0.999994695, -8.74319303e-05, 0.00325684017,
+                                1.52511831e-07, 0.999638617, 0.0268827565,
+                                -0.0032580134, 0.0268826149, -0.999633312
+                            )
+
+                            local existingPlatform = workspace:FindFirstChild("SuperJumpPlatform11")
+                            if not existingPlatform then
+                                local platform = Instance.new("Part")
+                                platform.Name = "SuperJumpPlatform11"
+                                platform.Size = Vector3.new(30, 1, 30)
+                                platform.Anchored = true
+                                platform.CanCollide = true
+                                platform.Material = Enum.Material.Grass
+                                platform.BrickColor = BrickColor.new("Lime green")
+                                platform.CFrame = targetCFrame
+                                platform.Parent = workspace
+                            end
+
+                            wait(1)
+                            hrp.CFrame = targetCFrame + Vector3.new(0, 3, 0)
+                            wait(6)
+
+                            humanoid.Jump = true
+
+                            local bodyVelocity = Instance.new("BodyVelocity")
+                            bodyVelocity.Velocity = Vector3.new(0, 300, 0)
+                            bodyVelocity.MaxForce = Vector3.new(0, math.huge, 0)
+                            bodyVelocity.P = 1250
+                            bodyVelocity.Parent = hrp
+
+                            task.delay(0.3, function()
+                                bodyVelocity:Destroy()
+                            end)
+                        end)
+                        if not success then
+                            warn("Auto Win World 11 error:", err)
+                        end
+                        wait(5)
+                    end
+                end)
+                coroutine.resume(jumpLoopThread11)
+            end
+        end
+    end
+})
+local Players = game:GetService("Players")
+local player = Players.LocalPlayer
+local running12 = false
+local jumpLoopThread12
+-- auto win for world
+AutoTab:CreateToggle({
+    Name = "Auto Win World 12",
+    Flag = "AutoWinWorld12Toggle",
+    Callback = function(state)
+        running12 = state
+        if running12 then
+            if not jumpLoopThread12 or coroutine.status(jumpLoopThread12) == "dead" then
+                jumpLoopThread12 = coroutine.create(function()
+                    while running12 do
+                        local success, err = pcall(function()
+                            local character = player.Character or player.CharacterAdded:Wait()
+                            local humanoid = character:WaitForChild("Humanoid")
+                            local hrp = character:WaitForChild("HumanoidRootPart")
+
+                            local invisWalls2 = workspace.World12:FindFirstChild("InvisWalls2")
+                            if invisWalls2 and invisWalls2:GetChildren()[5] then
+                                invisWalls2:GetChildren()[5]:Destroy()
+                            end
+
+                            local map = workspace.World12:FindFirstChild("Map")
+                            if map and map:FindFirstChild("Bottom") then
+                                map.Bottom:Destroy()
+                            end
+
+                            local targetCFrame = CFrame.new(
+                                -48.7777863, -465.752838, -10981.3545,
+                                0.202439189, 0.136878192, -0.969681799,
+                                1.25908684e-06, 0.990183651, 0.13977246,
+                                0.979294837, -0.0282966439, 0.200451806
+                            )
+
+                            local existingPlatform = workspace:FindFirstChild("SuperJumpPlatform12")
+                            if not existingPlatform then
+                                local platform = Instance.new("Part")
+                                platform.Name = "SuperJumpPlatform12"
+                                platform.Size = Vector3.new(30, 1, 30)
+                                platform.Anchored = true
+                                platform.CanCollide = true
+                                platform.Material = Enum.Material.Grass
+                                platform.BrickColor = BrickColor.new("Lime green")
+                                platform.CFrame = targetCFrame
+                                platform.Parent = workspace
+                            end
+
+                            wait(1)
+                            hrp.CFrame = targetCFrame + Vector3.new(0, 3, 0)
+                            wait(6)
+
+                            humanoid.Jump = true
+
+                            local bodyVelocity = Instance.new("BodyVelocity")
+                            bodyVelocity.Velocity = Vector3.new(0, 300, 0)
+                            bodyVelocity.MaxForce = Vector3.new(0, math.huge, 0)
+                            bodyVelocity.P = 1250
+                            bodyVelocity.Parent = hrp
+
+                            task.delay(0.3, function()
+                                bodyVelocity:Destroy()
+                            end)
+                        end)
+                        if not success then
+                            warn("Auto Win World 12 error:", err)
+                        end
+                        wait(5)
+                    end
+                end)
+                coroutine.resume(jumpLoopThread12)
+            end
+        end
+    end
+})
+local Players = game:GetService("Players")
+local player = Players.LocalPlayer
+local running13 = false
+local jumpLoopThread13
+-- auto win for world
+AutoTab:CreateToggle({
+    Name = "Auto Win World 13",
+    Flag = "AutoWinWorld13Toggle",
+    Callback = function(state)
+        running13 = state
+        if running13 then
+            if not jumpLoopThread13 or coroutine.status(jumpLoopThread13) == "dead" then
+                jumpLoopThread13 = coroutine.create(function()
+                    while running13 do
+                        local success, err = pcall(function()
+                            local character = player.Character or player.CharacterAdded:Wait()
+                            local humanoid = character:WaitForChild("Humanoid")
+                            local hrp = character:WaitForChild("HumanoidRootPart")
+
+                            local invisWalls2 = workspace.World13:FindFirstChild("InvisWalls2")
+                            if invisWalls2 and invisWalls2:GetChildren()[5] then
+                                invisWalls2:GetChildren()[5]:Destroy()
+                            end
+
+                            local map = workspace.World13:FindFirstChild("Map")
+                            if map and map:FindFirstChild("Bottom") then
+                                map.Bottom:Destroy()
+                            end
+
+                            local targetCFrame = CFrame.new(
+                                26.9913712, -454.084991, -12061.7012,
+                                -0.990072787, -0.0110450331, 0.140121117,
+                                7.76442505e-07, 0.996907294, 0.0785866082,
+                                -0.140555754, 0.0778065696, -0.987010777
+                            )
+
+                            local existingPlatform = workspace:FindFirstChild("SuperJumpPlatform13")
+                            if not existingPlatform then
+                                local platform = Instance.new("Part")
+                                platform.Name = "SuperJumpPlatform13"
+                                platform.Size = Vector3.new(30, 1, 30)
+                                platform.Anchored = true
+                                platform.CanCollide = true
+                                platform.Material = Enum.Material.Grass
+                                platform.BrickColor = BrickColor.new("Lime green")
+                                platform.CFrame = targetCFrame
+                                platform.Parent = workspace
+                            end
+
+                            wait(1)
+                            hrp.CFrame = targetCFrame + Vector3.new(0, 3, 0)
+                            wait(6)
+
+                            humanoid.Jump = true
+
+                            local bodyVelocity = Instance.new("BodyVelocity")
+                            bodyVelocity.Velocity = Vector3.new(0, 300, 0)
+                            bodyVelocity.MaxForce = Vector3.new(0, math.huge, 0)
+                            bodyVelocity.P = 1250
+                            bodyVelocity.Parent = hrp
+
+                            task.delay(0.3, function()
+                                bodyVelocity:Destroy()
+                            end)
+                        end)
+                        if not success then
+                            warn("Auto Win World 13 error:", err)
+                        end
+                        wait(5)
+                    end
+                end)
+                coroutine.resume(jumpLoopThread13)
+            end
+        end
+    end
+})
+local Players = game:GetService("Players")
+local player = Players.LocalPlayer
+local running14 = false
+local jumpLoopThread14
+-- auto win for world
+AutoTab:CreateToggle({
+    Name = "Auto Win World 14",
+    Flag = "AutoWinWorld14Toggle",
+    Callback = function(state)
+        running14 = state
+        if running14 then
+            if not jumpLoopThread14 or coroutine.status(jumpLoopThread14) == "dead" then
+                jumpLoopThread14 = coroutine.create(function()
+                    while running14 do
+                        local success, err = pcall(function()
+                            local character = player.Character or player.CharacterAdded:Wait()
+                            local humanoid = character:WaitForChild("Humanoid")
+                            local hrp = character:WaitForChild("HumanoidRootPart")
+
+                            local invisWalls2 = workspace.World14:FindFirstChild("InvisWalls2")
+                            if invisWalls2 and invisWalls2:GetChildren()[4] then
+                                invisWalls2:GetChildren()[4]:Destroy()
+                            end
+
+                            local map = workspace.World14:FindFirstChild("Map")
+                            if map and map:FindFirstChild("Bottom") then
+                                map.Bottom:Destroy()
+                            end
+
+                            local targetCFrame = CFrame.new(
+                                8.89503098, -438.778046, -13056.3301,
+                                -0.998567879, -0.00516347867, 0.0532500297,
+                                1.40753485e-07, 0.995331347, 0.0965166166,
+                                -0.053499788, 0.0963783935, -0.993905902
+                            )
+
+                            local existingPlatform = workspace:FindFirstChild("SuperJumpPlatform14")
+                            if not existingPlatform then
+                                local platform = Instance.new("Part")
+                                platform.Name = "SuperJumpPlatform14"
+                                platform.Size = Vector3.new(30, 1, 30)
+                                platform.Anchored = true
+                                platform.CanCollide = true
+                                platform.Material = Enum.Material.Grass
+                                platform.BrickColor = BrickColor.new("Lime green")
+                                platform.CFrame = targetCFrame
+                                platform.Parent = workspace
+                            end
+
+                            wait(1)
+                            hrp.CFrame = targetCFrame + Vector3.new(0, 3, 0)
+                            wait(6)
+
+                            humanoid.Jump = true
+
+                            local bodyVelocity = Instance.new("BodyVelocity")
+                            bodyVelocity.Velocity = Vector3.new(0, 300, 0)
+                            bodyVelocity.MaxForce = Vector3.new(0, math.huge, 0)
+                            bodyVelocity.P = 1250
+                            bodyVelocity.Parent = hrp
+
+                            task.delay(0.3, function()
+                                bodyVelocity:Destroy()
+                            end)
+                        end)
+                        if not success then
+                            warn("Auto Win World 14 error:", err)
+                        end
+                        wait(5)
+                    end
+                end)
+                coroutine.resume(jumpLoopThread14)
+            end
+        end
+    end
+})
+local Players = game:GetService("Players")
+local player = Players.LocalPlayer
+local running15 = false
+local jumpLoopThread15
+-- auto win for world
+AutoTab:CreateToggle({
+    Name = "Auto Win World 15",
+    Flag = "AutoWinWorld15Toggle",
+    Callback = function(state)
+        running15 = state
+        if running15 then
+            if not jumpLoopThread15 or coroutine.status(jumpLoopThread15) == "dead" then
+                jumpLoopThread15 = coroutine.create(function()
+                    while running15 do
+                        local success, err = pcall(function()
+                            local character = player.Character or player.CharacterAdded:Wait()
+                            local humanoid = character:WaitForChild("Humanoid")
+                            local hrp = character:WaitForChild("HumanoidRootPart")
+
+                            local invisWalls2 = workspace.World15:FindFirstChild("InvisWalls2")
+                            if invisWalls2 and invisWalls2:GetChildren()[4] then
+                                invisWalls2:GetChildren()[4]:Destroy()
+                            end
+
+                            local map = workspace.World15:FindFirstChild("Map")
+                            if map and map:FindFirstChild("Bottom") then
+                                map.Bottom:Destroy()
+                            end
+
+                            local targetCFrame = CFrame.new(
+                                9.26377964, -438.848846, -14089.001,
+                                -0.986986339, -0.0193051435, 0.159640998,
+                                7.80150629e-07, 0.992766798, 0.120058611,
+                                -0.160804033, 0.118496336, -0.979847252
+                            )
+
+                            local existingPlatform = workspace:FindFirstChild("SuperJumpPlatform15")
+                            if not existingPlatform then
+                                local platform = Instance.new("Part")
+                                platform.Name = "SuperJumpPlatform15"
+                                platform.Size = Vector3.new(30, 1, 30)
+                                platform.Anchored = true
+                                platform.CanCollide = true
+                                platform.Material = Enum.Material.Grass
+                                platform.BrickColor = BrickColor.new("Lime green")
+                                platform.CFrame = targetCFrame
+                                platform.Parent = workspace
+                            end
+
+                            wait(1)
+                            hrp.CFrame = targetCFrame + Vector3.new(0, 3, 0)
+                            wait(6)
+
+                            humanoid.Jump = true
+
+                            local bodyVelocity = Instance.new("BodyVelocity")
+                            bodyVelocity.Velocity = Vector3.new(0, 300, 0)
+                            bodyVelocity.MaxForce = Vector3.new(0, math.huge, 0)
+                            bodyVelocity.P = 1250
+                            bodyVelocity.Parent = hrp
+
+                            task.delay(0.3, function()
+                                bodyVelocity:Destroy()
+                            end)
+                        end)
+                        if not success then
+                            warn("Auto Win World 15 error:", err)
+                        end
+                        wait(5)
+                    end
+                end)
+                coroutine.resume(jumpLoopThread15)
+            end
+        end
+    end
+})
+local Players = game:GetService("Players")
+local RunService = game:GetService("RunService")
+
+local VisTab = Window:CreateTab("Visuals")
+VisTab:CreateLabel("Assistance features")
+-- creates full bright
+VisTab:CreateToggle({
+    Name = "Full Bright",
+    Flag = "FullBrightToggle",
+    Callback = function(state)
+        local Lighting = game:GetService("Lighting")
+        if state then
+            Lighting.Brightness = 2
+            Lighting.ClockTime = 14
+            Lighting.FogEnd = 100000
+            Lighting.Ambient = Color3.new(1, 1, 1)
+            Lighting.OutdoorAmbient = Color3.new(1, 1, 1)
+        else
+            Lighting.Brightness = 1
+            Lighting.ClockTime = 14
+            Lighting.FogEnd = 1000
+            Lighting.Ambient = Color3.new(0.5, 0.5, 0.5)
+            Lighting.OutdoorAmbient = Color3.new(0.5, 0.5, 0.5)
+        end
+    end
+})
+-- creates no fog.
+VisTab:CreateToggle({
+    Name = "No Fog",
+    Flag = "NoFogToggle",
+    Callback = function(state)
+        local Lighting = game:GetService("Lighting")
+        if state then
+            Lighting.FogStart = 0
+            Lighting.FogEnd = 100000
+        else
+            Lighting.FogStart = 0
+            Lighting.FogEnd = 1000
+        end
+    end
+})
+
+-- Nametags
+local Players = game:GetService("Players")
+local RunService = game:GetService("RunService")
+
+local nametagRadius = 2750
+local nametagEnabled = false
+local nametagFolder = Instance.new("Folder")
+nametagFolder.Name = "Nametags"
+nametagFolder.Parent = workspace
+
+local playerNametags = {}
+local localPlayer = Players.LocalPlayer
+
+local function createNametag(player)
+    if not player.Character or not player.Character:FindFirstChild("HumanoidRootPart") then return nil end
+    local billboard = Instance.new("BillboardGui")
+    billboard.Name = "NametagGui"
+    billboard.Adornee = player.Character.HumanoidRootPart
+    billboard.Size = UDim2.new(0, 100, 0, 30)
+    billboard.StudsOffset = Vector3.new(0, 3, 0)
+    billboard.AlwaysOnTop = true
+    billboard.Parent = nametagFolder
+
+    local textLabel = Instance.new("TextLabel")
+    textLabel.BackgroundTransparency = 1
+    textLabel.Size = UDim2.new(1, 0, 1, 0)
+    textLabel.Text = player.Name
+    textLabel.TextColor3 = Color3.new(1, 1, 1)
+    textLabel.TextStrokeColor3 = Color3.new(0, 0, 0)
+    textLabel.TextStrokeTransparency = 0
+    textLabel.Font = Enum.Font.SourceSansBold
+    textLabel.TextScaled = true
+    textLabel.Parent = billboard
+
+    return billboard
+end
+
+local function updateNametags()
+    if not localPlayer.Character or not localPlayer.Character:FindFirstChild("HumanoidRootPart") then return end
+    local localHRP = localPlayer.Character.HumanoidRootPart
+
+    for _, plr in pairs(Players:GetPlayers()) do
+        if plr ~= localPlayer then
+            local char = plr.Character
+            if char and char:FindFirstChild("HumanoidRootPart") then
+                local distance = (char.HumanoidRootPart.Position - localHRP.Position).Magnitude
+                if distance <= nametagRadius then
+                    if not playerNametags[plr] then
+                        playerNametags[plr] = createNametag(plr)
+                    end
+                    if playerNametags[plr] then
+                        playerNametags[plr].Enabled = true
+                        playerNametags[plr].Adornee = plr.Character.HumanoidRootPart
+                    end
+                else
+                    if playerNametags[plr] then
+                        playerNametags[plr].Enabled = false
+                    end
+                end
+            elseif playerNametags[plr] then
+                playerNametags[plr]:Destroy()
+                playerNametags[plr] = nil
+            end
+        end
+    end
+end
+
+local function clearNametags()
+    for _, gui in pairs(playerNametags) do
+        if gui then gui:Destroy() end
+    end
+    playerNametags = {}
+end
+
+local function onPlayerAdded(player)
+    if nametagEnabled and player ~= localPlayer then
+        player.CharacterAdded:Connect(function()
+            task.wait(1)
+            if nametagEnabled then
+                if playerNametags[player] then playerNametags[player]:Destroy() end
+                playerNametags[player] = createNametag(player)
+            end
+        end)
+    end
+end
+
+local function onPlayerRemoving(player)
+    if playerNametags[player] then
+        playerNametags[player]:Destroy()
+        playerNametags[player] = nil
+    end
+end
+
+local updateConnection
+local function toggleNametags(state)
+    nametagEnabled = state
+    if nametagEnabled then
+        for _, player in ipairs(Players:GetPlayers()) do
+            if player ~= localPlayer then
+                onPlayerAdded(player)
+            end
+        end
+        updateConnection = RunService.RenderStepped:Connect(updateNametags)
+        Players.PlayerAdded:Connect(onPlayerAdded)
+        Players.PlayerRemoving:Connect(onPlayerRemoving)
+    else
+        if updateConnection then
+            updateConnection:Disconnect()
+            updateConnection = nil
+        end
+        clearNametags()
+    end
+end
+
+VisTab:CreateToggle({
+    Name = "Nametags",
+    Flag = "NametagsToggle",
+    Callback = function(state)
+        toggleNametags(state)
+        Rayfield:Notify({
+            Title = "Nametags",
+            Content = state and "Nametags Enabled" or "Nametags Disabled",
+            Duration = 3
+        })
+    end
+})
+
+VisTab:CreateSlider({
+    Name = "Nametag Radius",
+    Range = {50, 10000},
+    Increment = 10,
+    CurrentValue = nametagRadius,
+    Flag = "NametagRadiusSlider",
+    Callback = function(value)
+        nametagRadius = value
+    end
+})
+-- player Teleportation
+MiscTab:CreateLabel("Player Teleportation")
+
+local Players = game:GetService("Players")
+local LocalPlayer = Players.LocalPlayer
+
+local playerNames = {}
+for _, player in pairs(Players:GetPlayers()) do
+    if player ~= LocalPlayer then
+        table.insert(playerNames, player.Name)
+    end
+end
+if #playerNames == 0 then
+    playerNames = {"No players found"}
+end
+
+local selectedPlayerName = nil
+
+local playerDropdown = MiscTab:CreateDropdown({
+    Name = "Select Player",
+    Options = playerNames,
+    CurrentOption = playerNames[1],
+    MultipleOptions = false,
+    Flag = "PlayerDropdown",
+    Callback = function(selection)
+        selectedPlayerName = table.concat(selection, ", ")
+        Rayfield:Notify({
+            Title = "Player Selected",
+            Content = "You selected: " .. selectedPlayerName,
+            Duration = 3,
+        })
+    end
+})
+
+-- Teleport Button
+MiscTab:CreateButton({
+    Name = "Teleport to Player",
+    Callback = function()
+        if selectedPlayerName == nil or selectedPlayerName == "No players found" then
+            Rayfield:Notify({
+                Title = "Error",
+                Content = "No valid target player selected.",
+                Duration = 3,
+            })
+            return
+        end
+
+        local targetPlayer = Players:FindFirstChild(selectedPlayerName)
+        if targetPlayer and targetPlayer.Character and targetPlayer.Character:FindFirstChild("HumanoidRootPart") then
+            if LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
+                LocalPlayer.Character.HumanoidRootPart.CFrame = targetPlayer.Character.HumanoidRootPart.CFrame
+                Rayfield:Notify({
+                    Title = "Teleported",
+                    Content = "Teleported to " .. selectedPlayerName,
+                    Duration = 3,
+                })
+            else
+                Rayfield:Notify({
+                    Title = "Error",
+                    Content = "Your character or HumanoidRootPart not found.",
+                    Duration = 3,
+                })
+            end
+        else
+            Rayfield:Notify({
+                Title = "Error",
+                Content = "Target player or HumanoidRootPart not found.",
+                Duration = 3,
+            })
+        end
+    end
+})
+
+local function updateDropdownOptions()
+    local newPlayerNames = {}
+    for _, player in pairs(Players:GetPlayers()) do
+        if player ~= LocalPlayer then
+            table.insert(newPlayerNames, player.Name)
+        end
+    end
+
+    if #newPlayerNames == 0 then
+        newPlayerNames = {"No players found"}
+        selectedPlayerName = nil
+    else
+        if selectedPlayerName == nil or not table.find(newPlayerNames, selectedPlayerName) then
+            selectedPlayerName = nil
+        end
+    end
+
+    playerDropdown:Refresh(newPlayerNames)
+end
+
+Players.PlayerAdded:Connect(updateDropdownOptions)
+Players.PlayerRemoving:Connect(updateDropdownOptions)
+
+
+
+    Window:LoadConfiguration()
+end
