@@ -1,10 +1,5 @@
 -- games
 local gameScripts = {
-    [109983668079237] = "", -- stops it from loading
-    [126884695634066] = "", -- stops it from loading
-    [127742093697776] = "", -- stops it from loading
-    [124977557560410] = "", -- stops it from loading
-    [96342491571673] = "", -- stops it from loading
     [81440632616906] = "https://raw.githubusercontent.com/breif-script-hub/script-hub/refs/heads/main/Games/81440632616906%20-%20dig%20to%20earths%20core", -- Dig to Earth's Core
     [14218711698] = "https://raw.githubusercontent.com/breif-script-hub/script-hub/refs/heads/main/Games/14218711698%20-%20criminal%20tycoon",   -- Criminal Tycoon
     [13355910112] = "https://raw.githubusercontent.com/breif-script-hub/script-hub/refs/heads/main/Games/13355910112%20-%20Every%20Second%20you%20get%20faster",   -- Every Second You Get Faster
