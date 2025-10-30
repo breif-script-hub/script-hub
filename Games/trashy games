@@ -1,7 +1,0 @@
-if game.PlaceId == 109983668079237 or game.PlaceId == 126884695634066 or game.PlaceId == 127742093697776 then
-    local Players = game:GetService("Players")
-    local function onPlayerAdded(player)
-        player:Kick("We will never support Trashy Games.")
-    end
-    Players.PlayerAdded:Connect(onPlayerAdded)
-end
