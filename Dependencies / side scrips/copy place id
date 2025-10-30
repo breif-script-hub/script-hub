@@ -1,0 +1,132 @@
+local Players = game:GetService("Players")
+local TweenService = game:GetService("TweenService")
+local player = Players.LocalPlayer
+local playerGui = player:WaitForChild("PlayerGui")
+local placeId = game.PlaceId
+local screenGui = Instance.new("ScreenGui")
+screenGui.Name = "PlaceIdPopupGui"
+screenGui.ResetOnSpawn = false
+screenGui.Parent = playerGui
+local frame = Instance.new("Frame")
+frame.Name = "PlaceIdPopup"
+frame.Size = UDim2.new(0, 300, 0, 150)
+frame.Position = UDim2.new(0.5, -150, 0.5, -75)
+frame.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
+frame.BorderSizePixel = 0
+frame.Visible = false
+frame.Parent = screenGui
+local corner = Instance.new("UICorner")
+corner.CornerRadius = UDim.new(0, 10)
+corner.Parent = frame
+local stroke = Instance.new("UIStroke")
+stroke.Color = Color3.fromRGB(100, 0, 150)
+stroke.Thickness = 2
+stroke.Parent = frame
+local title = Instance.new("TextLabel")
+title.Size = UDim2.new(1, 0, 0, 30)
+title.Position = UDim2.new(0, 0, 0, 10)
+title.Text = "Game Place ID:"
+title.TextColor3 = Color3.fromRGB(255, 255, 255)
+title.TextScaled = true
+title.BackgroundTransparency = 1
+title.Font = Enum.Font.SourceSansBold
+title.Parent = frame
+local codeLabel = Instance.new("TextLabel")
+codeLabel.Name = "PlaceIdLabel"
+codeLabel.Size = UDim2.new(1, -20, 0, 50)
+codeLabel.Position = UDim2.new(0, 10, 0, 40)
+codeLabel.Text = tostring(placeId)
+codeLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+codeLabel.TextScaled = true
+codeLabel.BackgroundTransparency = 1
+codeLabel.Font = Enum.Font.Code
+codeLabel.TextXAlignment = Enum.TextXAlignment.Center
+codeLabel.Parent = frame
+local copyButton = Instance.new("TextButton")
+copyButton.Size = UDim2.new(0.45, 0, 0, 30)
+copyButton.Position = UDim2.new(0.05, 0, 1, -40)
+copyButton.Text = "Copy"
+copyButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+copyButton.BackgroundColor3 = Color3.fromRGB(0, 170, 0)
+copyButton.TextScaled = true
+copyButton.Font = Enum.Font.SourceSans
+copyButton.Parent = frame
+
+local copyCorner = Instance.new("UICorner")
+copyCorner.CornerRadius = UDim.new(0, 5)
+copyCorner.Parent = copyButton
+local dismissButton = Instance.new("TextButton")
+dismissButton.Size = UDim2.new(0.45, 0, 0, 30)
+dismissButton.Position = UDim2.new(0.5, 5, 1, -40)
+dismissButton.Text = "Dismiss"
+dismissButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+dismissButton.BackgroundColor3 = Color3.fromRGB(170, 0, 0)
+dismissButton.TextScaled = true
+dismissButton.Font = Enum.Font.SourceSans
+dismissButton.Parent = frame
+
+local dismissCorner = Instance.new("UICorner")
+dismissCorner.CornerRadius = UDim.new(0, 5)
+dismissCorner.Parent = dismissButton
+local function showPopup()
+    frame.Visible = true
+    frame.BackgroundTransparency = 1
+    local fadeIn = TweenService:Create(frame, TweenInfo.new(0.3, Enum.EasingStyle.Quad), {BackgroundTransparency = 0})
+    fadeIn:Play()
+end
+local function hidePopup()
+    local fadeOut = TweenService:Create(frame, TweenInfo.new(0.3, Enum.EasingStyle.Quad), {BackgroundTransparency = 1})
+    fadeOut:Play()
+    fadeOut.Completed:Connect(function()
+        frame.Visible = false
+    end)
+end
+copyButton.MouseButton1Click:Connect(function()
+    local success, err = pcall(function()
+        setclipboard(tostring(placeId))  
+    end)
+    if success then
+        copyButton.Text = "Copied!"
+        task.wait(1)  
+        copyButton.Text = "Copy"
+    else
+        warn("Clipboard copy failed (executor not supported?): " .. tostring(err))
+        local tempTextBox = Instance.new("TextBox")
+        tempTextBox.Size = UDim2.new(0, 200, 0, 50)
+        tempTextBox.Position = UDim2.new(0.5, -100, 0.5, -25)
+        tempTextBox.Text = tostring(placeId)
+        tempTextBox.TextColor3 = Color3.fromRGB(255, 255, 255)
+        tempTextBox.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+        tempTextBox.TextScaled = true
+        tempTextBox.Font = Enum.Font.Code
+        tempTextBox.TextXAlignment = Enum.TextXAlignment.Center
+        tempTextBox.ClearTextOnFocus = false
+        tempTextBox.MultiLine = false
+        tempTextBox.Parent = screenGui
+        tempTextBox.ReadOnly = true
+        
+        local tbCorner = Instance.new("UICorner")
+        tbCorner.CornerRadius = UDim.new(0, 5)
+        tbCorner.Parent = tempTextBox
+        
+        tempTextBox:CaptureFocus()
+        tempTextBox.TextEditable = false
+        tempTextBox.SelectionStart = 1
+        tempTextBox.CursorPosition = #tempTextBox.Text + 1
+        tempTextBox.Visible = true
+        
+        copyButton.Text = "Select All (Ctrl+C)"
+        
+        game:GetService("Debris"):AddItem(tempTextBox, 3)
+        
+        tempTextBox.AncestryChanged:Connect(function()
+            if not tempTextBox.Parent then
+                copyButton.Text = "Copy"
+            end
+        end)
+    end
+end)
+dismissButton.MouseButton1Click:Connect(function()
+    hidePopup()
+end)
+showPopup()
