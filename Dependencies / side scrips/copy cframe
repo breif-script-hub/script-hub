@@ -1,0 +1,2 @@
+local Players = game:GetService("Players")
+setclipboard(tostring(Players.LocalPlayer.Character:GetPivot()))
