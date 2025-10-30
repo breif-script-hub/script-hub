@@ -1,5 +1,5 @@
 <h2 align="center">
-  A Roblox script Made by breif
+  A Roblox script Made by breif - i will not be updating it anymore that is why it is now open source you are free to copy and modify it as long as you give credit i hope this helps beginners on top of this i added comments so it might help uu understand how code works
   <br/>
 </h2>
 
