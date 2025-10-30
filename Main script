@@ -1,22 +1,21 @@
 -- games
 local gameScripts = {
-    [81440632616906] = "https://pastefy.app/lKb9XJ8k/raw", -- Dig to Earth's Core
-    [14218711698] = "https://pastefy.app/XX7YYnOr/raw",   -- Criminal Tycoon
-    [13355910112] = "https://pastefy.app/FHhPcrWX/raw",   -- Every Second You Get Faster
-    [5256165620] = "https://pastefy.app/PtnrPWRH/raw",    -- 3 2 1 Blast Off Simulator
-    [75663528075786] = "https://pastefy.app/g67mnnfZ/raw",-- How to Train Your Dragon
-    [13461044782] = "https://pastefy.app/xY0FX2QK/raw",   -- Every Second You Jump Higher
-    [13501167264] = "https://pastefy.app/oW4b807k/raw",   -- Build a raft or Die
-    [15338697306] = "https://pastefy.app/dHay9B9G/raw",   -- Go Kart Simulator
-    [95425238757150] = "https://pastebin.com/raw/SVvvz32K",-- Wall Hop to Admin Obby
-    [2693023319] = "https://pastefy.app/mNCkm96a/raw",    -- Expedition Antarctica
-    [109652885385286] = "https://pastefy.app/Rslw9Hts/raw",    -- Dig the backyard
-    [189707] = "https://raw.githubusercontent.com/breif-script-hub/script-hub/refs/heads/main/Games/trashy%20games",    -- trashy game
-    [189707] = "https://raw.githubusercontent.com/breif-script-hub/script-hub/refs/heads/main/Games/trashy%20games",    -- trashy game
-    [189707] = "https://raw.githubusercontent.com/breif-script-hub/script-hub/refs/heads/main/Games/trashy%20games",    -- trashy game
-    [189707] = "https://raw.githubusercontent.com/breif-script-hub/script-hub/refs/heads/main/Games/trashy%20games",    -- trashy game
+    [81440632616906] = "", -- Dig to Earth's Core
+    [14218711698] = "",   -- Criminal Tycoon
+    [13355910112] = "",   -- Every Second You Get Faster
+    [5256165620] = "",    -- 3 2 1 Blast Off Simulator
+    [75663528075786] = "",-- How to Train Your Dragon
+    [13461044782] = "",   -- Every Second You Jump Higher
+    [13501167264] = "",   -- Build a raft or Die
+    [15338697306] = "",   -- Go Kart Simulator
+    [95425238757150] = "",-- Wall Hop to Admin Obby
+    [2693023319] = "",    -- Expedition Antarctica
+    [109652885385286] = "",    -- Dig the backyard
+    [189707] = "",    -- Natural disasters
+    [189707] = "",    -- Trashy game
+    
 }
-local universalScript = "https://pastefy.app/J1JjXK69/raw" -- Universal Script
+local universalScript = "" -- Universal Script
 
 local url = gameScripts[game.PlaceId] or universalScript
 pcall(function()
