@@ -1,0 +1,86 @@
+local player = game.Players.LocalPlayer
+local guiName = "TeleportUI_ByBreif"
+local old = player.PlayerGui:FindFirstChild(guiName)
+if old then
+    old:Destroy()
+end
+local screenGui = Instance.new("ScreenGui")
+screenGui.Name = guiName
+screenGui.ResetOnSpawn = false
+screenGui.Parent = player.PlayerGui
+local frame = Instance.new("Frame")
+frame.Size = UDim2.new(0, 200, 0, 250)
+frame.Position = UDim2.new(0.5, 400, 0.4, 0)
+frame.BackgroundColor3 = Color3.fromRGB(40,40,40)
+frame.BorderSizePixel = 0
+frame.Active = true
+frame.Draggable = true
+frame.Parent = screenGui
+local title = Instance.new("TextLabel")
+title.Size = UDim2.new(1, 0, 0, 25)
+title.BackgroundTransparency = 1
+title.Text = "Teleport UI — Made by Breif"
+title.TextColor3 = Color3.fromRGB(255,255,255)
+title.Font = Enum.Font.SourceSansBold
+title.TextSize = 16
+title.Parent = frame
+local function createInput(name, posY)
+    local box = Instance.new("TextBox")
+    box.PlaceholderText = "0"
+    box.Text = ""
+    box.Size = UDim2.new(0, 60, 0, 25)
+    box.Position = UDim2.new(0, 10, 0, posY)
+    box.BackgroundColor3 = Color3.fromRGB(60,60,60)
+    box.TextColor3 = Color3.fromRGB(255,255,255)
+    box.ClearTextOnFocus = false
+    box.Parent = frame
+    local label = Instance.new("TextLabel")
+    label.Text = name
+    label.Size = UDim2.new(0, 100, 0, 25)
+    label.Position = UDim2.new(0, 80, 0, posY)
+    label.BackgroundTransparency = 1
+    label.TextColor3 = Color3.fromRGB(255,255,255)
+    label.TextXAlignment = Enum.TextXAlignment.Left
+    label.Parent = frame
+    return box
+end
+local forwardBox  = createInput("Forward", 30)
+local backwardBox = createInput("Backward", 60)
+local leftBox     = createInput("Left", 90)
+local rightBox    = createInput("Right", 120)
+local upBox       = createInput("Up", 150)
+local downBox     = createInput("Down", 180)
+local button = Instance.new("TextButton")
+button.Text = "Teleport"
+button.Size = UDim2.new(0, 180, 0, 30)
+button.Position = UDim2.new(0, 10, 0, 210)
+button.BackgroundColor3 = Color3.fromRGB(80,80,80)
+button.TextColor3 = Color3.fromRGB(255,255,255)
+button.Parent = frame
+button.MouseButton1Click:Connect(function()
+    local hrp = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
+    if not hrp then return end
+    local f = tonumber(forwardBox.Text) or 0
+    local b = tonumber(backwardBox.Text) or 0
+    local l = tonumber(leftBox.Text) or 0
+    local r = tonumber(rightBox.Text) or 0
+    local u = tonumber(upBox.Text) or 0
+    local d = tonumber(downBox.Text) or 0
+    local forward = hrp.CFrame.LookVector
+    local right = hrp.CFrame.RightVector
+    local up = Vector3.new(0,1,0)
+
+    local moveVector = forward * (f - b) + right * (r - l) + up * (u - d)
+
+    hrp.CFrame = hrp.CFrame + moveVector
+end)
+local UIS = game:GetService("UserInputService")
+local visible = true
+
+UIS.InputBegan:Connect(function(input, gpe)
+    if gpe then return end
+    if input.KeyCode == Enum.KeyCode.RightShift then
+        visible = not visible
+        frame.Visible = visible
+    end
+end)
